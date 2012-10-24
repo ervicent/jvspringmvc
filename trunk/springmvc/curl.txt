@@ -1,0 +1,3 @@
+curl -v -i -H "Accept: application/json" -X POST -d "id=111&description=teste111" "http://localhost:8080/springmvc/app/item/save"
+
+curl -v -i -H "Accept: application/json" -X POST -d "" "http://localhost:8080/springmvc/app/item/list.json"
