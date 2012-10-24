@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"       
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+        http://www.springframework.org/schema/beans 
+        http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+        http://www.springframework.org/schema/batch 
+        http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+        http://www.springframework.org/schema/util
+        http://www.springframework.org/schema/util/spring-util-2.5.xsd
+        http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+	default-autowire="byType">
+	
+	<aop:aspectj-autoproxy />
+	<context:component-scan base-package="springbatch" />
+	
+	<bean class="es.cofidis.sl.CofidisLog4jConfigurer" lazy-init="false">
+		<!-- property name="logpath" value="${log4j.path}" /-->
+		<property name="refreshInterval" value="0" />
+	</bean>
+			
+	<bean class="com.esilog.descans.util.PropertyPlaceholdersUtils">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+		<property name="systemPropertiesMode" value="2" />
+		<property name="locations">
+			<list merge="false">
+				<value>file:${fichero.prop}</value>
+			</list>
+		</property>
+	</bean>
+
+    <!--
+        El gestor de transacciones que se usará durante el procesamiento batch.
+        En este caso, usamos una implementación "dummy" provista por Spring Batch,
+        ya que no usaremos ningun recurso transaccional.
+    -->
+    <bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+
+    <!--
+        El repositorio de tareas de Spring Batch. Este bean es el encargado
+        de guardar la información de las corridas en la base de datos.
+        En este caso usaremos un repositorio en memoria, útil para desarrollo.
+    -->
+    <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+
+    <!--
+        Un ejecutador de tareas. A través de esta clase es que se inicia la
+        ejecución de las taras batch.
+    -->
+    <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+        <property name="jobRepository" ref="jobRepository" />
+    </bean>
+    
+    <!--
+        Un trabajo de Spring Batch.
+        Este es el bean principal de Spring Batch, que declara el trabajo batch
+        que se va a ejecutar. El trabajo está compuesto de varios "pasos" (step).
+        Los pasos se ejecutan en forma secuencial.
+
+        En este ejemplo, el trabajo consiste en ejecutar tres pasos. Cada paso
+        invoca a ImprimirTasklet, el cual imprime por consola un mensaje.
+        El resultado por consola es el mensaje "Hola, Mundo!".
+    -->
+    <batch:job id="trabajoBatch">
+        <batch:step id="primerPaso" next="segundoPaso">
+            <batch:tasklet ref="imprimirHola"/>
+        </batch:step>
+        <batch:step id="segundoPaso" next="tercerPaso">
+            <batch:tasklet ref="imprimirMundo"/>
+        </batch:step>
+        <batch:step id="tercerPaso">
+            <batch:tasklet ref="imprimirExclamacion"/>
+        </batch:step>
+    </batch:job>
+
+    <!--
+        Estos son los tasklet o acciones que se ejecutarán. Cada tasklet
+        representa una acción que Spring Batch ejecutará como un paso. Un
+        tasklet es la forma más simple en Spring Batch de ejecutar acciones.
+    -->
+    <bean id="imprimirHola" class="springbatch.demo0.ImprimirTasklet">
+        <property name="mensaje" value="Hola, " />
+    </bean>
+
+    <bean id="imprimirMundo" class="springbatch.demo0.ImprimirTasklet">
+        <property name="mensaje" value="Mundo" />
+    </bean>
+
+    <bean id="imprimirExclamacion" class="springbatch.demo0.ImprimirTasklet">
+        <property name="mensaje" value="!!!" />
+    </bean>
+
+</beans>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+       http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+	default-autowire="byType">
+
+    <!-- En este ejemplo, se utiliza el namespace "http://www.springframework.org/schema/batch" introducido
+         en la versión 2 de spring-batch. Proporciona un atajo para definir objetos de spring-batch
+         como:  * jobs
+                * job-repository
+                * job-listener
+                * step
+                * step-listener
+
+         En este ejemplo sólo lo utilizaremos para mostrar la definición de jobs y steps.
+
+         Más información en
+         http://static.springsource.org/spring-batch/reference/html/whatsNew.html#whatsNewConfiguration
+    -->
+
+	<aop:aspectj-autoproxy />
+	<context:component-scan base-package="springbatch" />
+	
+	<!-- jpa config
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager" />	
+	 -->
+	 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" />
+	
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" rollback-for="java.lang.Exception" />
+            <tx:method name="read*" read-only="true" />
+            <tx:method name="is*" read-only="true" />
+            <tx:method name="exists*" read-only="true" />
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="validate*" read-only="true" />
+            <tx:method name="count*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+
+    <!--
+         El origen de datos que apunta a la base de datos con las tablas de
+         Spring Batch. En estas tablas Spring Batch lleva un registro de todas
+         las corridas que se hicieron.
+         El script para generar las tablas necesarias por Spring Batch se
+         encuentra dentro de spring-batch-core-xxxx.jar (en la raiz).
+     -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@172.16.216.77:1521/GAUDITST" />
+		<property name="username" value="CLIEN" />
+		<property name="password" value="cofidis" />
+		<property name="initialSize" value="1" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="5" />
+	</bean>
+	
+	<bean class="es.cofidis.sl.CofidisLog4jConfigurer" lazy-init="false">
+		<!-- property name="logpath" value="${log4j.path}" /-->
+		<property name="refreshInterval" value="0" />
+	</bean>
+	
+	<bean class="com.esilog.descans.util.PropertyPlaceholdersUtils">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+		<property name="systemPropertiesMode" value="2" />
+		<property name="locations">
+			<list merge="false">
+				<value>file:${fichero.prop}</value>
+			</list>
+		</property>
+	</bean>
+	
+    <!--
+        El gestor de transacciones que se usará durante el procesamiento batch.
+    -->
+   <bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+
+
+    <!--
+        El repositorio de tareas de Spring Batch. Este bean es el encargado
+        de guardar la información de las corridas en la base de datos.
+    -->
+    <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+    <!--
+        Un ejecutador de tareas. A través de esta clase es que se inicia la
+        ejecución de las taras batch.
+    -->
+    <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+        <property name="jobRepository" ref="jobRepository" />
+    </bean>
+
+    <!--
+        Una trabajo de Spring Batch.
+        Este es el bean principal de Spring Batch, que declara el trabajo batch
+        que se va a ejecutar. El trabajo está compuesto de varios "pasos" (step).
+        Los pasos se ejecutan en forma secuencial.
+
+        Utilizamos en este caso el tag reducido "job" del xmlns
+        http://www.springframework.org/schema/batch.
+
+        Nuestro step está compuesto de un tasklet que tendrá un chunk con un
+        reader y un writer. Además tendrá dos listeners: cabeceraHandler y consolaItemWriter.
+        En estos dos listeners, se llamará al metodo que esté definido con la anotación
+        @BeforeStep para pasarle el Contexto de ejecución del step.
+
+    -->
+    <job id="trabajoBatch" job-repository="jobRepository"
+         restartable="true" xmlns="http://www.springframework.org/schema/batch" >
+        <step id="imprimirPorConsola" >
+            <tasklet transaction-manager="transactionManager" >
+                <chunk reader="planetaItemReader" writer="consolaItemWriter" commit-interval="5"/>
+                <listeners>
+                    <listener ref="cabeceraHandler"/>
+                    <listener ref="consolaItemWriter"/>
+                </listeners>
+            </tasklet>
+        </step>
+    </job>
+
+
+    <!--
+        Lector de planteas. Esta reader de archivos planos es una clase
+        utilitaria provista por Spring Batch. Este bean lee el archivo
+        "planetas.csv". El atributo "lineMapper" indica la composicion del
+        archivo (en este caso, separado por comas "," y con los nombres de
+        cada una de las columnas.
+        El atributo "fileSetMapper" es el encargado de convertir cada linea del
+        archivo a un objeto. En este caso se utiliza una clase utilitaria de
+        Spring Batch para convertir cada columna a un objeto Planeta. Esta clase
+        utilitaria utiliza los nombres de columna como nombres de atributos
+        en el objeto Planeta destino.
+
+        En este ejemplo además, se define que se salteará 1 linea del procesamiento
+        de registros, y que esa línea la procesara el bean cabeceraHandler. Este bean
+        deberá implementar la interfaz LineCallbackHandler para manejar las líneas salteadas.
+    -->
+
+    <bean id="planetaItemReader" class="org.springframework.batch.item.file.FlatFileItemReader">
+        <property name="resource" value="classpath:planetas9.csv"/>
+        <property name="lineMapper">
+            <bean class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+                <property name="lineTokenizer">
+                    <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+                        <property name="delimiter" value="," />
+                        <property name="names" value="Codigo, Nombre, Diametro, Tipo, Significado"/>
+                    </bean>
+                </property>
+                <property name="fieldSetMapper">
+                    <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+                        <property name="prototypeBeanName" value="planeta"/>
+                    </bean>
+                </property>
+            </bean>
+        </property>
+        <!-- indicamos que se saltee 1 linea y la procese el bean que se define en la propiedad
+        skippedLinesCallback-->
+        <property name="linesToSkip" value="1"/>
+        <property name="skippedLinesCallback" ref="cabeceraHandler"/>
+    </bean>
+
+    <!--
+        Este es el bean implementado por nosotros que interpretará el registro cabecera del archivo.
+        Le definimos un mapper al igual que a los registros, pero en este caso para obtener el objeto de
+        tipo CabeceraArchivo.
+    -->
+    <bean id="cabeceraHandler" class="springbatch.demo9.CabeceraHandler">
+        <property name="lineMapper" ref="cabeceraMapper"/>
+    </bean>
+
+    <!--
+        El mapper de la cabecera, utilizando clases utilitarias de spring-batch, para que que devuelva
+        un bean del tipo CabeceraArchivo.
+    -->
+    <bean id="cabeceraMapper" class="org.springframework.batch.item.file.mapping.DefaultLineMapper">
+        <property name="lineTokenizer">
+            <bean class="org.springframework.batch.item.file.transform.DelimitedLineTokenizer">
+                <property name="delimiter" value="|" />
+                <property name="names" value="cantidadRegistros,descripcion"/>
+            </bean>
+        </property>
+        <property name="fieldSetMapper">
+            <bean class="org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper">
+                <property name="prototypeBeanName" value="cabeceraArchivo"/>
+            </bean>
+        </property>
+    </bean>
+
+    <!--
+        Esta es la clase encargada de escribir los resultados de la lectura
+        del "itemReader". Cada elemento leido por el "planetaItemReader" es
+        procesado por este "itemWriter".
+        Este writer obtiene del contexto la cabecera leida y la utiliza para
+        mostrar por consola un mensaje descriptivo, combinando informacion de la
+        cabecera y del registro
+    -->
+    <bean id="consolaItemWriter" class="springbatch.demo9.ConsolaItemWriter"/>
+
+    <!--
+        Este bean es usado por "planetaItemReader" (en particular, por su
+        fieldSetMapper), para convertir cada línea del archivo de origen a un
+        objeto.
+        Su scope TIENE que ser "prototype", ya que se necesita una instancia
+        nueva por cada invocación.
+     -->
+    <bean id="planeta" scope="prototype" class="springbatch.demo9.Planeta"/>
+
+    <!--
+        Este bean es el objeto que representa la cabecera del archivo recibida con sus datos.
+        Lo creará el bean cabeceraHandler y lo guardará en el contexto. Lo obtendrá del contexto y lo usará
+        el bean consolaItemWriter
+    -->
+    <bean id="cabeceraArchivo" scope="prototype" class="springbatch.demo9.CabeceraArchivo"/>
+
+</beans>
