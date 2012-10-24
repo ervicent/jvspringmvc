@@ -1,0 +1,25 @@
+Software necesario para proyecto Maven:
+
+Eclipse 3.6
+Apache tomcat 5.5
+Maven 2.06 o superior
+Plugin de eclipse para m2eclipse.
+
+Ficheros de configuracion tocado pom.xml
+	- Comandos para adaptar proyecto: mvn eclipse:eclipse -Dwtpversion=2.0
+	- Se toca los ficheros classpath para añadir las librerias Java EE
+	- Se toca el fichero org.eclipse.wst.common.project.facet.core.xml para la version jst.web
+	
+Comandos maven:
+
+maven package
+maven install
+maven clean
+
+Para probar el proyecto:
+
+Añadir el proyecto a un servidor.
+Debug del tomcat.
+Lanzar en eclipse la herramienta "Launch Webservices Explorer"
+	- Clickar en wsdl page en la parte posterior derecha.
+	- Añadir la url http://localhost:8282/jaxwsExample/HelloWs?wsdl y saldra el ejemplo codificado
