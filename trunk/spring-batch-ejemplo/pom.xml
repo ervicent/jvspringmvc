@@ -1,0 +1,153 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>prueba</groupId>
+	<artifactId>prueba</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>pruebaSpringBatch</name>
+
+	<properties>
+		<mvn.properties.path>${basedir}/target/test-classes/batch.properties</mvn.properties.path>
+		<!-- Reports -->
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		
+		<!-- Build -->
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		
+		<!-- Database settings oracle -->
+		<jdbc.groupId>oracle.jdbc</jdbc.groupId>
+		<jdbc.artifactId>ojdbc14</jdbc.artifactId>
+		<jdbc.version>10.2.0.4.0</jdbc.version>
+		<jdbc.driverClassName>oracle.jdbc.OracleDriver</jdbc.driverClassName>
+		<jdbc.url><![CDATA[jdbc:oracle:thin:@172.16.216.77:1521/GAUDITST]]></jdbc.url>
+		<jdbc.username>CLIEN</jdbc.username>
+		<jdbc.password>cofidis</jdbc.password>
+		<jdbc.jetty.groupId>oracle.jdbc</jdbc.jetty.groupId>
+		<jdbc.jetty.artifactId>ojdbc14</jdbc.jetty.artifactId>
+		<jdbc.jetty.version>10.2.0.4.0</jdbc.jetty.version>
+		<jdbc.jetty.datasource>oracle.jdbc.OracleDriver</jdbc.jetty.datasource>
+		<hibernate.dialect>org.hibernate.dialect.Oracle10gDialect</hibernate.dialect>
+	</properties>
+	
+	<repositories>
+	    <repository>
+	      <id>java.net</id>
+	      <url>http://download.java.net/maven/2</url>
+	    </repository>
+	    <repository>
+	      <id>JBoss repository</id>
+	      <url>http://repository.jboss.com/maven2/</url>
+	    </repository>
+		<repository>
+			<id>cofidis-maven-repo</id>
+			<name>Cofidis Maven Repository</name>
+			<url>http://maven.cofidis.local/maven</url>
+		</repository>
+ 	</repositories>
+ 
+	<dependencies>
+       
+        <!-- Descans -->
+        <dependency>
+        	<groupId>com.esilog.descans.libs</groupId>
+        	<artifactId>descans-batch</artifactId>
+        	<version>2.1</version>
+        </dependency>
+        
+		<dependency>
+			<groupId>es.cofidis.batch</groupId>
+			<artifactId>batch-core</artifactId>
+			<version>1.2-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.compass-project</groupId>
+			<artifactId>compass</artifactId>
+			<version>2.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.0.1</version>		
+		</dependency>
+		<!-- Cofidis -->
+        <dependency>
+			<groupId>es.cofidis.sl</groupId>
+			<artifactId>sl</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>${jdbc.groupId}</groupId>
+			<artifactId>${jdbc.artifactId}</artifactId>
+			<version>${jdbc.version}</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<manifest>
+							<mainClass>org.springframework.batch.core.launch.support.CommandLineJobRunner</mainClass>
+							<addClasspath>false</addClasspath>
+							<classpathPrefix>lib</classpathPrefix>
+						</manifest>
+					</archive>
+					<finalName>cu-batch-${pom.version}</finalName>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<!-- Para indicar versión de compilación -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>1.5</source>
+					<target>1.5</target>
+				</configuration>
+			</plugin>
+			<!-- Para generar el fichero manifest al jar -->
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-jar-plugin</artifactId>
+		        <configuration>
+		          <useDefaultManifestFile>true</useDefaultManifestFile>
+		        </configuration>
+		    </plugin>		    
+		</plugins>
+	</build>
+	
+	<reporting>
+	    <plugins>
+	      <plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-javadoc-plugin</artifactId>
+	      </plugin>
+	    </plugins>
+	</reporting>
+	
+	<prerequisites>
+		<maven>2.0.6</maven>
+	</prerequisites>
+	
+	<scm>
+		<connection>scm:svn:${mvn.svn}/trunk/core</connection>
+		<developerConnection>scm:svn:${mvn.svn}/trunk/core</developerConnection>
+		<url>${mvn.svn}/trunk/core</url>
+	</scm>
+
+</project>

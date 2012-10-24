@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:batch="http://www.springframework.org/schema/batch"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd
+       http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-2.1.xsd
+       http://www.springframework.org/schema/context
+	   http://www.springframework.org/schema/context/spring-context-2.5.xsd"
+	default-autowire="byType">
+
+	<aop:aspectj-autoproxy />
+	<context:component-scan base-package="springbatch" />
+	
+	<!-- jpa config
+	<bean id="txManager" class="org.springframework.orm.jpa.JpaTransactionManager" />	
+	 -->
+	 <bean id="txManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" />
+	
+	<tx:annotation-driven transaction-manager="txManager"/>
+	
+	<tx:advice id="txAdvice" transaction-manager="txManager">
+        <tx:attributes>
+            <tx:method name="*" rollback-for="java.lang.Exception" />
+            <tx:method name="read*" read-only="true" />
+            <tx:method name="is*" read-only="true" />
+            <tx:method name="exists*" read-only="true" />
+            <tx:method name="get*" read-only="true" />
+            <tx:method name="find*" read-only="true" />
+            <tx:method name="validate*" read-only="true" />
+            <tx:method name="count*" read-only="true" />
+        </tx:attributes>
+    </tx:advice>
+    
+    <!--
+         El origen de datos que apunta a la base de datos con las tablas de
+         Spring Batch. En estas tablas Spring Batch lleva un registro de todas
+         las corridas que se hicieron.
+         El script para generar las tablas necesarias por Spring Batch se
+         encuentra dentro de spring-batch-core-xxxx.jar (en la raiz).
+     -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@172.16.216.77:1521/GAUDITST" />
+		<property name="username" value="CLIEN" />
+		<property name="password" value="cofidis" />
+		<property name="initialSize" value="1" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="5" />
+	</bean>
+	
+	<bean class="es.cofidis.sl.CofidisLog4jConfigurer" lazy-init="false">
+		<!-- property name="logpath" value="${log4j.path}" /-->
+		<property name="refreshInterval" value="0" />
+	</bean>
+			
+	<bean class="com.esilog.descans.util.PropertyPlaceholdersUtils">
+		<property name="ignoreResourceNotFound" value="true" />
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+		<property name="systemPropertiesMode" value="2" />
+		<property name="locations">
+			<list merge="false">
+				<value>file:${fichero.prop}</value>
+			</list>
+		</property>
+	</bean>
+	
+
+    <!--
+         El origen de datos que apunta a la base de datos con las tablas de
+         Spring Batch. En estas tablas Spring Batch lleva un registro de todas
+         las corridas que se hicieron.
+         El script para generar las tablas necesarias por Spring Batch se
+         encuentra dentro de spring-batch-core-xxxx.jar (en la raiz).
+     -->
+    <!-- bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@172.16.216.77:1521/GAUDITST" />
+		<property name="username" value="CLIEN" />
+		<property name="password" value="cofidis" />
+		<property name="initialSize" value="1" />
+		<property name="maxActive" value="10" />
+		<property name="maxIdle" value="5" />
+	</bean-->
+
+    <!--
+        El gestor de transacciones que se usará durante el procesamiento batch.
+        En este caso, usamos una implementación "dummy" provista por Spring Batch,
+        ya que no usaremos ningun recurso transaccional.
+    -->
+    <bean id="transactionManager" class="org.springframework.batch.support.transaction.ResourcelessTransactionManager"/>
+
+    <!--
+        El repositorio de tareas de Spring Batch. Este bean es el encargado
+        de guardar la información de las corridas en la base de datos.
+        En este caso usaremos un repositorio en memoria, útil para desarrollo.
+    -->
+    <bean id="jobRepository" class="org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean">
+        <property name="transactionManager" ref="transactionManager"/>
+    </bean>
+
+
+    <!--
+        Un ejecutador de tareas. A través de esta clase es que se inicia la
+        ejecución de las taras batch.
+    -->
+    <bean id="jobLauncher" class="org.springframework.batch.core.launch.support.SimpleJobLauncher">
+        <property name="jobRepository" ref="jobRepository" />
+    </bean>
+
+
+    <!--
+        Una trabajo de Spring Batch.
+        Este es el bean principal de Spring Batch, que declara el trabajo batch
+        que se va a ejecutar. El trabajo está compuesta de varios "pasos" (step).
+        Los pasos se ejecutan en forma secuencial.
+
+        En este ejemplo, el trabajo consiste en un único paso "imprimirPorConsola".
+        Este paso tiene un "itemReader" que lee planetas y los mapea a un objeto
+        Planeta, y un "itemWriter" que imprimir objetos Planeta por consola.
+    -->
+    <batch:job id="trabajoBatch">
+        <batch:step id="imprimirPorConsola">
+            <batch:tasklet>
+                <batch:chunk reader="planetaItemReader"
+                             processor="pasarAMayusculas"
+                             writer="consolaItemWriter"
+                             commit-interval="5" />
+            </batch:tasklet>
+        </batch:step>
+    </batch:job>
+
+
+    <!--
+        Lector de planetas. Esta reader de base de datos es una clase
+        utilitaria provista por Spring Batch. Este bean ejecuta el query "sql"
+        y recorrer las filas resultantes. Cada fila es transformada con el
+        "mapper" asociado.
+        En este caso se usa un mapper utilitario, que de acuerdo al alias
+        indicado en cada columna del query lo asocia a un objeto Planeta.
+    -->
+    <bean id="planetaItemReader" class="org.springframework.batch.item.database.JdbcCursorItemReader">
+        <property name="dataSource" ref="dataSource" />
+        <property name="sql" value="select CUT032_IDFINANCIA as codigo, CUT032_NOMTITULAR as nombre, CUT032_IMPORTE as diametro, CUT032_DIGITOCONTR as tipo, CUT032_DOMICILIO as significado from GESTI.CUT032FINANCIACIONES"/>
+        <property name="rowMapper">
+            <bean id="planetaMapper" class="org.springframework.jdbc.core.BeanPropertyRowMapper">
+                <property name="mappedClass">
+                    <value type="java.lang.Class">springbatch.demo8.Planeta</value>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+
+    <!--
+        Esta es la clase encargada de escribir los resultados de la lectura
+        del "itemReader". Cada elemento leido por el "planetaItemReader" es
+        procesado por este "itemWriter".
+        ConsolaItemWriter recibe entonces un Planeta y lo muestra por consola.
+    -->
+    <bean id="consolaItemWriter" class="springbatch.demo8.ConsolaItemWriter"/>
+
+    <!--
+        Esta es la clase que va a recibir los objetos desde el "planetaItemReader",
+        lo va a modificar (para eso esta!), y luego lo va a pasar al "consolaItemWriter"
+        para que muestre por pantalla el atributo modificado.
+    -->
+    <bean id="pasarAMayusculas" class="springbatch.demo8.PlanetaProcessor"/>
+
+
+</beans>
