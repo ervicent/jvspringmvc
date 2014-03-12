@@ -1,0 +1,145 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+	<head>
+    
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="abstract" content="Página web Barnasur">
+        <meta name="author" content="Raúl Sierra Pérez">
+        <meta name="copyright" content="Raúl Sierra Pérez 2014" />
+        <meta name="date" content="08-03-2014">
+        <meta name="keywords" content="Barnasur, Multiservicios">
+        <meta name="locality" content="Aguilar de la Fra., España"> 
+        <meta name="robots" content="index,follow"/>
+        <meta name="reply-to" content="raulsete88@gmail.com">
+        <meta name="description" content="Esta página web está dedicada a ofrecer multiservicios" />
+        <meta name="generator" content="Macromedia Dreamweaver" />
+    
+        <title>Barnasur</title>
+    
+        <link href="default.css" rel="stylesheet" type="text/css" media="all" />
+        <link href="fonts.css" rel="stylesheet" type="text/css" media="all" />
+        
+        <!--Visor de imagenes-->
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+        <script src="galleria/galleria-1.3.5.min.js"></script>
+        <style>
+            .galleria{ width: 700px; height: 400px; background: #000 }
+        </style>
+        
+    </head>
+    
+    <body>
+        <!--Visor de imagenes-->
+        <script>
+           if (Galleria) { $("body").text('Galleria works') }
+        </script>
+        <div id="wrapper">
+            <!--Menu-->
+            <div id="menu" class="container">
+                <ul>
+                    <li class="current_page_item"><a href="#">Inicio</a></li>
+                    <li><a href="ubicacion.html">Ubicación</a></li>
+                    <li><a href="presupuestos.html">Presupuesto</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                </ul>
+            </div>
+            <!-- end #menu -->
+            
+            <!--Logotipo-->
+            <div id="header" class="container">
+              <div id="logo">
+                  <h1>barnasur</h1>
+                    <p>especialistas en multiservicios</p>
+                </div>
+                <div id="banner"><img src="images/pic01.jpg" alt="" title="Barnasur"/>
+                </div>
+            </div>
+            
+            <!--Bienvenido-->
+            <div id="welcome" class="container">
+                <div class="title">
+                    <h2>bienvenido a nuestra web</h2>
+                    <span class="byline"><strong>BARNASUR</strong> es una empresa dedicada a ofrecer a sus clientes...</span>
+				</div>         
+            </div>
+            
+            
+            <div id="page" class="container">
+                <div id="content">
+                    
+                    <!--Proyectos-->
+                    <div class="title">
+                        <h2>proyectos</h2>
+                        <span class="byline">estos son algunos de los proyectos que ya hemos realizado</span>
+                    </div>
+                    
+                    <!--Visor imagenes--> 
+                    <div class="galleria">
+                        <img src="images/pic01.jpg" width="693" height="384" widht="600px">
+                        <img src="images/pic02.jpg" width="693" height="384" widht="600px">
+                        <img src="images/pic03.jpg" width="693" height="384" widht="600px">
+                    </div>                 
+                    <script>
+                        Galleria.loadTheme('galleria/themes/classic/galleria.classic.min.js');
+                        Galleria.run('.galleria');
+                    </script>                
+                    <p>Descripcion sobre algunos proyectos llevados a cabo</p>
+                </div>
+                
+                <!--Servicios-->
+                <div id="sidebar">
+                    <div class="box1">
+                        <div class="title">
+                            <h2>servicios</h2>
+                        </div>
+                            <ul class="style2">
+                                <li>Desalojo</li>
+                                	<ul class="style3">
+                                    	<li>Comercios</li>
+                                        <li>Domicilios</li>
+                                        <li>Locales</li>
+                                        <li>Naves industriales</li>
+                                    </ul>                              
+                                <li>Limpieza</li>
+                                	<ul class="style3">
+                                    	<li>Domicilios</li>
+                                        <li>Comunidades</li>
+                                        <li>Oficinas</li>
+                                        <li>Comercios</li>
+                                    </ul>
+                                <li>Reformas</li>
+                                	<ul class="style3">
+                                    	<li>Albañileria</li>
+                                        <li>Electricidad</li>
+                                        <li>Instalaciones</li>
+                                        <li>Carpinteria</li>
+                                        <li>Pintura</li>
+                                        <li>Pladur</li>
+                                    </ul>
+                            </ul>
+                	</div>               
+                </div>
+            </div>
+        </div>
+        
+        <!--Contacto-->
+        <div id="footer-wrapper">
+            <div id="footer" class="container">
+                <h2>Conecta con nosotros</h2>
+                <span class="byline">Encuentranos en las redes sociales</span>
+                <ul class="contact">
+                    <li><a href="#" class="icon icon-twitter"><span>Twitter</span></a></li>
+                    <li><a href="#" class="icon icon-facebook"><span>Facebook</span></a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <!--Copyright-->
+        <div id="copyright" class="container">
+            <p>Copyright (c) 2013 Sitename.com. All rights reserved. | Photos by Fotogrph | Design by Barnasur</p>
+        </div>
+    </body>
+    
+</html>
