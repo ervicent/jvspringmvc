@@ -1,0 +1,49 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Cambiar Foto
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<h1>Cambiar foto</h1>
+		<p:panel style="margin: 0 0 0 30px;">
+			<div id="perfil-playa">
+				<h:panelGrid columns="2">
+					<p:column>
+						<h:graphicImage id="fotoPerfil" library="fotos_perfil_usuarios"
+							name="#{usuarioMB.usuarioLoggeado.nombreUser}.jpg"
+							styleClass="bordes-foto-perfil"
+							rendered="#{usuarioMB.usuarioLoggeado.fotoUsuario != null}" />
+						<h:graphicImage library="fotos_perfil_usuarios" name="sinfoto.jpg"
+							styleClass="bordes-foto-perfil"
+							rendered="#{usuarioMB.usuarioLoggeado.fotoUsuario == null}" />
+					</p:column>
+					<h:outputText
+						value="#{usuarioMB.usuarioLoggeado.apellido}&#160;
+										#{usuarioMB.usuarioLoggeado.nombre}"
+						style="font-size: 34px;font-style: italic;color: #192129;" />
+					<f:facet name="footer">
+						<h:form id="uploadForm" enctype="multipart/form-data">
+							<p:fileUpload id="fotoPerfil" uploadLabel="Seleccione una imagen"
+								label="Seleccione una imagen"
+								value="#{usuarioMB.fotoPerfilFile}" mode="simple"
+								allowTypes="*.jpg;" />
+							<h:commandButton value="Subir foto" ajax="false"
+								actionListener="#{usuarioMB.upload}" update="fotoPerfil"
+								style="margin:0 0 0 10px; padding: 0 5px 0 5px; width:100px;"
+								oncomplete="document.location.reload(true)" />
+						</h:form>
+					</f:facet>
+				</h:panelGrid>
+			</div>
+		</p:panel>
+	</ui:define>
+</ui:composition>

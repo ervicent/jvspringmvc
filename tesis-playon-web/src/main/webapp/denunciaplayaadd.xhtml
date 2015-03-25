@@ -1,0 +1,71 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Denunciar playa
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Denunciar Playa de Estacionamiento</h1>
+
+		<h:form style="margin:0 0 0 20px;">
+			<p:growl id="messages" />
+			<div align="left">
+				<h:panelGrid id="displayView" columns="3" cellpadding="8"
+					cellspacing="10" styleClass="admin-input-text">
+
+					<p:column>
+						<div align="right">
+							<h:outputLabel for="playa" value="Playa a denunciar: " />
+						</div>
+					</p:column>
+					<p:column>
+						<p:inputText id="playa" style="width: 200px"
+							value="#{denunciaPlayaMB.playaSelected.nombreComercial}"
+							readonly="true">
+						</p:inputText>
+					</p:column>
+					<p:column />
+
+					<p:column>
+						<div align="right">
+							<h:outputLabel for="asunto" value="Motivo de la denuncia: " />
+						</div>
+					</p:column>
+
+					<p:column styleClass="vert-align-top">
+						<p:inputTextarea id="asunto" rows="7" cols="33"
+							style="width: 300px" value="#{denunciaPlayaMB.motivo}"
+							required="true" requiredMessage="Campo motivo obligatorio"
+							maxlength="500">
+							<f:validateLength minimum="3" update="mensajeMsg" />
+							<p:ajax event="blur" update="mensajeMsg" />
+						</p:inputTextarea>
+					</p:column>
+					<p:column>
+						<p:message id="mensajeMsg" for="asunto" display="icon" />
+					</p:column>
+
+					<p:column></p:column>
+					<p:column>
+						<div align="right">
+							<p:commandButton id="enviar" value="Registrar denuncia"
+								action="#{denunciaPlayaMB.denunciarPlaya}" ajax="false">
+							</p:commandButton>
+							<p:commandButton id="cancelar" value="Cancelar"
+								action="/viewperfilplaya.html"
+								ajax="false" immediate="true">
+								<f:param name="id" value="#{denunciaPlayaMB.playaSelected.id}"/>
+							</p:commandButton>
+						</div>
+					</p:column>
+					<p:column></p:column>
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

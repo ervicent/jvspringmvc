@@ -1,0 +1,103 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Abonados
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<h1>Abonados</h1>
+
+		<h:form>
+
+			<p:dataTable id="abonos" var="abono" paginator="true"
+				value="#{abonoMB.abonadosEnLaPlaya}" rows="5"
+				emptyMessage="No existen clientes con abonos para su Playa"
+				paginatorPosition="bottom">
+
+
+				<p:column headerText="Nombre" style="text-align:center">
+
+					<f:facet name="header">
+						<h:outputText value="Nombre" />
+					</f:facet>
+					<h:outputText value="#{abono.vehiculo.cliente.usuario.nombre}" />
+				</p:column>
+
+				<p:column headerText="Apellido" style="text-align:center">
+
+					<f:facet name="header">
+						<h:outputText value="Apellido" />
+					</f:facet>
+					<h:outputText value="#{abono.vehiculo.cliente.usuario.apellido}" />
+				</p:column>
+
+				<p:column headerText="Fecha desde" style="text-align:center">
+
+					<f:facet name="header">
+						<h:outputText value="Fecha desde" />
+					</f:facet>
+					<h:outputText value="#{abono.fechaVigenciaDesde}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Fecha hasta" style="text-align:center">
+
+					<f:facet name="header">
+						<h:outputText value="Fecha hasta" />
+					</f:facet>
+					<h:outputText value="#{abono.fechaVigenciaHasta}">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Patente" style="text-align:center">
+
+					<f:facet name="header">
+						<h:outputText value="Patente" />
+					</f:facet>
+					<h:outputText value="#{abono.vehiculo.patente}" />
+				</p:column>
+
+				<f:facet name="footer">
+
+					<div align="center">
+						<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+							<h:commandLink title="Exportar a excel">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/excel.png" />
+								<p:dataExporter type="xls" target="abonos" fileName="Abonados" />
+							</h:commandLink>
+
+							<h:commandLink title="Exportar a PDF">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/pdf.png" />
+								<p:dataExporter type="pdf" target="abonos"
+									preProcessor="#{empleadoMB.listadoAbonadosPDF}"
+									fileName="Abonados" />
+							</h:commandLink>
+						</h:panelGrid>
+					</div>
+				</f:facet>
+
+			</p:dataTable>
+			<br></br>
+			<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+				<p:commandButton id="addAbono" value="Nuevo abonado"
+					action="/playa/gerencia/abonoaddgerente.html?faces-redirect=true"
+					ajax="false" />
+			</h:panelGroup>
+
+		</h:form>
+
+
+	</ui:define>
+</ui:composition>

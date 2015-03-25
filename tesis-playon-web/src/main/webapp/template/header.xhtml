@@ -1,0 +1,21 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+		
+		<div id="header">
+			<div id="logo">
+				<h1><h:link outcome="/index">
+					<h:graphicImage library="images" name="logo_playon.png" styleClass="logo" />
+				</h:link></h1>
+			</div>
+			<div id="loginform">
+				<h:outputText value="#{LoginMB.getLoggedUser}" />
+				<ui:include src="loginform.xhtml" />
+				
+			</div>
+		</div>
+		
+</ui:composition>	

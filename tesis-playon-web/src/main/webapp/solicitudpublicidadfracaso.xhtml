@@ -1,0 +1,28 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Solicitud de alta de publicidad
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" redisplay="false" globalOnly="true" />
+		<div style="margin-left: 20px;">
+			<h1>Solicitud de alta de publicidad</h1>
+			<p>Se ha producido un error en la transacción. No se pudo registrar 
+				el alta de la publicidad. ¡Disculpe las molestias ocacionadas. Muchas gracias!</p>
+			
+			<div align="right">
+				<p>El equipo de <i>Playón, Red de Playas.</i></p>
+			</div>
+			
+			<p>
+				<h:link value="Volver" outcome="index" />
+			</p>
+		</div>
+	</ui:define>
+</ui:composition>

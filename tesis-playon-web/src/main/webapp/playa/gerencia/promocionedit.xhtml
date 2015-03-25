@@ -1,0 +1,166 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Nueva promoción
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Editar promoción</h1>
+
+		<p:growl id="messages" />
+		<h:form id="form" style="margin-left:20px">
+
+			<div align="left" style="margin: 10px 30px 5px 50px">
+				<p:panel header="Datos de la promoción">
+					<h:panelGrid id="editPromocion" columns="3" cellspacing="5"
+						cellpadding="5">
+
+						<h:outputLabel for="nombre" value="Nombre: " />
+						<p:inputText id="nombre" style="width: 200px"
+							value="#{promocionMB.promocionSelected.nombre}" maxlength="25"
+							required="true" requiredMessage="Campo obligatorio">
+							<f:validateLength minimum="3" />
+							<p:ajax event="blur" update="nombreMsg" />
+						</p:inputText>
+						<p:message id="nombreMsg" for="nombre" display="icon" />
+
+						<h:outputLabel for="descripcion" value="Descripción: " />
+						<p:inputTextarea id="descripcion" style="width: 200px"
+							value="#{promocionMB.promocionSelected.descripcion}">
+							<f:validateLength minimum="3" />
+							<p:ajax event="blur" update="descripcionMsg" />
+						</p:inputTextarea>
+						<p:message id="descripcionMsg" for="descripcion" display="icon" />
+
+						<h:outputLabel for="fechaInicio" value="Fecha de inicio: " />
+						<p:calendar showButtonPanel="true" navigator="true"
+							mindate="#{promocionMB.today}" id="fechaInicio"
+							value="#{promocionMB.promocionSelected.fechaInicio}"
+							required="true" requiredMessage="Campo obligatorio" locale="es"
+							validator="#{promocionMB.validateDateInicial}"
+							pattern="dd/MM/yyyy">
+							<p:ajax event="blur" update="fechaInicioMsg" />
+						</p:calendar>
+						<p:message id="fechaInicioMsg" for="fechaInicio" display="icon" />
+
+						<h:outputLabel for="fechaFin" value="Fecha de finalización: " />
+						<p:calendar showButtonPanel="true" navigator="true"
+							mindate="#{promocionMB.today}" id="fechaFin"
+							value="#{promocionMB.promocionSelected.fechaFin}" required="true"
+							requiredMessage="Campo obligatorio" locale="es"
+							validator="#{promocionMB.validateDate}" pattern="dd/MM/yyyy">
+							<p:ajax event="blur" update="fechaFinMsg" />
+						</p:calendar>
+						<p:column />
+
+						<p:column />
+						<p:column>
+							<div style="width: 215px;">
+								<p:message id="fechaFinMsg" for="fechaFin" display="text" />
+							</div>
+						</p:column>
+						<p:column />
+
+						<h:outputLabel for="horaInicio" value="Hora de inicio: " />
+						<p:calendar value="#{promocionMB.promocionSelected.horaInicio}"
+							pattern="HH:mm" timeOnly="true" locale="es" />
+						<p:column />
+
+						<h:outputLabel for="horaFin" value="Hora de finalización: " />
+						<p:calendar value="#{promocionMB.promocionSelected.horaFin}"
+							pattern="HH:mm" timeOnly="true" locale="es" />
+						<p:column />
+
+
+						<h:outputLabel for="tarifa" value="Tarifa: " />
+						<p:inputText id="tarifa" style="width: 200px" readonly="true"
+							value="#{promocionMB.promocionSelected.tarifa.categoriaVehiculo.nombre} / #{promocionMB.promocionSelected.tarifa.tipoEstadia.nombre}"
+							maxlength="25" required="true"
+							requiredMessage="Campo obligatorio">
+							<p:ajax event="blur" update="tarifaMsg" />
+						</p:inputText>
+						<p:commandButton id="seleccionarTarifa" value="Seleccionar tarifa"
+							onclick="popupTarifas.show();" type="button" style="width: 150px" />
+
+						<p:column />
+						<p:column>
+							<div style="width: 215px;">
+								<p:message id="tarifaMsg" for="tarifa" display="text" />
+							</div>
+						</p:column>
+						<p:column />
+
+						<h:outputLabel for="descuento" value="Descuento: (%)" />
+						<p:inputText id="descuento" style="width: 200px"
+							value="#{promocionMB.promocionSelected.descuento}"
+							required="true" requiredMessage="Campo obligatorio">
+							<f:validateLength minimum="3" />
+							<p:ajax event="blur" update="descuentoMsg" />
+							<p:ajax event="keyup" update="montoConDescuento"
+								listener="#{promocionMB.calcularDescuento}" />
+						</p:inputText>
+						<p:message id="descuentoMsg" for="descuento" display="icon" />
+
+						<h:outputLabel for="montoFijo" value="Monto fijo: " />
+						<p:inputText id="montoFijo" style="width: 200px"
+							value="#{promocionMB.promocionSelected.montoFijo}"
+							readonly="true">
+							<f:convertNumber type="currency" currencySymbol="$ " />
+						</p:inputText>
+						<p:column />
+
+						<h:outputLabel for="montoConDescuento"
+							value="Monto con descuento: " />
+						<p:inputText id="montoConDescuento" style="width: 200px"
+							value="#{promocionMB.montoConDescuento}" maxlength="25"
+							readonly="true">
+							<f:convertNumber type="currency" currencySymbol="$ " />
+						</p:inputText>
+						<p:column />
+					</h:panelGrid>
+					<div align="center" style="margin: 10px 30px 0 0;">
+						<p:commandButton id="modificar" value="Modificar"
+							action="#{promocionMB.updatePromocion}" ajax="false" />
+						<p:commandButton id="cancelar" value="Cancelar" immediate="true"
+							ajax="false" style="margin-left:10px;"
+							action="/playa/gerencia/promocioneslist.html?faces-redirect=true" />
+					</div>
+				</p:panel>
+			</div>
+			<div style="width: 650px;">
+				<p:dialog id="modalDialog" header="Tarifas" widgetVar="popupTarifas"
+					modal="true" draggable="false" width="650">
+					<h:form id="tarifaForm">
+						<p:dataGrid id="tarifas" var="tarifa" columns="3" paginator="true"
+							value="#{tarifaMB.tarifaPlayaLogged}"
+							emptyMessage="No existen tarifas" paginatorPosition="bottom">
+							<p:panel
+								header="#{tarifa.categoriaVehiculo.nombre}&#160;/&#160;#{tarifa.tipoEstadia.nombre}"
+								style="text-align:center">
+								<h:panelGrid columns="2" style="width:100%;">
+									<h:outputText value="Importe: " />
+									<h:outputText value="#{tarifa.importe}">
+										<f:convertNumber type="currency" currencySymbol="$ " />
+									</h:outputText>
+									<p:column />
+									<p:commandButton id="seleccionar" value="Seleccionar"
+										action="#{promocionMB.seleccionarTarifa(tarifa)}" ajax="false"
+										oncomplete="popupTarifas.hide();" immediate="true">
+									</p:commandButton>
+								</h:panelGrid>
+							</p:panel>
+						</p:dataGrid>
+					</h:form>
+				</p:dialog>
+			</div>
+		</h:form>
+		<h:outputScript name="js/i18n.js" />
+	</ui:define>
+</ui:composition>

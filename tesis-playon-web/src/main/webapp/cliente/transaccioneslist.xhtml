@@ -1,0 +1,107 @@
+<ui:composition template="../template/templateCliente.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Historial de movimientos
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<h1>Mis Transacciones</h1>
+		<h:form style="margin:0 0 0 20px;">
+			<h:panelGrid columns="6" cellspacing="10">
+				<h:outputText value="Desde:" />
+				<p:calendar value="#{cuentaClienteMB.fechaDesde}" id="calDesde"
+					navigator="true" locale="es" showButtonPanel="true"
+					pattern="dd/MM/yyyy" />
+
+				<p:column>
+					<div align="right">
+						<h:outputText value="Hasta: " />
+					</div>
+				</p:column>
+				<p:calendar value="#{cuentaClienteMB.fechaHasta}" id="calHasta"
+					navigator="true" locale="es" showButtonPanel="true"
+					pattern="dd/MM/yyyy" />
+
+				<p:commandButton id="buscarButton" value="Buscar"
+					icon="ui-icon-search" ajax="true" update="transacciones" />
+				<p:commandButton id="buscarButton2" style="width:80px;"
+					action="#{cuentaClienteMB.updateListado}" value="Todas"
+					icon="ui-icon-search" ajax="true" update="transacciones" />
+
+			</h:panelGrid>
+
+
+			<p:dataTable id="transacciones" var="transaccionCliente"
+				rowStyleClass="#{transaccionCliente.tipoPago.nombre eq 'Cuenta' ? 'old' :null}"
+				paginator="true" rows="10" value="#{cuentaClienteMB.transacciones}"
+				emptyMessage="No ha realizado transacciones"
+				paginatorPosition="bottom">
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Fecha" />
+					</f:facet>
+					<h:outputText value="#{transaccionCliente.fecha}">
+						<f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeStyle="short"
+							type="both" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Tipo Transacción" />
+					</f:facet>
+					<h:outputText value="#{transaccionCliente.tipoPago.descripcion}">
+					</h:outputText>
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Importe" />
+					</f:facet>
+
+					<h:outputText value="#{transaccionCliente.importe}">
+						<f:convertNumber type="currency" currencySymbol="$" />
+					</h:outputText>
+				</p:column>
+
+				<p:columnGroup type="footer">
+					<p:row>
+						<p:column colspan="2" footerText="Saldo" style="text-align:right" />
+						<p:column footerText="$ #{cuentaClienteMB.cuentaCliente.saldo}">
+						</p:column>
+					</p:row>
+				</p:columnGroup>
+
+
+
+				<f:facet name="footer">
+					<div align="center">
+						<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+							<h:commandLink title="Exportar a excel">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/excel.png" />
+								<p:dataExporter type="xls" target="transacciones"
+									fileName="Transacciones" />
+							</h:commandLink>
+
+							<h:commandLink title="Exportar a PDF">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/pdf.png" />
+								<p:dataExporter type="pdf" target="transacciones"
+									preProcessor="#{cuentaClienteMB.listadoTransaccionesPDF}"
+									fileName="Transacciones" />
+							</h:commandLink>
+						</h:panelGrid>
+					</div>
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,77 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Nueva Tarifa" />
+
+	<ui:define name="panelContent">
+		<h:form>
+		
+			<p:growl id="messages" />
+			<table class="admin-input-text">
+				<tr>
+					<td><h:outputText for="playa" value="Playa: " /></td>
+					<td><p:selectOneMenu value="#{tarifaMB.tarifaSelected.playa}" effect="fade">
+							<f:selectItems value="#{playaMB.playaList}" var="playa"
+								itemValue="#{playa}" itemLabel="#{playa.nombreComercial}" />
+							<f:converter converterId="playaConverter" />
+						</p:selectOneMenu></td>
+				</tr>
+
+				<tr>
+					<td><h:outputText for="tipoEstadia" value="Tipo Estadia: " /></td>
+					<td><p:selectOneMenu value="#{tarifaMB.tarifaSelected.tipoEstadia}"
+							effect="fade">
+							<f:selectItems value="#{tipoEstadiaMB.tipoEstadiaList}"
+								var="tipoEstadia" itemValue="#{tipoEstadia}"
+								itemLabel="#{tipoEstadia.nombre}" />
+							<f:converter converterId="tipoEstadiaConverter" />
+						</p:selectOneMenu></td>
+				</tr>
+
+				<tr>
+					<td><h:outputText for="categoriaVehiculo"
+							value="Categoria Vehiculo: " /></td>
+					<td><p:selectOneMenu value="#{tarifaMB.tarifaSelected.categoriaVehiculo}"
+							effect="fade">
+							<f:selectItems
+								value="#{categoriaVehiculoMB.categoriaVehiculoList}"
+								var="categoriaVehiculo" itemValue="#{categoriaVehiculo}"
+								itemLabel="#{categoriaVehiculo.nombre}" />
+							<f:converter converterId="categoriaVehiculoConverter" />
+						</p:selectOneMenu></td>
+				</tr>
+
+				<tr>
+					<td><h:outputLabel for="importe" value="Importe: " /></td>
+					<td><p:inputText id="importe" value="#{tarifaMB.tarifaSelected.importe}"
+							required="true" requiredMessage="Campo obligatorio">
+							<p:ajax event="blur" update="importeMsg" />
+						</p:inputText></td>
+					<td><p:message id="importeMsg" for="importe" display="icon" /></td>
+				</tr>
+
+				<tr>
+					<td><h:outputLabel for="vigente" value="Vigente: " /></td>
+					<td><p:selectBooleanCheckbox id="vigente"
+							value="#{tarifaMB.tarifaSelected.vigente}">
+						</p:selectBooleanCheckbox></td>
+					<td></td>
+				</tr>
+
+				<tr style="text-align: right;">
+					<td colspan="2"><p:commandButton id="reset" value="Limpiar"
+							action="#{tarifaMB.reset}" ajax="false"
+							style="margin-right:15px" />
+						<p:commandButton id="addTarifa" value="Modificar Tarifa"
+							action="#{tarifaMB.updateTarifaAdmin()}" ajax="false" />
+						</td>
+					<td></td>
+				</tr>
+			</table>
+		</h:form>
+	</ui:define>
+</ui:composition>

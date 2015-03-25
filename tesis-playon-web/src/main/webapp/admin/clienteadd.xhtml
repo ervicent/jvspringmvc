@@ -1,0 +1,139 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<ui:param name="panelTitle" value="Nuevo Cliente" />
+
+	<ui:define name="panelContent" class="admin-font">
+		<h:form>
+			<p:growl id="messages" />
+
+			<div align="center">
+				<h:panelGrid id="displayView" columns="1" cellpadding="8"
+					styleClass="admin-input-text">
+					<p:panel header="Datos de Usuario">
+						<h:panelGrid columns="3" cellpadding="8"
+							styleClass="admin-input-text">
+
+							<h:outputLabel for="nombreUser" value="Nombre usuario: " />
+							<p:inputText id="nombreUser" value="#{clienteMB.nombreUser}"
+								required="true" requiredMessage="Campo nombre usuario obligatorio"
+								maxlength="25" validator="#{validatorMB.isValidUserName}">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="nombreUserMsg" />
+							</p:inputText>
+							<p:message id="nombreUserMsg" for="nombreUser" display="icon" />
+
+							<h:outputLabel for="password" value="Contraseña: " />
+							<p:password id="password" value="#{clienteMB.password}"
+								required="true" feedback="true" match="passwordRepeat"
+								requiredMessage="Campo contraseña obligatorio">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="passwordRepeatMsg" />
+							</p:password>
+							<p:column />
+
+							<h:outputLabel for="passwordRepeat" value="Repetir Contraseña: " />
+							<p:password id="passwordRepeat" value="#{clienteMB.password}"
+								required="true" feedback="true"
+								requiredMessage="Campo repetir contraseña obligatorio">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="passwordRepeatMsg" />
+							</p:password>
+							<p:message id="passwordRepeatMsg" for="passwordRepeat"
+								display="icon" />
+
+						</h:panelGrid>
+					</p:panel>
+
+					<p:panel header="Datos de Cliente">
+						<h:panelGrid columns="3" cellpadding="8"
+							styleClass="admin-input-text">
+
+							<h:outputLabel for="nombre" value="Nombre: " />
+							<p:inputText id="nombre" value="#{clienteMB.nombre}"
+								required="true" requiredMessage="Campo nombre obligatorio"
+								maxlength="40">
+								<f:validateLength minimum="2" />
+								<p:ajax event="blur" update="nombreMsg" />
+							</p:inputText>
+							<p:message id="nombreMsg" for="nombre" display="icon" />
+
+							<h:outputLabel for="apellido" value="Apellido: " />
+							<p:inputText id="apellido" value="#{clienteMB.apellido}"
+								required="true" requiredMessage="Campo apellido obligatorio"
+								maxlength="40">
+								<f:validateLength minimum="2" />
+								<p:ajax event="blur" update="apellidoMsg" />
+							</p:inputText>
+							<p:message id="apellidoMsg" for="apellido" display="icon" />
+
+							<h:outputText for="tipoDoc" value="Tipo Doc.: " />
+							<p:selectOneMenu style="width: 293px"
+								value="#{clienteMB.tipoDoc}" effect="fade">
+								<f:selectItems value="#{tipoDocMB.tipoDocList}" var="tipoDoc"
+									itemValue="#{tipoDoc}" itemLabel="#{tipoDoc.nombre}" />
+								<f:converter converterId="tipoDocConverter" />
+							</p:selectOneMenu>
+							<p:column />
+
+							<h:outputLabel for="nroDoc" value="Nro. Documento: " />
+							<p:inputText id="nroDoc" value="#{clienteMB.nroDoc}"
+								required="true" requiredMessage="Campo nro. documento obligatorio"
+								type="numeric" maxlength="10">
+								<f:validateLength minimum="6" />
+								<p:ajax event="blur" update="nroDocMsg" />
+							</p:inputText>
+							<p:message id="nroDocMsg" for="nroDoc" display="icon" />
+
+							<h:outputLabel for="email" value="E-mail: " />
+							<p:inputText id="email" value="#{clienteMB.email}"
+								required="true" requiredMessage="Campo obligatorio" type="email"
+								maxlength="100" validator="#{validatorMB.isValidEmailUsuario}">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="emailMsg" />
+							</p:inputText>
+							<p:message id="emailMsg" for="email" display="icon" />
+
+							<h:outputText for="barrio" value="Barrio: " />
+							<p:selectOneMenu style="width: 293px" value="#{clienteMB.barrio}"
+								effect="fade">
+								<f:selectItems value="#{barrioMB.barrioList}" var="barrio"
+									itemValue="#{barrio}" itemLabel="#{barrio.nombre}" />
+								<f:converter converterId="barrioConverter" />
+							</p:selectOneMenu>
+							<p:column />
+
+							<h:outputLabel for="domicilio" value="Domicilio: " />
+							<p:inputText id="domicilio" value="#{clienteMB.domicilio}"
+								required="true" requiredMessage="Campo domicilio obligatorio"
+								maxlength="150">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="domicilioMsg" />
+							</p:inputText>
+							<p:message id="domicilioMsg" for="domicilio" display="icon" />
+
+							<h:outputLabel for="telefono" value="Telefono: " />
+							<p:inputText id="telefono" value="#{clienteMB.telefono}"
+								maxlength="25">
+							</p:inputText>
+							<p:column />
+						</h:panelGrid>
+					</p:panel>
+					<f:facet name="footer" >
+					<div align="center">
+							<p:commandButton id="addCliente" value="Registrar Cliente"
+								action="#{clienteMB.addClienteAdmin}" ajax="false" />
+							<p:commandButton id="reset" value="Cancelar" immediate="true"
+								action="/admin/clientelist.html?faces-redirect=true"
+								ajax="false" style="margin-right:15px" />
+					</div></f:facet>
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

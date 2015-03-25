@@ -1,0 +1,324 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle"
+		value="Listado de Playas de Estacionamiento liquidadas" />
+
+	<ui:define name="panelContent" class="admin-font">
+		<p:growl id="messages" />
+		<table class="ui-datatable liquidacion-table"
+			style="text-align: right;">
+			<tr>
+				<th colspan="3" class="ui-widget-header ui-state-default"
+					scope="col">Período</th>
+			</tr>
+			<tr>
+				<td style="text-align: center; width: 300px;"
+					class="ui-widget-content"><h:outputText value="Desde:   " />
+					<p:calendar value="#{liquidacionMB.fechaDesde}" id="calDesde"
+						navigator="true" locale="es" showButtonPanel="true"
+						pattern="dd/MM/yyyy" /></td>
+
+				<td style="text-align: center; width: 300px;"
+					class="ui-widget-content"><h:outputText value="Hasta:   " />
+					<p:calendar value="#{liquidacionMB.fechaHasta}" id="calHasta"
+						navigator="true" locale="es" showButtonPanel="true"
+						pattern="dd/MM/yyyy" /></td>
+
+				<td style="text-align: center; width: 150px;"
+					class="ui-widget-content"><p:commandButton id="buscarButton"
+						action="#{liquidacionMB.updateLiquidacionesListPorFecha}"
+						value="Buscar" icon="ui-icon-search" ajax="true"
+						update="liquidaciones" /></td>
+			</tr>
+		</table>
+		<br />
+		<p:dataTable id="liquidaciones" var="liquidacion"
+			value="#{liquidacionMB.liquidacionesListPorFecha}"
+			paginatorPosition="bottom" paginator="true" rows="10"
+			sortBy="#{liquidacion.id}"
+			emptyMessage="¡No existen playas de estacionamiento liquidadas!"
+			sortOrder="ascending">
+
+			<f:facet name="header">  
+            	Listado de playas liquidadas  
+        	</f:facet>
+
+			<p:column id="liquidacionId" sortBy="#{liquidacion.id}"
+				styleClass="column-font">
+				<f:facet name="header">
+					<h:outputText value="Número" />
+				</f:facet>
+				<h:outputText value="#{liquidacion.id}" />
+			</p:column>
+
+			<p:column id="fecha" sortBy="#{liquidacion.fecha}"
+				styleClass="column-font">
+				<f:facet name="header">
+					<h:outputText value="Fecha" />
+				</f:facet>
+				<h:outputText value="#{liquidacion.fecha}">
+					<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+				</h:outputText>
+			</p:column>
+
+			<p:column id="fechaD" sortBy="#{liquidacion.fechaDesde}"
+				styleClass="column-font">
+				<f:facet name="header">
+					<h:outputText value="Desde" />
+				</f:facet>
+				<h:outputText value="#{liquidacion.fechaDesde}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column id="fechaH" sortBy="#{liquidacion.fechaHasta}"
+				styleClass="column-font">
+				<f:facet name="header">
+					<h:outputText value="Desde" />
+				</f:facet>
+				<h:outputText value="#{liquidacion.fechaHasta}">
+					<f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+
+			<p:column id="playaHeader"
+				sortBy="#{liquidacion.estadia.playa.razonSocial}"
+				styleClass="column-font">
+				<f:facet name="header">
+					<h:outputText value="Playa" />
+				</f:facet>
+				<h:outputText value="#{liquidacion.estadia.playa.razonSocial}" />
+			</p:column>
+
+			<p:column id="importeHeader" sortBy="#{liquidacion.importeTotal}"
+				styleClass="column-font">
+				<f:facet name="header">
+					<h:outputText value="Importe" />
+				</f:facet>
+				<h:outputText value="#{liquidacion.importeTotal}">
+					<f:convertNumber type="currency" currencySymbol="$" />
+				</h:outputText>
+			</p:column>
+
+			<p:column headerText="Opciones" styleClass="column-options"
+				exportable="false" style="text-align:center; width:80px;">
+
+				<p:commandLink id="view" update=":mainForm:displayView"
+					oncomplete="playasDialog.show();" title="Ver Datos">
+					<f:setPropertyActionListener value="#{liquidacion.estadia.playa}"
+						target="#{playaMB.playaSelected}" />
+					<h:graphicImage library="images/icons" name="search.png" />
+				</p:commandLink>
+
+				<p:commandLink id="viewTrn" update=":mainForm:pnlTransaccionesView"
+					action="#{transaccionPlayaMB.updateTransaccionesList}"
+					oncomplete="trnDialog.show();" title="Ver Transacciones">
+					<f:setPropertyActionListener value="#{liquidacion}"
+						target="#{transaccionPlayaMB.liquidacionSelected}" />
+					<h:graphicImage library="images/icons" name="list.png" />
+				</p:commandLink>
+
+			</p:column>
+			<f:facet name="footer">
+				<div align="center">
+					<h:panelGrid columns="2" header="Exportar" style="width:10%;">
+						<h:commandLink title="Exportar a excel">
+							<p:graphicImage
+								value="http://www.primefaces.org/showcase/images/excel.png" />
+							<p:dataExporter type="xls" target=":mainForm:liquidaciones"
+								adminfileName="Liquidaciones" fileName="Liquidaciones" />
+						</h:commandLink>
+
+						<h:commandLink title="Exportar a PDF">
+							<p:graphicImage
+								value="http://www.primefaces.org/showcase/images/pdf.png" />
+							<f:param name="titulo" value="Listado de playas liquidadas" />
+							<p:dataExporter type="pdf" target="liquidaciones"
+								preProcessor="#{transaccionPlayaMB.listadoGeneralTransaccionPDF}"
+								fileName="Liquidaciones">
+							</p:dataExporter>
+						</h:commandLink>
+					</h:panelGrid>
+				</div>
+			</f:facet>
+		</p:dataTable>
+
+		<!-- DIALOG PARA VER LOS DATOS DE LA PLAYA SELECCIONADA -->
+		<p:dialog header="Datos de la Playa" widgetVar="playasDialog"
+			resizable="false" id="playasDlg" showEffect="fade" modal="true"
+			position="center,top" draggable="true"
+			style="margin-bottom:50px;height:70%;">
+
+			<h:panelGrid columns="1" width="100%" height="80%"
+				style="margin:10px 0 10px 0;">
+				<h:panelGrid id="displayView" columns="2" cellpadding="8">
+					<p:column>
+						<h:outputText value="Razon Social: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.razonSocial}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Nombre Comercial: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.nombreComercial}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="C.U.I.T.: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.cuit}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Barrio: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.barrio.nombre}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Domicilio: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.domicilio}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Teléfono: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.telefono}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="E-mail: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.email}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Disponibilidad: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.disponibilidad}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Estado: " />
+					</p:column>
+					<p:column>
+						<h:outputText value="#{playaMB.playaSelected.estado.nombre}"
+							style="font-weight:bold" />
+					</p:column>
+
+				</h:panelGrid>
+				<p:column>
+					<div align="right">
+						<p:commandButton id="btnAceptarPlayas" value="Aceptar"
+							onclick="playasDialog.hide();" type="button" />
+					</div>
+				</p:column>
+			</h:panelGrid>
+		</p:dialog>
+
+		<!-- DIALOG PARA VER LOS DATOS DE LAS TRANSACCIONES DE LA PLAYA SELECCIONADA -->
+		<p:dialog header="Datos de las transacciones" widgetVar="trnDialog"
+			resizable="false" id="trnDlg" showEffect="fade" modal="true"
+			position="center,top" draggable="true"
+			style="margin-bottom:50px;height:70%;">
+
+			<h:panelGrid id="pnlTransaccionesView" columns="1" width="100%"
+				height="80%" style="margin:10px 0 10px 0;">
+				<p:dataTable id="transaccionesView" var="transaccionPlaya"
+					paginatorPosition="bottom" rows="8"
+					value="#{transaccionPlayaMB.transaccionesList}" paginator="true">
+
+					<f:facet name="header">  
+            			Listado de transacciones de la playa 
+        			</f:facet>
+
+					<p:column id="playaHeader" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Playa" />
+						</f:facet>
+						<h:outputText
+							value="#{transaccionPlaya.cuentaPlaya.playa.razonSocial}" />
+					</p:column>
+
+					<p:column id="fechaHeader" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Fecha" />
+						</f:facet>
+						<h:outputText value="#{transaccionPlaya.fecha}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="tipoPagoHeader" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Tipo de Pago" />
+						</f:facet>
+						<h:outputText value="#{transaccionPlaya.tipoPago.nombre}" />
+					</p:column>
+
+					<p:column id="importeHeader" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Importe" />
+						</f:facet>
+						<h:outputText value="#{transaccionPlaya.importe}">
+							<f:convertNumber type="currency" currencySymbol="$" />
+						</h:outputText>
+					</p:column>
+
+					<f:facet name="footer">
+						<div align="center">
+							<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+								<h:commandLink title="Exportar a excel">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/excel.png" />
+									<p:dataExporter type="xls" target="transaccionesView"
+										fileName="Liquidaciones" />
+								</h:commandLink>
+
+								<h:commandLink title="Exportar a PDF">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/pdf.png" />
+									<f:param name="titulo" value="Listado de transacciones" />
+									<p:dataExporter type="pdf" target="transaccionesView"
+										preProcessor="#{transaccionPlayaMB.listadoDetalleTransaccionPDF}"
+										fileName="Detalle Liquidacion">
+									</p:dataExporter>
+								</h:commandLink>
+							</h:panelGrid>
+						</div>
+					</f:facet>
+
+				</p:dataTable>
+				<p:column>
+					<div align="right">
+						<p:commandButton id="btnAceptarTrn" value="Aceptar"
+							onclick="trnDialog.hide()" type="button" />
+					</div>
+				</p:column>
+			</h:panelGrid>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

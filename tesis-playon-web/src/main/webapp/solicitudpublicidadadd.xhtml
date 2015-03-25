@@ -1,0 +1,257 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Solicitud de alta de cliente
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Solicitud de alta de publicidad</h1>
+		<p>Con el siguiente formulario usted puede publicitar su empresa
+			en nuestro sistema, aprovechando todos nuestros beneficios.</p>
+
+		<h:form id="form" style="margin-left:30px"
+			enctype="multipart/form-data">
+			<p:growl id="messages" globalOnly="false" redisplay="false"
+				showSummary="false" autoUpdate="false" />
+
+			<div align="left" style="margin-top: 10px">
+
+				<p:panel header="Datos del Responsable">
+					<h:panelGrid id="displayViewResponsable" columns="3"
+						cellspacing="10" styleClass="admin-input-text">
+
+						<p:column>
+							<h:outputLabel for="apellido" value="Apellido: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="apellido" style="width: 200px"
+								value="#{publicidadMB.apellidoResponsable}" required="true"
+								requiredMessage="Campo apellido obligatorio" maxlength="40">
+								<f:validateLength minimum="3" />
+								<p:ajax event="blur" update="apellidoMsg" />
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<p:message id="apellidoMsg" for="apellido" display="icon" />
+						</p:column>
+
+						<p:column>
+							<h:outputLabel for="nombre" value="Nombre: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="nombre" style="width: 200px"
+								value="#{publicidadMB.nombreResponsable}" required="true"
+								requiredMessage="Campo nombre obligatorio" maxlength="40">
+								<f:validateLength minimum="3" />
+								<p:ajax event="blur" update="nombreMsg" />
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<p:message id="nombreMsg" for="nombre" display="icon" />
+						</p:column>
+
+						<p:column>
+							<h:outputLabel for="email" value="E-mail: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="email" value="#{publicidadMB.emailResponsable}"
+								style="width: 200px" required="true"
+								requiredMessage="Campo e-mail obligatorio" type="email"
+								maxlength="100">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="emailMsg" />
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<p:message id="emailMsg" for="email" display="icon" />
+						</p:column>
+
+						<p:column>
+							<h:outputLabel for="telefono" value="Telefono: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="telefono"
+								value="#{publicidadMB.telefonoResponsable}" style="width: 200px"
+								maxlength="25">
+							</p:inputText>
+						</p:column>
+						<p:column />
+					</h:panelGrid>
+				</p:panel>
+
+				<p:panel header="Datos de la Empresa" style="margin-top: 10px">
+					<h:panelGrid id="displayViewEmpresa" columns="3" cellspacing="10"
+						styleClass="admin-input-text">
+
+						<p:column>
+							<h:outputLabel for="nombreEmpresa" value="Nombre Empresa: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="nombreEmpresa" style="width: 200px"
+								value="#{publicidadMB.nombreEmpresa}" required="true"
+								requiredMessage="Campo nombre empresa obligatorio"
+								maxlength="25">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="nombreEmpresaMsg" />
+							</p:inputText>
+						</p:column>
+						<p:column>
+							<p:message id="nombreEmpresaMsg" for="nombreEmpresa"
+								display="icon" />
+						</p:column>
+
+						<p:column>
+							<h:outputLabel for="urlText"
+								value="Dirección web de la Empresa: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="urlText" style="width: 200px"
+								value="#{publicidadMB.url}" required="true"
+								requiredMessage="Campo dirección web obligatorio" type="url"
+								onchange="addUrl('#{publicidadMB.url}');">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" listener="#{publicidadMB.addHttp}"
+									update="urlMsg,urlText" />
+							</p:inputText>
+
+						</p:column>
+						<p:column>
+							<p:message id="urlMsg" for="urlText" display="icon" />
+						</p:column>
+
+						<h:outputLabel for="fechaInicio" value="Fecha inicio publicidad: " />
+						<p:calendar showButtonPanel="true" navigator="true"
+							mindate="#{publicidadMB.today}" id="fechaInicio"
+							value="#{publicidadMB.fechaDesde}" required="true"
+							pattern="dd/MM/yyyy"
+							requiredMessage="Campo fecha inicio obligatorio" locale="es"
+							validator="#{publicidadMB.validateDateInicial}">
+							<p:ajax event="blur" update="fechaInicioMsg" />
+							<p:ajax event="dateSelect"
+								listener="#{publicidadMB.calcularCostoTotal}"
+								update="fechaInicioMsg, costoTotal" />
+						</p:calendar>
+						<p:message id="fechaInicioMsg" for="fechaInicio" display="icon" />
+
+						<h:outputLabel for="fechaFin"
+							value="Fecha finalización publicidad: " />
+						<p:calendar showButtonPanel="true" navigator="true"
+							mindate="#{publicidadMB.today}" id="fechaFin"
+							value="#{publicidadMB.fechaHasta}" required="true"
+							pattern="dd/MM/yyyy"
+							requiredMessage="Campo fecha finalización obligatorio"
+							locale="es" validator="#{publicidadMB.validateDate}">
+							<p:ajax event="blur" update="fechaFinMsg" />
+							<p:ajax event="dateSelect"
+								listener="#{publicidadMB.calcularCostoTotal}"
+								update="fechaFinMsg, costoTotal" />
+						</p:calendar>
+						<p:message id="fechaFinMsg" for="fechaFin" display="icon" />
+
+						<p:column>
+							<h:outputLabel for="precio" value="Precio por día: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="precio" style="width: 12	0px"
+								value="#{publicidadMB.precio}" readonly="true">
+								<f:convertNumber type="currency" currencySymbol="$ " />
+							</p:inputText>
+						</p:column>
+						<p:column />
+
+						<p:column>
+							<h:outputLabel for="costoTotal"
+								value="Costo de la  publicación: " />
+						</p:column>
+						<p:column>
+							<p:inputText id="costoTotal" style="width: 120px"
+								value="#{publicidadMB.costoTotal}" readonly="true">
+								<f:convertNumber type="currency" currencySymbol="$ " />
+							</p:inputText>
+						</p:column>
+						<p:column />
+						<p:column>
+							<h:outputLabel value="Vista previa de la imagen: " />
+						</p:column>
+						<p:column id="images">
+							<ui:fragment rendered="#{publicidadMB.upload == false}">
+								<h:graphicImage library="fotos_publicidad"
+									name="colocar_imagen.png" width="130px" height="200px" />
+							</ui:fragment>
+							<ui:fragment rendered="#{publicidadMB.upload == true}">
+								<h:graphicImage library="tmp"
+									name="#{publicidadMB.fotoPublicidad.nombre}" width="130px"
+									height="200px" />
+							</ui:fragment>
+						</p:column>
+						<p:column />
+						<f:facet name="footer">
+							<h:panelGrid columns="1" styleClass="admin-input-text"
+								style="display:block;">
+								<h:panelGrid columns="3" cellspacing="10"
+									styleClass="admin-input-text" style="display:block;">
+									<h:outputLabel value="Imagen a subir: " />
+									<p:fileUpload value="#{publicidadMB.foto}" mode="simple"
+										allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />
+									<h:commandButton id="upload" value="Subir imagen"
+										actionListener="#{publicidadMB.upload}" ajax="false"
+										style="margin:0 10px 0 0; padding: 0 5px 0 5px"
+										update="images" />
+								</h:panelGrid>
+								<h:outputLabel
+									value="* Tamaño de imagen recomendado: 200px de ancho - 360px de alto." />
+							</h:panelGrid>
+						</f:facet>
+					</h:panelGrid>
+				</p:panel>
+				<div align="center" style="margin-top: 10px">
+					<p:commandButton id="addPublicidad" value="Registrar Publicidad"
+						onclick="dlgDM.show();" type="button">
+					</p:commandButton>
+					<p:commandButton id="reset" value="Cancelar" immediate="true"
+						action="/index.html?faces-redirect=true" ajax="false"
+						style="margin-left:10px" />
+				</div>
+			</div>
+		</h:form>
+
+		<p:dialog header="Abonar Publicidad : Medios de Pago"
+			widgetVar="dlgDM" resizable="false">
+			<h:panelGrid columns="1" style="margin-bottom:10px">
+				<p:column>
+					<div align="center">
+						<h:outputLabel value="Dinero Mail" />
+					</div>
+				</p:column>
+				<p:column>
+					<form id="dmForm"
+						action='https://argentina.dineromail.com/Shop/Shop_Ingreso.asp'
+						method='post'>
+						<input type='hidden' name='NombreItem'
+							value='Registrar Nueva Publicidad' /> <input type='hidden'
+							name='TipoMoneda' value='1' /> <input type='hidden'
+							name='PrecioItem' value='#{publicidadMB.costoTotal}' /> <input
+							type='hidden' name='E_Comercio' value='2329650' /> <input
+							type='hidden' name='NroItem' value='-' /> <input type='hidden'
+							name='DireccionExito'
+							value='http://localhost:8080/tesis-playon-web/solicitudpublicidadend.jsf' />
+						<input type='hidden' name='DireccionFracaso'
+							value='http://localhost:8080/tesis-playon-web/solicitudpublicidadfracaso.jsf' />
+						<input type='hidden' name='DireccionEnvio' value='0' /> <input
+							type='hidden' name='Mensaje' value='0' /> <input type='image'
+							src='https://argentina.dineromail.com/imagenes/botones/pagar-medios_c.gif'
+							name='submit' alt='Pagar con DineroMail' /> <input type='hidden'
+							name='Mensaje' value='0' /> <input type='hidden'
+							name='MediosPago' value='4,2,7,13' />
+					</form>
+				</p:column>
+			</h:panelGrid>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,95 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle"
+		value="Informes de Recaudación - Administración" />
+
+	<ui:define name="panelContent">
+		<div>
+			<p:panel id="pnlCosumo">
+				<h:panelGrid columns="1" width="100%">
+					<p:column>
+						<h:panelGrid columns="5" width="100%">
+							<h:outputLabel value="Fecha Desde: " />
+							<p:calendar value="#{estadisticaAdministracionMB.fechaDesde}"
+								navigator="true" locale="es" showButtonPanel="true"
+								id="fechaDesde" required="true" pattern="dd/MM/yyyy"
+								requiredMessage="Campo fecha desde obligatorio" />
+							<h:outputLabel value="Fecha Hasta: " />
+							<p:calendar value="#{estadisticaAdministracionMB.fechaHasta}"
+								navigator="true" locale="es" showButtonPanel="true"
+								id="fechaHasta" required="true" pattern="dd/MM/yyyy"
+								requiredMessage="Campo fecha hasta obligatorio" />
+							<p:commandButton id="getGrafico" value="Ver Reporte"
+								action="#{estadisticaAdministracionMB.calcularComisionPorPeriodo}"
+								ajax="false" update="consumoChart,comisionesTable">
+							</p:commandButton>
+						</h:panelGrid>
+					</p:column>
+					<p:column>
+						<ui:fragment
+							rendered="#{estadisticaAdministracionMB.lModelComision != null}">
+							<p:lineChart id="consumoChart"
+								datatipFormat="#{estadisticaAdministracionMB.datatipFormat}"
+								xaxisLabel="Período agrupado por mes"
+								yaxisLabel="Recaudación en $"
+								value="#{estadisticaAdministracionMB.lModelComision}"
+								legendPosition="ne" legendRows="2" animate="true"
+								title="Recaudación de transacciones por período mensual"
+								minY="0" maxY="#{estadisticaAdministracionMB.maximoMonto}"
+								style="margin-top:20px" />
+						</ui:fragment>
+					</p:column>
+					<p:column
+						rendered="#{estadisticaAdministracionMB.lModelComision != null}">
+						<div align="center">
+							<p:dataTable id="comisionesTable" var="comision"
+								value="#{estadisticaAdministracionMB.comisionesList}"
+								style="width:70%;margin-top:20px;">
+
+								<p:column headerText="Mes" style="text-align:center;">
+									<h:outputText value="#{comision[1]}" />
+								</p:column>
+
+								<p:column headerText="Año" style="text-align:center;">
+									<h:outputText value="#{comision[0]}" />
+								</p:column>
+
+								<p:column headerText="Cantidad Transacciones"
+									style="text-align:center;">
+									<h:outputText value="#{comision[2]}" />
+								</p:column>
+
+								<p:column headerText="Comisión" style="text-align:center;">
+									<h:outputText value="$#{comision[3]}" />
+								</p:column>
+
+								<f:facet name="footer">
+									<div align="center">
+										<h:panelGrid columns="2"
+											style="text-align:center; width:60px;">
+											<h:commandLink title="Exportar a pdf"
+												action="#{estadisticaAdministracionMB.crearPDF}">
+												<h:graphicImage library="images/icons" name="pdf.png" /> 
+											</h:commandLink>
+
+											<h:commandLink title="Exportar a excel"
+												action="#{estadisticaAdministracionMB.crearExcel}">
+												<h:graphicImage library="images/icons" name="excel.png" />
+											</h:commandLink>
+										</h:panelGrid>
+									</div>
+								</f:facet>
+
+							</p:dataTable>
+						</div>
+					</p:column>
+				</h:panelGrid>
+			</p:panel>
+		</div>
+	</ui:define>
+</ui:composition>

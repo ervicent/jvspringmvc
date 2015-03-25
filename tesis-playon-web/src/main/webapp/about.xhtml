@@ -1,0 +1,25 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="dontloadsidebar" value="true" />
+
+	<ui:define name="title">
+		Acerca de Playón
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Acerca de Playón</h1>
+		<p>Playón es un nuevo modelo de e-commerce diseñado para ofrecer
+			descuentos y promociones en playas de estacionamiento, en una forma
+			sencilla y segura</p>
+
+		<h:graphicImage styleClass="content-image" library="images" name="paraClientes.jpg" />
+
+		<h:button value="¡Descubrí las playas con descuentos!" outcome="index" />
+	</ui:define>
+
+</ui:composition>

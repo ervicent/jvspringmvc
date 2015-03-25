@@ -1,0 +1,52 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Publicidades
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Nuestras Publicidades</h1>
+
+
+		<h:form>
+			<p:growl id="messages" />
+			<div style="margin-left: 20px;">
+				<p>
+					Empresas que publicaron en <i>Playón, Red de Playas.</i>
+				</p>
+			</div>
+
+			<div align="center">
+				<p:dataGrid var="publicidad" value="#{publicidadMB.publicidadList}"
+					columns="2" rows="6" paginator="true"
+					paginatorPosition="bottom" emptyMessage="¡No existen publicidades!">
+					<f:facet name="header">Nuestras Publicidades</f:facet>
+					<p:panel style="text-align:center; border: 3px solid #0091DF; border-radius: 15px;">
+						<h:panelGrid columns="2" cellspacing="0" cellpadding="0"
+							style="width:100%;">
+							<p:columns>
+								<a href="#{publicidad.fotoPublicidad.url}" target="_blank"><h:graphicImage
+										library="fotos_publicidad"
+										name="#{publicidad.fotoPublicidad.id}_#{publicidad.fotoPublicidad.nombre}" width="80"
+										height="100" /> </a>
+							</p:columns>
+							<p:columns>
+								<h:panelGrid columns="1" style="width:100%">
+								<h:outputText value="#{publicidad.nombreEmpresa}" />
+								<a href="#{publicidad.fotoPublicidad.url}" target="_blank"><h:outputText
+										value="#{publicidad.fotoPublicidad.url}" /></a>
+								<h:outputText value="#{publicidad.telefonoResponsable}" />
+								</h:panelGrid>
+							</p:columns>
+						</h:panelGrid>
+					</p:panel>
+				</p:dataGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

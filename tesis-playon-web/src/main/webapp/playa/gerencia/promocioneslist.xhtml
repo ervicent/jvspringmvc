@@ -1,0 +1,187 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:param name="title" value="Listado de Promociones" />
+
+	<ui:define name="content" class="admin-font">
+		<h1>Promociones</h1>
+
+		<h:form>
+			<p:growl id="messages" />
+
+
+			<p:dataGrid var="promocion" value="#{promocionMB.promocionPlayaList}"
+				columns="1" rows="1" paginator="true"
+				emptyMessage="No existen promociones en su playa"
+				paginatorPosition="bottom">
+
+				<f:facet name="header">
+						Listado de promociones de la playa
+					</f:facet>
+
+				<p:panel header="#{promocion.nombre}" style="text-align:left">
+					<h:outputText value="Descripción: " style="font-weight:bold;" />
+					<h:outputText value="#{promocion.descripcion}"
+						style="font-weight:bold;" />
+					<h:panelGrid columns="4" style="width:100%" cellpadding="2"
+						cellspacing="2">
+						<h:outputText value="Fecha de inicio: " />
+						<h:outputText value="#{promocion.fechaInicio}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+
+						<h:outputText value="Fecha de finalización: " />
+						<h:outputText value="#{promocion.fechaFin}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+
+						<h:outputText value="Hora de inicio: " />
+						<h:outputText value="#{promocion.horaInicio}">
+							<f:convertDateTime pattern="HH:mm" />
+						</h:outputText>
+
+						<h:outputText value="Hora de finalización: " />
+						<h:outputText value="#{promocion.horaFin}">
+							<f:convertDateTime pattern="HH:mm" />
+						</h:outputText>
+
+						<h:outputText value="Tipo de estadía: " />
+						<h:outputText value="#{promocion.tarifa.tipoEstadia.nombre}" />
+
+						<h:outputText value="Categoría de vehículo: " />
+						<h:outputText value="#{promocion.tarifa.categoriaVehiculo.nombre}" />
+
+						<h:outputText value="Monto fijo: " />
+						<h:outputText value="#{promocion.montoFijo}">
+							<f:convertNumber type="currency" currencySymbol="$ " />
+						</h:outputText>
+
+						<h:outputText value="Monto con descuento: " />
+						<h:outputText
+							value="#{(promocion.montoFijo * (1- promocion.descuento/100))}">
+							<f:convertNumber type="currency" currencySymbol="$ " />
+						</h:outputText>
+
+						<p:column>
+							<h:outputText value="Descuento: " />
+							<h:outputText value="&#160;#{promocion.descuento}%" />
+						</p:column>
+						<p:column>
+							<h:outputText value="Estado: " />
+							<h:outputText
+								value="&#160;#{promocion.estadoPromocion.nombre eq 'Vigente' and
+							promocion.fechaFin ge promocionMB.today ? 'Vigente' : 'De Baja'}" />
+						</p:column>
+
+						<p:column />
+
+						<p:column>
+							<div align="center">
+								<p:commandLink id="edit" title="Editar Promoción" ajax="false"
+									action="/playa/gerencia/promocionedit.html?faces-redirect=true">
+									<f:setPropertyActionListener value="#{promocion}"
+										target="#{promocionMB.promocionSelected}" />
+									<h:graphicImage library="images/icons" name="pencil.png"
+										style="width:25px; height:25px;" />
+								</p:commandLink>
+								&#160;&#160;&#160;&#160;
+								<p:commandLink id="darBaja" title="Dar de baja"
+									action="#{promocionMB.deletePromocion}" ajax="false">
+									<f:setPropertyActionListener value="#{promocion}"
+										target="#{promocionMB.promocionSelected}" />
+									<h:graphicImage library="images/icons" name="trash.png"
+										style="width:25px; height:25px;" />
+								</p:commandLink>
+							</div>
+						</p:column>
+					</h:panelGrid>
+				</p:panel>
+
+
+
+
+				<p:dataTable id="promociones" var="promocion"
+					value="#{promocionMB.promocionPlayaList}" style="display:none">
+
+					<p:column headerText="Nombre" style="text-align:center">
+
+						<f:facet name="header">
+							<h:outputText value="Nombre" />
+						</f:facet>
+						<h:outputText value="#{promocion.nombre}" />
+
+					</p:column>
+
+					<p:column headerText="Fecha Inicio" style="text-align:center">
+						<f:facet name="header">
+							<h:outputText value="Fecha Inicio" />
+						</f:facet>
+						<h:outputText value="#{promocion.fechaInicio}" />
+					</p:column>
+
+					<p:column headerText="Fecha Fin" style="text-align:center">
+						<f:facet name="header">
+							<h:outputText value="Fecha Fin" />
+						</f:facet>
+						<h:outputText value="#{promocion.fechaFin}" />
+					</p:column>
+
+					<p:column headerText="Tipo Estadia" style="text-align:center">
+
+						<f:facet name="header">
+							<h:outputText value="Tipo Estadia" />
+						</f:facet>
+						<h:outputText value="#{promocion.tarifa.tipoEstadia.nombre}" />
+					</p:column>
+
+					<p:column headerText="Precio final" style="text-align:center">
+						<f:facet name="header">
+							<h:outputText value="Monto Final" />
+						</f:facet>
+						<h:outputText
+							value="#{(promocion.montoFijo * (1- promocion.descuento/100))}">
+							<f:convertNumber type="currency" currencySymbol="$ " />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+				<f:facet name="footer">
+
+					<div align="center">
+						<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+							<h:commandLink title="Exportar a excel">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/excel.png" />
+								<p:dataExporter type="xls" target="promociones"
+									fileName="Promociones" />
+							</h:commandLink>
+
+							<h:commandLink title="Exportar a PDF">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/pdf.png" />
+								<p:dataExporter type="pdf" target="promociones"
+									preProcessor="#{documentExporterMB.listadoPromocionesPDF}"
+									fileName="Promociones" />
+							</h:commandLink>
+						</h:panelGrid>
+					</div>
+				</f:facet>
+			</p:dataGrid>
+
+
+			<br></br>
+			<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+				<p:commandButton id="addPromocion" value="Nueva Promoción"
+					action="/playa/gerencia/promocionadd.html?faces-redirect=true"
+					ajax="false" />
+			</h:panelGroup>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

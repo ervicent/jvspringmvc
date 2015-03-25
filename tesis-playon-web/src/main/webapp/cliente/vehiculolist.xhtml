@@ -1,0 +1,66 @@
+<ui:composition template="../template/templateCliente.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Lista
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<h1>Mis vehículos</h1>
+		<h:form>
+			<p:dataTable id="vehiculos" var="vehiculo" paginator="true" rows="5"
+				value="#{vehiculoMB.vehiculoList}"
+				emptyMessage="No ha registrado vehiculos" paginatorPosition="bottom">
+
+				<p:column headerText="Patente">
+					<h:outputText value="#{vehiculo.patente}" />
+				</p:column>
+
+				<p:column headerText="Marca">
+					<h:outputText
+						value="#{vehiculo.modeloVehiculo.marcaVehiculo.nombre}" />
+				</p:column>
+
+				<p:column headerText="Modelo">
+					<h:outputText value="#{vehiculo.modeloVehiculo.nombre}" />
+				</p:column>
+
+				<p:column headerText="Categoría">
+					<h:outputText
+						value="#{vehiculo.modeloVehiculo.categoriaVehiculo.nombre}" />
+				</p:column>
+
+				<p:column headerText="Opciones"
+					style="text-align:center; width:80px;">
+					<p:commandLink id="edit" title="Editar"
+						action="/cliente/vehiculoedit.html?faces-redirect=true"
+						ajax="false">
+						<f:setPropertyActionListener value="#{vehiculo}"
+							target="#{vehiculoMB.vehiculoSelected}" />
+						<h:graphicImage library="images/icons" name="pencil.png"
+							style="width:25px; height:25px;" />
+					</p:commandLink>
+					<p:commandLink id="darBaja" title="Dar de baja"
+						action="#{vehiculoMB.deleteVehiculo}" ajax="false">
+						<f:setPropertyActionListener value="#{vehiculo}"
+							target="#{vehiculoMB.vehiculoSelected}" />
+						<h:graphicImage library="images/icons" name="trash.png"
+							style="width:25px; height:25px;" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+
+			<br></br>
+			<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+				<p:commandButton id="addVehiculo" value="Nuevo Vehículo"
+					action="/cliente/vehiculoadd.html?faces-redirect=true" ajax="false" />
+			</h:panelGroup>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

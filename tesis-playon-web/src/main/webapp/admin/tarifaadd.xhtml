@@ -1,0 +1,72 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Nueva Tarifa" />
+
+	<ui:define name="panelContent">
+		<h:form>
+			<p:growl id="messages" />
+			<div>
+				<h:panelGrid id="displayView" columns="3" cellpadding="8"
+					cellspacing="10" styleClass="admin-input-text">
+
+					<h:outputText for="playa" value="Playa: " />
+					<p:selectOneMenu value="#{tarifaMB.playa}" effect="fade">
+						<f:selectItems value="#{playaMB.playaList}" var="playa"
+							itemValue="#{playa}" itemLabel="#{playa.nombreComercial}" />
+						<f:converter converterId="playaConverter" />
+					</p:selectOneMenu>
+					<p:column />
+
+					<h:outputText for="tipoEstadia" value="Tipo Estadia: " />
+					<p:selectOneMenu value="#{tarifaMB.tipoEstadia}" effect="fade">
+						<f:selectItems value="#{tipoEstadiaMB.tipoEstadiaList}"
+							var="tipoEstadia" itemValue="#{tipoEstadia}"
+							itemLabel="#{tipoEstadia.nombre}" />
+						<f:converter converterId="tipoEstadiaConverter" />
+					</p:selectOneMenu>
+					<p:column />
+
+					<h:outputText for="categoriaVehiculo" value="Categoria Vehiculo: " />
+					<p:selectOneMenu value="#{tarifaMB.categoriaVehiculo}"
+						effect="fade">
+						<f:selectItems
+							value="#{categoriaVehiculoMB.categoriaVehiculoList}"
+							var="categoriaVehiculo" itemValue="#{categoriaVehiculo}"
+							itemLabel="#{categoriaVehiculo.nombre}" />
+						<f:converter converterId="categoriaVehiculoConverter" />
+					</p:selectOneMenu>
+					<p:column />
+
+					<h:outputLabel for="importe" value="Importe: " />
+					<p:inputText id="importe" value="#{tarifaMB.importe}"
+						required="true" requiredMessage="Campo obligatorio">
+						<p:ajax event="blur" update="importeMsg" />
+					</p:inputText>
+					<p:message id="importeMsg" for="importe" display="icon" />
+
+					<h:outputLabel for="vigente" value="Vigente: " />
+					<p:selectBooleanCheckbox id="vigente" value="#{tarifaMB.vigente}">
+					</p:selectBooleanCheckbox>
+					<p:column />
+
+					<p:column />
+					<p:column>
+						<div align="right">
+							<p:commandButton id="addTarifa" value="Registrar Tarifa"
+								action="#{tarifaMB.addTarifaAdmin}" ajax="false" />
+							<p:commandButton id="reset" value="Cancelar" immediate="true"
+								action="/admin/tarifalist.html?faces-redirect=true" ajax="false"
+								style="margin-left:10px" />
+						</div>
+					</p:column>
+					<p:column />
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

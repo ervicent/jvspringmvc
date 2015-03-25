@@ -1,0 +1,65 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+
+	<h:head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<h:outputStylesheet library="css" name="style_admin.css" />
+		<title>Playon | Inicio de sesión</title>
+	</h:head>
+
+	<h:body>
+		<div id="mainbody-login">
+
+			<div id="login-header"
+				class="ui-widget ui-widget-header ui-corner-all">
+				<ui:include src="headerLogin.xhtml" />
+			</div>
+
+			<div id="login-main"
+				class="ui-widget-content ui-corner-all ui-shadow">
+
+				<h:form>
+					<p:panel header="Inicio de Sesion:"
+						style="border:0px; text-align: center;">
+						
+						<ui:insert name="Content">
+							<table>
+								<tr>
+									<td><h:outputText value="Usuario: " /></td>
+									<td><h:inputText value="#{loginMB.usuario}" /></td>
+								</tr>
+								<tr>
+									<td><h:outputText value="Contrasena: " /></td>
+									<td><h:inputSecret value="#{loginMB.password}" /></td>
+								</tr>
+								<tr>
+									<td colspan="2"><h:messages /></td>
+								</tr>
+								<tr>
+									<td colspan="2" align="center"><h:commandButton
+											action="#{loginMB.login}" value="Ingresar" /></td>
+								</tr>
+								<tr>
+									<td><h:commandButton action="shopTemplate" value="Volver" /></td>
+									<td></td>
+								</tr>
+							</table>
+						</ui:insert>
+						
+					</p:panel>
+				</h:form>
+
+
+			</div>
+
+		</div>
+	</h:body>
+</f:view>
+
+</html>

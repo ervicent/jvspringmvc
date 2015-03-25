@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<faces-config
+    xmlns="http://java.sun.com/xml/ns/javaee"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+    http://java.sun.com/xml/ns/javaee/web-facesconfig_2_0.xsd"
+    version="2.0">
+  	
+  	<!-- JSF and Spring are integrated -->
+  	<application>
+    	<el-resolver>
+    		org.springframework.web.jsf.el.SpringBeanFacesELResolver
+    	</el-resolver>
+  	</application>
+  	
+  	<navigation-rule>
+		<display-name>login.xhtml</display-name> 		
+		<from-view-id>/login.xhtml</from-view-id>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>UnSecured</from-outcome>
+    		<to-view-id>/index.xhtml</to-view-id>
+    	</navigation-case>
+    </navigation-rule>
+    
+ 	<navigation-rule>
+    	<display-name>*</display-name>
+    	<from-view-id>/*</from-view-id>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>SecuredAdmin</from-outcome>
+    		<to-view-id>/admin/index.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>SecuredAuditor</from-outcome>
+    		<to-view-id>/auditoria/index.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>SecuredContador</from-outcome>
+    		<to-view-id>/index.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>SecuredGerentePlaya</from-outcome>
+    		<to-view-id>/playa/panelcontrol.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>SecuredEmpleadoPlaya</from-outcome>
+    		<to-view-id>/playa/panelcontrol.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>SecuredUser</from-outcome>
+    		<to-view-id>/index.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>SecuredClient</from-outcome>
+    		<to-view-id>/index.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    	<!-- 
+    	<navigation-case>
+    		<from-action>#{loginMB.login}</from-action>
+    		<from-outcome>UnSecured</from-outcome>
+    		<to-view-id>/index.xhtml</to-view-id>
+    	</navigation-case>
+    	 -->
+    	<navigation-case>
+    		<from-action>#{loginMB.logout}</from-action>
+    		<from-outcome>LoggedOut</from-outcome>
+    		<to-view-id>/index.xhtml</to-view-id>
+    		<redirect />
+    	</navigation-case>
+    </navigation-rule>
+      
+</faces-config>

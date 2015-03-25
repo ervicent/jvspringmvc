@@ -1,0 +1,21 @@
+#content { /* 	width: 665px; */
+	width: 865px;
+	float: left;
+	padding: 0;
+}
+
+.content-image {
+	width: 860px;
+	margin: 0px 0 40px 0;
+	border: 1px solid rgb(166, 201, 226)	;
+}
+
+#content-box1 {
+	width: 320px;
+	float: left;
+}
+
+#content-box2 {
+	margin: 0 0 0 345px;
+	width: 320px;
+}

@@ -1,0 +1,90 @@
+<ui:composition template="../template/templateCliente.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Carga saldo de cliente
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Cargar saldo fácil en su cuenta</h1>
+
+		<p>¡Ingrese el monto deseado y disfrute de los beneficios de
+			Playón!</p>
+
+		<h:form id="contenido">
+			<p:growl id="messages" />
+
+			<h:panelGrid columns="3" cellpadding="5">
+				<p:column>
+					<h:outputText id="txt_cliente"
+						value="Bienvenido #{cuentaClienteMB.cliente.usuario.nombre} 
+                                                         #{cuentaClienteMB.cliente.usuario.apellido}" />
+				</p:column>
+				<p:column></p:column>
+				<p:column></p:column>
+
+				<p:column>
+					<h:outputText value="Su saldo actual es de: " />
+					<h:outputText id="txt_cuenta"
+						value="#{cuentaClienteMB.cliente.cuentaCliente.saldo}">
+						<f:convertNumber type="currency" currencySymbol="$"/>	
+					</h:outputText>
+					<h:outputText value=" argentinos." />
+				</p:column>
+				<p:column>
+
+				</p:column>
+				<p:column></p:column>
+
+				<p:column>
+					<h:outputLabel for="saldo"
+						value="Ingrese el monto que desea cargar en su cuenta: " />
+				</p:column>
+				<p:column>
+					<p:inputText id="saldo" value="#{cuentaClienteMB.saldo}"
+						inmediate="true">
+						<p:ajax event="blur" update="saldoMsg" />
+						<f:convertNumber type="currency" currencySymbol="$"/>	
+					</p:inputText>
+				</p:column>
+				<p:column>
+					<p:message id="saldoMsg" for="saldo" display="icon" />
+				</p:column>
+				<br />
+
+			</h:panelGrid>
+		</h:form>
+		<table>
+			<tr>
+				<td><div align="center" style="width: 265px;">
+						<h:outputText value="DineroMail" />
+						<form id='dineromail'
+							action='https://argentina.dineromail.com/Shop/Shop_Ingreso.asp'
+							method="get">
+							<input type='hidden' name='NombreItem' value='Promocion' /> <input
+								type='hidden' name='TipoMoneda' value='1' /> <input
+								type='hidden' name='PrecioItem' value='#{cuentaClienteMB.saldo}' />
+							<input type='hidden' name='E_Comercio' value='2329650' /> <input
+								type='hidden' name='NroItem' value='-' /> <input type='hidden'
+								name='MediosPago' value='2' /> <input type='hidden'
+								name='image_url' value='http://' /> <input type='hidden'
+								name='DireccionExito'
+								value='http://localhost:8080/tesis-playon-web/cliente/operacionexitosa.jsf' />
+							<input type='hidden' name='DireccionFracaso'
+								value='http://localhost:8080/tesis-playon-web/transactionerror.xhtml' />
+							<input type='hidden' name='DireccionEnvio' value='0' /> <input
+								type='hidden' name='Mensaje' value='0' /> <input type='image'
+								src='https://argentina.dineromail.com/imagenes/botones/pagar-medios_c.gif'
+								name='submit' alt='Pagar con DineroMail' />
+
+						</form>
+					</div></td>
+
+			</tr>
+		</table>
+	</ui:define>
+</ui:composition>

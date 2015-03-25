@@ -1,0 +1,195 @@
+<ui:composition template="../template/templateCliente.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Perfil de playa
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Editar Mi Perfil</h1>
+		<p:growl id="messages" />
+		<div style="margin: 0 20px 0 20px;">
+			<p:panel>
+				<div id="perfil-playa">
+					<h:panelGrid columns="2">
+						<p:column>
+							<h:graphicImage id="fotoPerfil" library="fotos_perfil_usuarios"
+								name="#{perfilClienteMB.usuario.nombreUser}.jpg"
+								styleClass="bordes-foto-perfil"
+								rendered="#{perfilClienteMB.usuario.fotoUsuario != null}" />
+							<h:graphicImage library="fotos_perfil_usuarios"
+								name="sinfoto.jpg" styleClass="bordes-foto-perfil"
+								rendered="#{perfilClienteMB.usuario.fotoUsuario == null}" />
+						</p:column>
+						<h:outputText
+							value="#{perfilClienteMB.usuario.apellido}&#160;
+										#{perfilClienteMB.usuario.nombre}"
+							style="font-size: 34px;font-style: italic;color: #192129;" />
+						<f:facet name="footer">
+							<h:form id="uploadForm" enctype="multipart/form-data">
+								<p:fileUpload id="fotoPerfil"
+									uploadLabel="Seleccione una imagen"
+									label="Seleccione una imagen"
+									value="#{perfilClienteMB.fotoPerfilFile}" mode="simple"
+									allowTypes="*.jpg;" />
+								<h:commandButton value="Subir foto" ajax="false"
+									actionListener="#{perfilClienteMB.upload}"
+									update="fotoPerfil"
+									style="margin:0 0 0 10px; padding: 0 5px 0 5px; width:100px;"
+									oncomplete="document.location.reload(true)" />
+							</h:form>
+						</f:facet>
+					</h:panelGrid>
+				</div>
+			</p:panel>
+		</div>
+
+		<h:form id="form">
+			<div id="perfil-playa" style="margin: 20px 50px 0 50px;">
+				<h:panelGrid columns="1" width="100%" cellpadding="5" cellspacing="10">
+					<p:panel header="Mis Datos Personales" styleClass="fuente-outputtext">
+						<h:panelGrid columns="3" cellpadding="5" cellspacing="10">
+							<h:outputText value="Nombre de usuario: "
+								styleClass="fuente-outputtext" />
+							<p:inputText id="nombreUser" readonly="true"
+								value="#{perfilClienteMB.usuario.nombreUser}"
+								style="width:200px;" />
+							<p:column />
+
+							<h:outputText value="Apellido: " styleClass="fuente-outputtext" />
+							<p:column>
+								<p:inputText id="apellido" style="width: 200px"
+									value="#{perfilClienteMB.apellido}" required="true"
+									requiredMessage="Campo obligatorio" maxlength="40">
+									<f:validateLength minimum="3" />
+									<p:ajax event="blur" update="apellidoMsg" />
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message id="apellidoMsg" for="apellido" display="icon" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="nombre" value="Nombre: "
+									styleClass="fuente-outputtext" />
+							</p:column>
+							<p:column>
+								<p:inputText id="nombre" style="width: 200px"
+									value="#{perfilClienteMB.nombre}" required="true"
+									requiredMessage="Campo obligatorio" maxlength="40">
+									<f:validateLength minimum="3" />
+									<p:ajax event="blur" update="nombreMsg" />
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message id="nombreMsg" for="nombre" display="icon" />
+							</p:column>
+
+							<p:column>
+								<h:outputText for="tipoDoc" value="Tipo Doc.: "
+									styleClass="fuente-outputtext" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu style="width: 220px"
+									value="#{perfilClienteMB.tipoDoc}" effect="fade">
+									<f:selectItems value="#{tipoDocMB.tipoDocList}" var="tipoDoc"
+										itemValue="#{tipoDoc}" itemLabel="#{tipoDoc.nombre}" />
+									<f:converter converterId="tipoDocConverter" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column></p:column>
+
+							<p:column>
+								<h:outputLabel for="nroDoc" value="Nro. Documento: "
+									styleClass="fuente-outputtext" />
+							</p:column>
+							<p:column>
+								<p:inputText id="nroDoc" value="#{perfilClienteMB.nroDocumento}"
+									required="true" requiredMessage="Campo obligatorio"
+									type="numeric" maxlength="10">
+									<f:validateLength minimum="6" />
+									<p:ajax event="blur" update="nroDocMsg" />
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message id="nroDocMsg" for="nroDoc" display="icon" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="email" value="E-mail: "
+									styleClass="fuente-outputtext" />
+							</p:column>
+							<p:column>
+								<p:inputText id="email" value="#{perfilClienteMB.email}"
+									style="width: 200px" required="true"
+									requiredMessage="Campo obligatorio" type="email"
+									maxlength="100">
+									<f:validateLength minimum="5" />
+									<p:ajax event="blur" update="emailMsg" />
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message id="emailMsg" for="email" display="icon" />
+							</p:column>
+
+							<p:column>
+								<h:outputText for="barrio" value="Barrio: "
+									styleClass="fuente-outputtext" />
+							</p:column>
+							<p:column>
+								<p:selectOneMenu style="width: 220px"
+									value="#{perfilClienteMB.barrio}" effect="fade">
+									<f:selectItems value="#{barrioMB.barrioList}" var="barrio"
+										itemValue="#{barrio}" itemLabel="#{barrio.nombre}" />
+									<f:converter converterId="barrioConverter" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column></p:column>
+
+							<p:column>
+								<h:outputLabel for="domicilio" value="Domicilio: "
+									styleClass="fuente-outputtext" />
+							</p:column>
+							<p:column>
+								<p:inputText id="domicilio" value="#{perfilClienteMB.domicilio}"
+									style="width: 200px" required="true"
+									requiredMessage="Campo obligatorio" maxlength="100">
+									<f:validateLength minimum="5" />
+									<p:ajax event="blur" update="domicilioMsg" />
+								</p:inputText>
+							</p:column>
+							<p:column>
+								<p:message id="domicilioMsg" for="domicilio" display="icon" />
+							</p:column>
+
+							<p:column>
+								<h:outputLabel for="telefono" value="Telefono: "
+									styleClass="fuente-outputtext" />
+							</p:column>
+							<p:column>
+								<p:inputText id="telefono" value="#{perfilClienteMB.telefono}"
+									style="width: 200px" maxlength="25">
+								</p:inputText>
+							</p:column>
+						</h:panelGrid>
+					</p:panel>
+					<p:column>
+						<div align="center">
+							<p:commandButton id="Modificar" value="Modificar"
+								action="#{perfilClienteMB.updateCliente}" ajax="false">
+							</p:commandButton>
+							<p:commandButton id="cancelar" value="Cancelar"
+								action="/cliente/perfilcliente.html?faces-redirect=true"
+								ajax="false" style="margin-left:15px">
+							</p:commandButton>
+						</div>
+					</p:column>
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

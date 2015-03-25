@@ -1,0 +1,53 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Nuevo Rol de Usuario" />
+
+	<ui:define name="panelContent">
+		<h:form>
+			<p:growl id="messages" />
+
+			<div align="center">
+				<h:panelGrid columns="1" width="60%">
+					<p:panel header="Rol de Usuario">
+						<h:panelGrid id="displayView" columns="3" cellpadding="8"
+							styleClass="admin-input-text">
+
+							<h:outputLabel for="nombre" value="Nombre: " />
+							<p:inputText id="nombre" value="#{rolUsuarioMB.nombre}"
+								required="true" requiredMessage="Campo nombre obligatorio"
+								maxlength="40">
+								<f:validateLength minimum="5" />
+								<p:ajax event="blur" update="nombreMsg" />
+							</p:inputText>
+							<p:message id="nombreMsg" for="nombre" display="icon" />
+
+							<h:outputLabel for="descripcion" value="Descripcion " />
+							<p:inputText id="descripcion" value="#{rolUsuarioMB.descripcion}"
+								required="true" requiredMessage="Campo descripción obligatorio"
+								maxlength="40">
+								<f:validateLength minimum="4" />
+								<p:ajax event="blur" update="descripcionMsg" />
+							</p:inputText>
+							<p:message id="descripcionMsg" for="descripcion" display="icon" />
+						</h:panelGrid>
+					</p:panel>
+					<p:column>
+						<div align="center">
+							<p:commandButton id="addUser" value="Registrar nuevo rol"
+								action="#{rolUsuarioMB.addRolUsuario}" ajax="false" />
+							<p:commandButton id="reset" value="Cancelar" immediate="true"
+								action="/admin/rolusuariolist.html?faces-redirect=true"
+								ajax="false" style="margin-right:15px" />
+						</div>
+					</p:column>
+				</h:panelGrid>
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

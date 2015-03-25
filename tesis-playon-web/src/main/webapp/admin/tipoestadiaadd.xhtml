@@ -1,0 +1,38 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Nuevo Tipo de Estadía"/>
+		
+	<ui:define name="panelContent" class="admin-font">
+		<h:form>      
+	     <table> 
+		     <tr>
+		     	<td><h:outputLabel for="nombre" value="Nombre: " /></td>
+		     	<td><p:inputText id="nombre" value="#{tipoEstadiaMB.nombre}">
+		     			<f:validateLength minimum="5" /> 
+		     			<p:ajax event="blur" update="nombreMsg" />
+		     		</p:inputText>
+		     		<p:message id="nombreMsg" for="nombre" display="icon"/> 
+		     	</td>
+		     </tr>
+		     <tr>
+		     	<td><h:outputLabel for="descripcion" value="Descripcion: " /></td>   
+		     	<td><p:inputText id="descripcion" value="#{tipoEstadiaMB.descripcion}"> 
+		     			<f:validateLength minimum="10" /> 
+		     			<p:ajax event="blur" update="descripcionMsg" />  
+		     		</p:inputText>
+		     		<p:message id="descripcionMsg" for="descripcion" display="icon"/> 
+		     	</td>    
+		     </tr>            
+	         <tr>
+		     	<td><p:commandButton id="addTipoE" value="Agregar" action="#{tipoEstadiaMB.addTipoEstadia}" ajax="false"/></td>
+		     	<td><p:commandButton id="reset" value="Limpiar" action="#{tipoEstadiaMB.reset}" ajax="false"/></td>
+		     </tr>   
+	     </table>
+     </h:form>
+	</ui:define>
+</ui:composition>

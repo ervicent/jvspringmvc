@@ -1,0 +1,133 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuperfil" value="true" />
+
+
+	<ui:define name="title">
+		Promociones
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Listado de promociones</h1>
+
+		<h:form id="form" style="margin: 10px 0px 0px 30px;">
+			<p:growl id="messages" />
+
+			<p:dataTable var="promocion"
+				value="#{promocionMB.promocionListEmpleado}" paginator="true"
+				emptyMessage="No existen promociones en estos momentos"
+				paginatorPosition="bottom">
+
+
+				<p:column headerText="Nombre" filterBy="#{promocion.nombre}"
+					filterMatchMode="contains">
+					<h:outputText value="#{promocion.nombre}" />
+				</p:column>
+
+				<p:column headerText="Tipo Estadía" styleClass="column-font"
+					filterMatchMode="exact" filterBy="#{promocion.tarifa.tipoEstadia}"
+					filterOptions="#{promocionMB.tipoEstadiaOptions}">
+					<div align="center">
+						<h:outputText value="#{promocion.tarifa.tipoEstadia.nombre}" />
+					</div>
+				</p:column>
+
+				<p:column headerText="Categoría" styleClass="column-font"
+					filterMatchMode="exact"
+					filterOptions="#{promocionMB.categoriaOptions}"
+					filterBy="#{promocion.tarifa.categoriaVehiculo}">
+					<div align="center">
+						<h:outputText value="#{promocion.tarifa.categoriaVehiculo.nombre}" />
+					</div>
+				</p:column>
+
+				<p:column headerText="Descuento" filterBy="#{promocion.descuento}"
+					filterMatchMode="contains">
+					<div align="center">
+						<h:outputText value="#{promocion.descuento}%" />
+					</div>
+				</p:column>
+
+				<p:column headerText="Opciones" style="text-align:center;">
+					<p:commandLink id="view" title="Ver promoción"
+						oncomplete="viewDialog.show();" update=":form:displayView">
+						<f:setPropertyActionListener value="#{promocion}"
+							target="#{promocionMB.promocionSelected}" />
+						<h:graphicImage library="images/icons" name="search.png" />
+					</p:commandLink>
+				</p:column>
+
+			</p:dataTable>
+
+			<p:dialog header="Datos de la promoción" widgetVar="viewDialog"
+				resizable="false" id="viewDlg" showEffect="fade" modal="true"
+				draggable="false">
+
+				<p:panel id="displayView"
+					header="#{promocionMB.promocionSelected.nombre}"
+					style="text-align:left">
+					<h:outputText value="Descripción: " />
+					<h:outputText value="#{promocionMB.promocionSelected.descripcion}" />
+					<h:panelGrid columns="4" style="width:100%" cellpadding="10"
+						cellspacing="10">
+						<h:outputText value="Fecha de inicio: " />
+						<h:outputText value="#{promocionMB.promocionSelected.fechaInicio}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+
+						<h:outputText value="Fecha de finalización: " />
+						<h:outputText value="#{promocionMB.promocionSelected.fechaFin}">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+
+						<h:outputText value="Hora de inicio: " />
+						<h:outputText value="#{promocionMB.promocionSelected.horaInicio}" />
+
+						<h:outputText value="Hora de finalización: " />
+						<h:outputText value="#{promocionMB.promocionSelected.horaFin}" />
+
+						<h:outputText value="Tipo de estadía: " />
+						<h:outputText
+							value="#{promocionMB.promocionSelected.tarifa.tipoEstadia.nombre}" />
+
+						<h:outputText value="Categoría de vehículo: " />
+						<h:outputText
+							value="#{promocionMB.promocionSelected.tarifa.categoriaVehiculo.nombre}" />
+
+						<h:outputText value="Monto fijo: " />
+						<h:outputText value="#{promocionMB.promocionSelected.montoFijo}"
+							type="currency">
+							<f:convertNumber type="currency" currencySymbol="$" />
+						</h:outputText>
+
+						<h:outputText value="Monto con descuento: " />
+						<h:outputText type="currency"
+							value="#{promocionMB.promocionSelected.montoFijo * (1- promocionMB.promocionSelected.descuento/100)}">
+							<f:convertNumber type="currency" currencySymbol="$" />
+						</h:outputText>
+
+						<h:outputText value="Descuento: " />
+						<h:outputText type="currency"
+							value="&#160;#{promocionMB.promocionSelected.descuento}%">
+							<f:convertNumber type="currency" />
+						</h:outputText>
+						<h:outputText value="Estado: " />
+						<h:outputText
+							value="&#160;#{promocionMB.promocionSelected.estadoPromocion.nombre eq 'Vigente' and
+							promocion.fechaFin ge promocionMB.today ? 'Vigente' : 'De Baja'}" />
+
+					</h:panelGrid>
+				</p:panel>
+				<div align="right" style="margin-top: 5px">
+					<p:commandButton id="btnAceptar" value="Aceptar"
+						style="padding:4px" onclick="viewDialog.hide();" type="button" />
+				</div>
+			</p:dialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

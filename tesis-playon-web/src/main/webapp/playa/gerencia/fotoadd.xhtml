@@ -1,0 +1,50 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuperfil" value="true" />
+
+
+	<ui:define name="title">
+		Fotos del perfil
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Fotos</h1>
+
+		<h:form id="uploadForm" enctype="multipart/form-data">
+			<div align="center">
+				<p:galleria id="galeria" value="#{perfilPlayaMB.fotosList}"
+					var="image" effect="slide" effectSpeed="1000" showOverlays="true">
+					<h:graphicImage library="fotos_playas" name="#{image.id}_#{image.nombre}"
+						style="width:190px; height:140px" />
+					<p:galleriaOverlay>
+						<div align="right">
+							<p:commandLink value="Eliminar foto"
+								action="#{perfilPlayaMB.deleteFoto}" ajax="false">
+								<f:setPropertyActionListener value="#{image}"
+									target="#{perfilPlayaMB.fotoSelected}" />
+							</p:commandLink>
+						</div>
+					</p:galleriaOverlay>
+				</p:galleria>
+			</div>
+			<div>
+				<h:outputText value="Agregar fotos" styleClass="fuente-subtitle" />
+				<br />
+
+				<p:fileUpload id="upload"
+					fileUploadListener="#{perfilPlayaMB.handleFileUpload}"
+					mode="advanced" multiple="true" sizeLimit="4194304"
+					allowTypes="/(\.|\/)(jpe?g)$/" label="Seleccionar fotos"
+					uploadLabel="Guardar todos" cancelLabel="Cancelar" update="galeria">
+				</p:fileUpload>
+				<p:growl id="messages" showDetail="true" />
+				<br />
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

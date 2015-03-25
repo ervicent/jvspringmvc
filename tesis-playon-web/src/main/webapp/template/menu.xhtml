@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div id="menu">
+		<ul>
+			<li class="first"><h:link value="Inicio" outcome="/index" /></li>
+
+
+			<li><span class="opener">Playas<b></b></span>
+				<ul>
+					<li><h:link value="¿Cómo funciona?" outcome="/comofunciona" /></li>
+					<li><h:link value="Solicitar Suscripción"
+							outcome="/solicitudplayaadd" /></li>
+				</ul></li>
+
+			<ui:fragment rendered="#{loginMB.logueado}">
+				<ui:fragment rendered="#{loginMB.rol eq '[ROLE_CLIENT]'}">
+					<li><span class="opener">Menu Cliente<b></b></span>
+						<ul>
+							<li><h:link value="Perfil" outcome="/cliente/perfilcliente" /></li>
+							<li><h:link value="Cuenta" outcome="/cliente/cuentacliente" /></li>
+							<li><h:link value="Cargar Crédito"
+									outcome="/cliente/cargarcredito" /></li>
+						</ul></li>
+				</ui:fragment>
+
+				<ui:fragment rendered="#{loginMB.rol eq '[ROLE_PLAYA_GERENTE]'}">
+					<li><span class="opener">Menu Playa<b></b></span>
+						<ul>
+							<li><h:link value="Panel de control"
+									outcome="/playa/panelcontrol" /></li>
+							<li><h:link value="Perfil de playa"
+									outcome="/playa/gerencia/perfilplaya" /></li>
+							<li><h:link value="Ingreso / Egreso"
+									outcome="/playa/ingresoegresovehiculo" /></li>
+						</ul></li>
+				</ui:fragment>
+
+				<ui:fragment rendered="#{loginMB.rol eq '[ROLE_PLAYA_EMPLEADO]'}">
+					<li><span class="opener">Menu Playa<b></b></span>
+						<ul>
+							<li><h:link value="Panel de control"
+									outcome="/playa/panelcontrol" /></li>
+							<li><h:link value="Perfil de playa"
+									outcome="/playa/perfilplaya" /></li>
+							<li><h:link value="Ingreso / Egreso"
+									outcome="/playa/ingresoegresovehiculo" /></li>
+						</ul></li>
+				</ui:fragment>
+			</ui:fragment>
+
+			<li><span class="opener">Publicidad<b></b></span>
+				<ul>
+					<li><h:link value="Solicitar Publicidad"
+							outcome="/solicitudpublicidadadd" /></li>
+					<li><h:link value="Nuestras Publicidades"
+							outcome="/publicidadeslist" /></li>
+				</ul></li>
+			<li><h:link value="Contacto" outcome="/contact" /></li>
+			<li class="last"><h:link value="Acerca de" outcome="/about" /></li>
+
+
+		</ul>
+		<br class="clearfix" />
+	</div>
+
+</ui:composition>

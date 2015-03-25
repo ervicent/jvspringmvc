@@ -1,0 +1,27 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Solicitud de alta de playa
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<div style="margin-left: 20px;">
+			<h1>Solicitud de alta de playa</h1>
+			<p>El proceso se ha completado exitosamente, en breve nos
+				pondremos en contacto para informarle las novedades. Muchas gracias.
+			</p>
+			<p>
+				El equipo de <i>Playón, Red de Playas.</i>
+			</p>
+			<p>
+				<h:link value="Volver" outcome="index" />
+			</p>
+		</div>
+	</ui:define>
+</ui:composition>

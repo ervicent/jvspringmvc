@@ -1,0 +1,34 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Nuevo Barrio" />
+
+	<ui:define name="panelContent">
+		<h:form>
+			<table>
+				<tr>
+					<td><h:outputText for="pais" value="Pais: " /></td>
+					<td><p:selectOneMenu id="pais" value="#{paisMB.pais}" effect="fade">
+						<f:selectItem itemLabel="Seleccione un Pais" itemValue="" />
+						<f:selectItems value="#{paisMB.paises}" />
+						<p:ajax event="change" update="provincias" process="@this"
+							listener="#{paisMB.handlePaisChange}" />
+					</p:selectOneMenu></td>
+				</tr>
+
+				<tr>
+					<td><h:outputText for="provincia" value="Provincia: " /></td>
+					<td><p:selectOneMenu id="provincias" value="#{paisMB.provincia}"
+						effect="fade">
+						<f:selectItem itemLabel="Seleccione una provincia" itemvalue="" />
+						<f:selectItems value="#{paisMB.provincias}" />
+					</p:selectOneMenu></td>
+				</tr>
+			</table>
+		</h:form>
+	</ui:define>
+</ui:composition>

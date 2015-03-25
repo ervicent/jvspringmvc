@@ -1,0 +1,113 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Editar empleado
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Editar empleado</h1>
+
+		<p:growl id="messages" autoUpdate="false" showDetail="true"
+			globalOnly="true" />
+		<h:form id="form" style="margin-left:20px">
+
+			<div align="left" style="margin: 10px 30px 5px 50px">
+
+				<p:panel header="Datos de Empleado">
+					<h:panelGrid id="displayViewEmpleado" columns="3" cellspacing="10"
+						styleClass="admin-input-text">
+
+						<h:outputLabel for="apellido" value="Apellido " />
+						<p:inputText id="apellido" value="#{empleadoMB.empleadoSelected.usuario.apellido}"
+							style="width: 200px" required="true"
+							requiredMessage="Campo apellido obligatorio" maxlength="40">
+							<f:validateLength minimum="2" />
+							<p:ajax event="blur" update="apellidoMsg" />
+						</p:inputText>
+						<p:message id="apellidoMsg" for="apellido" display="icon" />
+
+						<h:outputLabel for="nombre" value="Nombre: " />
+						<p:inputText id="nombre" value="#{empleadoMB.empleadoSelected.usuario.nombre}"
+							style="width: 200px" required="true"
+							requiredMessage="Campo nombre obligatorio" maxlength="40">
+							<f:validateLength minimum="2" />
+							<p:ajax event="blur" update="nombreMsg" />
+						</p:inputText>
+						<p:message id="nombreMsg" for="nombre" display="icon" />
+
+						<h:outputLabel for="email" value="E-mail: " />
+						<p:inputText id="email" value="#{empleadoMB.empleadoSelected.usuario.email}"
+							style="width: 200px" required="true"
+							requiredMessage="Campo e-mail obligatorio" type="email"
+							maxlength="100">
+							<f:validateLength minimum="5" update="emailMsg" />
+							<p:ajax event="blur" update="emailMsg" />
+						</p:inputText>
+						<p:message id="emailMsg" for="email" display="icon" />
+
+						<p:column style="margin-rigth:120px;">
+							<h:outputText for="tipoDoc" value="Tipo Documento: " />
+						</p:column>
+						<p:selectOneMenu value="#{empleadoMB.empleadoSelected.usuario.tipoDoc}" effect="fade"
+							style="width:159px;">
+							<f:selectItems value="#{tipoDocMB.tipoDocList}" var="tipoDoc"
+								itemValue="#{tipoDoc}" itemLabel="#{tipoDoc.nombre}" />
+							<f:converter converterId="tipoDocConverter" />
+						</p:selectOneMenu>
+						<p:column></p:column>
+
+						<h:outputLabel for="nroDoc" value="Nro. Documento: " />
+						<p:inputText id="nroDoc" value="#{empleadoMB.empleadoSelected.usuario.nroDoc}"
+							required="true"
+							requiredMessage="Campo nro. documento obligatorio">
+							<f:validateLength minimum="6" update="nroDocMsg" />
+							<p:ajax event="blur" update="nroDocMsg" />
+						</p:inputText>
+						<p:message id="nroDocMsg" for="nroDoc" display="icon" />
+
+						<h:outputLabel for="legajo" value="Legajo: " />
+						<p:inputText id="legajo" value="#{empleadoMB.empleadoSelected.legajo}">
+							<f:validateLength minimum="4" update="legajosMsg" />
+							<p:ajax event="blur" update="legajoMsg" />
+						</p:inputText>
+						<p:message id="legajoMsg" for="legajo" display="icon" />
+
+						<h:outputLabel for="cargoEmpleado" value="Cargo: " />
+						<p:selectOneMenu value="#{empleadoMB.empleadoSelected.cargoEmpleado}" effect="fade"
+							style="width:159px;">
+							<f:selectItems value="#{cargoEmpleadoMB.cargoEmpleadoList}"
+								var="cargo" itemValue="#{cargo}" itemLabel="#{cargo.nombre}" />
+							<f:converter converterId="cargoEmpleadoConverter" />
+						</p:selectOneMenu>
+						<p:column></p:column>
+						
+						<h:outputLabel for="enable" value="Habilitado: " />
+						<p:column>
+						<p:selectBooleanCheckbox id="enable"
+							value="#{empleadoMB.empleadoSelected.usuario.enable}">
+						</p:selectBooleanCheckbox>
+						</p:column>
+						<p:column></p:column>
+						
+					</h:panelGrid>
+				</p:panel>
+
+				
+				<div align="center" style="margin-top: 10px">
+					<p:commandButton id="addEmploy" value="Modificar"
+						action="#{empleadoMB.updateEmpleado}" ajax="false" />
+					<p:commandButton id="cancelar" immediate="true" value="Cancelar"
+						action="/playa/gerencia/empleadolist.html?faces-redirect=true"
+						ajax="false" style="margin-left:10px;" type="submit" />
+				</div>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

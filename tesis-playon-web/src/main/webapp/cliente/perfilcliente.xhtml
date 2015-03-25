@@ -1,0 +1,80 @@
+<ui:composition template="../template/templateCliente.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Perfil de playa
+    </ui:define>
+
+	<ui:define name="content">
+		<h:form style="margin:0 0 0 30px;">
+			<h1>
+				<h:outputText value="Perfil de Cliente" />
+				<ui:fragment>
+					<p:commandButton id="editar" value="Editar Perfil"
+						style="position: absolute; right:270px;" icon="ui-icon-pencil"
+						action="/cliente/perfilclienteedit.html?faces-redirect=true"
+						ajax="false" />
+				</ui:fragment>
+
+			</h1>
+			<div style="margin: 0 20px 0 20px;">
+				<p:panel>
+					<div id="perfil-playa">
+						<h:panelGrid columns="2">
+							<p:column>
+								<h:graphicImage library="fotos_perfil_usuarios"
+									name="#{perfilClienteMB.usuario.nombreUser}.jpg"
+									styleClass="bordes-foto-perfil"
+									rendered="#{perfilClienteMB.usuario.fotoUsuario != null}" />
+								<h:graphicImage library="fotos_perfil_usuarios"
+									name="sinfoto.jpg" styleClass="bordes-foto-perfil"
+									rendered="#{perfilClienteMB.usuario.fotoUsuario == null}" />
+							</p:column>
+							<h:outputText
+								value="#{perfilClienteMB.usuario.apellido}&#160;
+										#{perfilClienteMB.usuario.nombre}"
+								style="font-size: 34px;font-style: italic;color: #192129;" />
+						</h:panelGrid>
+					</div>
+				</p:panel>
+			</div>
+
+			<div id="perfil-playa" style="margin: 20px 50px 0 50px;">
+				<p:panel header="Mis Datos Personales"
+					styleClass="fuente-outputtext">
+					<h:panelGrid columns="2" cellpadding="8" cellspacing="10">
+
+						<h:outputText value="Nombre de usuario: "
+							styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilClienteMB.usuario.nombreUser}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="E-mail: " styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilClienteMB.usuario.email}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Teléfono: " styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilClienteMB.cliente.telefono}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Domicilio: " styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilClienteMB.cliente.domicilio}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Barrio: " styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilClienteMB.cliente.barrio.nombre}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Localidad: " styleClass="fuente-outputtext" />
+						<h:outputText value="Córdoba" styleClass="fuente-perfil" />
+
+					</h:panelGrid>
+				</p:panel>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

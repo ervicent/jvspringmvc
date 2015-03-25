@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 3.0 License
+
+Name       : Big Business 2.0
+Description: A two-column, fixed-width design with a bright color scheme.
+Version    : 1.0
+Released   : 20120624
+-->
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<meta name="description" content="" />
+	<meta name="keywords" content="" />
+	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+
+	<h:outputStylesheet library="css" name="style.css" />
+	<h:outputStylesheet library="css" name="style_custom.css" />
+	<h:outputStylesheet library="css"
+		name="#{!empty dontloadsidebar ? 'content100.css' : 'contentslide.css'}" />
+	<h:outputStylesheet library="css" name="style_playa.css" />
+
+
+	<h:outputScript library="primefaces" name="jquery/jquery.js"
+		target="head" />
+
+	<!--
+		<h:outputScript library="js" name="jquery-1.7.1.min.js" target="head" /> 
+	-->
+	<h:outputScript library="js" name="jquery.dropotron-1.0.js"
+		target="head" />
+
+	<ui:fragment rendered="#{!empty loadslider}">
+		<h:outputScript library="js" name="jquery.slidertron-1.1.js"
+			target="head" />
+	</ui:fragment>
+
+	<ui:include src="loadscripts.xhtml" />
+
+	<script type="text/javascript">
+		$(function() {
+			$('#menu > ul').dropotron({
+				mode : 'fade',
+				globalOffsetY : 11,
+				offsetY : -15
+			});
+		});
+	</script>
+
+	<ui:fragment rendered="#{!empty loadslider}">
+		<script type="text/javascript">
+			$(function() {
+				$('#slider').slidertron({
+					viewerSelector : '.viewer',
+					indicatorSelector : '.indicator span',
+					reelSelector : '.reel',
+					slidesSelector : '.slide',
+					speed : 'slow',
+					advanceDelay : 4000
+				});
+			});
+		</script>
+	</ui:fragment>
+	<title>Playon | <ui:insert name="title">Red de playas de estacionamiento</ui:insert>
+	</title>
+
+</h:head>
+<h:body>
+	<div id="wrapper">
+
+		<ui:include src="header.xhtml" />
+		<ui:include src="menu.xhtml" />
+
+		<ui:fragment rendered="#{!empty loadslider}">
+			<ui:include src="slider.xhtml" />
+		</ui:fragment>
+
+		<div id="page">
+
+			<div id="content">
+				<div class="box">
+
+					<ui:insert name="content">Default content
+					</ui:insert>
+				</div>
+				<br class="clearfix" />
+			</div>
+
+			<ui:fragment rendered="#{empty dontloadsidebar}">
+				<ui:include src="sidebar.xhtml" />
+			</ui:fragment>
+
+			<br class="clearfix" />
+		</div>
+
+		<ui:include src="page-bottom.xhtml" />
+
+	</div>
+	<ui:include src="footer.xhtml" />
+</h:body>
+</html>

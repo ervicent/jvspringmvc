@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:faces="http://www.springframework.org/schema/faces"
+	xmlns:int-security="http://www.springframework.org/schema/integration/security"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/integration/security
+                http://www.springframework.org/schema/integration/security/spring-integration-security-2.1.xsd
+                http://www.springframework.org/schema/aop
+                http://www.springframework.org/schema/aop/spring-aop-3.1.xsd
+                http://www.springframework.org/schema/security
+                http://www.springframework.org/schema/security/spring-security-3.1.xsd
+                http://www.springframework.org/schema/integration
+                http://www.springframework.org/schema/integration/spring-integration-2.1.xsd
+                http://www.springframework.org/schema/beans
+                http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+                http://www.springframework.org/schema/faces
+                http://www.springframework.org/schema/faces/spring-faces-2.2.xsd
+                http://www.springframework.org/schema/tx 
+                http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+                http://www.springframework.org/schema/context
+                http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+	<context:component-scan base-package="tesis.playon.web" />
+
+
+	<bean id="Abono" class="tesis.playon.web.model.Abono" />
+	<bean id="Barrio" class="tesis.playon.web.model.Barrio" />
+	<bean id="CategoriaVehiculo" class="tesis.playon.web.model.CategoriaVehiculo" />
+	<bean id="CargoEmpleado" class="tesis.playon.web.model.CargoEmpleado" />
+	<bean id="Calificacion" class="tesis.playon.web.model.Calificacion" />
+	<bean id="Cliente" class="tesis.playon.web.model.Cliente" />
+	<bean id="ColorVehiculo" class="tesis.playon.web.model.ColorVehiculo" />
+	<bean id="Comentario" class="tesis.playon.web.model.Comentario" />
+	<bean id="CuentaCliente" class="tesis.playon.web.model.CuentaCliente" />
+	<bean id="CuentaPlaya" class="tesis.playon.web.model.CuentaPlaya" />
+	<bean id="DenunciaPlaya" class="tesis.playon.web.model.DenunciaPlaya" />
+	<bean id="DenunciaVehiculo" class="tesis.playon.web.model.DenunciaVehiculo" />
+	<bean id="DetalleEstadia" class="tesis.playon.web.model.DetalleEstadia" />
+	<bean id="Empleado" class="tesis.playon.web.model.Empleado" />
+	<bean id="Estadia" class="tesis.playon.web.model.Estadia" />
+	<bean id="EstadoDenuncia" class="tesis.playon.web.model.EstadoDenuncia" />
+	<bean id="EstadoPlaya" class="tesis.playon.web.model.EstadoPlaya" />
+	<bean id="EstadoPromocion" class="tesis.playon.web.model.EstadoPromocion" />
+	<bean id="EstadoPublicidad" class="tesis.playon.web.model.EstadoPublicidad" />
+	<bean id="Favorito" class="tesis.playon.web.model.Favorito" />
+	<bean id="Foto" class="tesis.playon.web.model.Foto" />
+	<bean id="FotoPublicidad" class="tesis.playon.web.model.FotoPublicidad" />
+	<bean id="FotoUsuario" class="tesis.playon.web.model.FotoUsuario" />
+	<bean id="Localidad" class="tesis.playon.web.model.Localidad" />
+	<bean id="MarcaVehiculo" class="tesis.playon.web.model.MarcaVehiculo" />
+	<bean id="ModeloVehiculo" class="tesis.playon.web.model.ModeloVehiculo" />
+	<bean id="Pais" class="tesis.playon.web.model.Pais" />
+	<bean id="PerfilPlaya" class="tesis.playon.web.model.PerfilPlaya" />
+	<bean id="Playa" class="tesis.playon.web.model.Playa" />
+	<!-- <bean id="Posicion" class="tesis.playon.web.model.Posicion" /> -->
+	<bean id="Promocion" class="tesis.playon.web.model.Promocion" />
+	<bean id="Provincia" class="tesis.playon.web.model.Provincia" />
+	<bean id="Publicidad" class="tesis.playon.web.model.Publicidad" />
+	<bean id="RolesPorUsuario" class="tesis.playon.web.model.RolesPorUsuario" />
+	<bean id="RolUsuario" class="tesis.playon.web.model.RolUsuario" />
+	<bean id="Tarifa" class="tesis.playon.web.model.Tarifa" />
+	<bean id="TipoDoc" class="tesis.playon.web.model.TipoDoc" />
+	<bean id="TipoEstadia" class="tesis.playon.web.model.TipoEstadia" />
+	<bean id="TipoPago" class="tesis.playon.web.model.TipoPago" />
+	<bean id="TransaccionCliente" class="tesis.playon.web.model.TransaccionCliente" />
+	<bean id="TransaccionPlaya" class="tesis.playon.web.model.TransaccionPlaya" />
+	<bean id="Usuario" class="tesis.playon.web.model.Usuario" />
+	<bean id="Vehiculo" class="tesis.playon.web.model.Vehiculo" />
+	<bean id="Liquidacion" class="tesis.playon.web.model.Liquidacion" />
+
+
+	<!-- User Service Declaration -->
+	<bean id="AbonoService" class="tesis.playon.web.service.impl.AbonoService">
+		<property name="abonoDao" ref="AbonoDao" />
+	</bean>
+	<bean id="BarrioService" class="tesis.playon.web.service.impl.BarrioService">
+		<property name="barrioDao" ref="BarrioDao" />
+	</bean>
+	<bean id="CalificacionService" class="tesis.playon.web.service.impl.CalificacionService">
+		<property name="calificacionDao" ref="CalificacionDao" />
+	</bean>
+	<bean id="CargoEmpleadoService" class="tesis.playon.web.service.impl.CargoEmpleadoService">
+		<property name="cargoEmpleadoDao" ref="CargoEmpleadoDao" />
+	</bean>
+	<bean id="CategoriaVehiculoService" class="tesis.playon.web.service.impl.CategoriaVehiculoService">
+		<property name="categoriaVehiculoDao" ref="CategoriaVehiculoDao" />
+	</bean>
+	<bean id="ClienteService" class="tesis.playon.web.service.impl.ClienteService">
+		<property name="clienteDao" ref="ClienteDao" />
+	</bean>
+	<bean id="ColorVehiculoService" class="tesis.playon.web.service.impl.ColorVehiculoService">
+		<property name="colorVehiculoDao" ref="ColorVehiculoDao" />
+	</bean>
+	<bean id="ComentarioService" class="tesis.playon.web.service.impl.ComentarioService">
+		<property name="comentarioDao" ref="ComentarioDao" />
+	</bean>
+	<bean id="CuentaClienteService" class="tesis.playon.web.service.impl.CuentaClienteService">
+		<property name="cuentaClienteDao" ref="CuentaClienteDao" />
+	</bean>
+	<bean id="CuentaPlayaService" class="tesis.playon.web.service.impl.CuentaPlayaService">
+		<property name="cuentaPlayaDao" ref="CuentaPlayaDao" />
+	</bean>
+	<bean id="DenunciaPlayaService" class="tesis.playon.web.service.impl.DenunciaPlayaService">
+		<property name="denunciaPlayaDao" ref="DenunciaPlayaDao" />
+	</bean>
+	<bean id="DenunciaVehiculoService" class="tesis.playon.web.service.impl.DenunciaVehiculoService">
+		<property name="denunciaVehiculoDao" ref="DenunciaVehiculoDao" />
+	</bean>
+	<bean id="DetalleEstadiaService" class="tesis.playon.web.service.impl.DetalleEstadiaService">
+		<property name="detalleEstadiaDao" ref="DetalleEstadiaDao" />
+	</bean>
+	<bean id="EstadiaService" class="tesis.playon.web.service.impl.EstadiaService">
+		<property name="estadiaDao" ref="EstadiaDao" />
+	</bean>
+	<bean id="EstadoPlayaService" class="tesis.playon.web.service.impl.EstadoPlayaService">
+		<property name="estadoPlayaDao" ref="EstadoPlayaDao" />
+	</bean>
+	<bean id="EstadoDenunciaService" class="tesis.playon.web.service.impl.EstadoDenunciaService">
+		<property name="estadoDenunciaDao" ref="EstadoDenunciaDao" />
+	</bean>
+	<bean id="EstadoPromocionService" class="tesis.playon.web.service.impl.EstadoPromocionService">
+		<property name="estadoPromocionDao" ref="EstadoPromocionDao" />
+	</bean>
+	<bean id="EstadoPublicidadService" class="tesis.playon.web.service.impl.EstadoPublicidadService">
+		<property name="estadoPublicidadDao" ref="EstadoPublicidadDao" />
+	</bean>
+	<bean id="EmpleadoService" class="tesis.playon.web.service.impl.EmpleadoService">
+		<property name="empleadoDao" ref="EmpleadoDao" />
+	</bean>
+	<bean id="FavoritoService" class="tesis.playon.web.service.impl.FavoritoService">
+		<property name="favoritoDao" ref="FavoritoDao" />
+	</bean>
+	<bean id="FotoService" class="tesis.playon.web.service.impl.FotoService">
+		<property name="fotoDao" ref="FotoDao" />
+	</bean>
+	<bean id="FotoPublicidadService" class="tesis.playon.web.service.impl.FotoPublicidadService">
+		<property name="fotoPublicidadDao" ref="FotoPublicidadDao" />
+	</bean>
+	
+	<bean id="FotoUsuarioService" class="tesis.playon.web.service.impl.FotoUsuarioService">
+		<property name="fotoUsuarioDao" ref="FotoUsuarioDao" />
+	</bean>
+	
+	<bean id="LocalidadService" class="tesis.playon.web.service.impl.LocalidadService">
+		<property name="localidadDao" ref="LocalidadDao" />
+	</bean>
+	<bean id="MarcaVehiculoService" class="tesis.playon.web.service.impl.MarcaVehiculoService">
+		<property name="marcaVehiculoDao" ref="MarcaVehiculoDao" />
+	</bean>
+	<bean id="ModeloVehiculoService" class="tesis.playon.web.service.impl.ModeloVehiculoService">
+		<property name="modeloVehiculoDao" ref="ModeloVehiculoDao" />
+	</bean>
+	<bean id="PaisService" class="tesis.playon.web.service.impl.PaisService">
+		<property name="paisDao" ref="PaisDao" />
+	</bean>
+	<bean id="PerfilPlayaService" class="tesis.playon.web.service.impl.PerfilPlayaService">
+		<property name="perfilPlayaDao" ref="PerfilPlayaDao" />
+	</bean>
+	<bean id="PlayaService" class="tesis.playon.web.service.impl.PlayaService">
+		<property name="playaDao" ref="PlayaDao" />
+	</bean>
+	<bean id="PromocionService" class="tesis.playon.web.service.impl.PromocionService">
+		<property name="promocionDao" ref="PromocionDao" />
+	</bean>
+	<bean id="ProvinciaService" class="tesis.playon.web.service.impl.ProvinciaService">
+		<property name="provinciaDao" ref="ProvinciaDao" />
+	</bean>
+	
+	<bean id="PublicidadService" class="tesis.playon.web.service.impl.PublicidadService">
+		<property name="publicidadDao" ref="PublicidadDao" />
+	</bean>
+	
+	<bean id="RolesPorUsuarioService" class="tesis.playon.web.service.impl.RolesPorUsuarioService">
+		<property name="rolesPorUsuarioDao" ref="RolesPorUsuarioDao" />
+	</bean>
+	<bean id="RolUsuarioService" class="tesis.playon.web.service.impl.RolUsuarioService">
+		<property name="rolUsuarioDao" ref="RolUsuarioDao" />
+	</bean>
+	<bean id="TarifaService" class="tesis.playon.web.service.impl.TarifaService">
+		<property name="tarifaDao" ref="TarifaDao" />
+	</bean>
+	<bean id="TipoDocService" class="tesis.playon.web.service.impl.TipoDocService">
+		<property name="tipoDocDao" ref="TipoDocDao" />
+	</bean>
+	<bean id="TipoEstadiaService" class="tesis.playon.web.service.impl.TipoEstadiaService">
+		<property name="tipoEstadiaDao" ref="TipoEstadiaDao" />
+	</bean>
+	<bean id="TipoPagoService" class="tesis.playon.web.service.impl.TipoPagoService">
+		<property name="tipoPagoDao" ref="TipoPagoDao" />
+	</bean>
+	<bean id="TransaccionClienteService" class="tesis.playon.web.service.impl.TransaccionClienteService">
+		<property name="transaccionClienteDao" ref="TransaccionClienteDao" />
+	</bean>
+	<bean id="TransaccionPlayaService" class="tesis.playon.web.service.impl.TransaccionPlayaService">
+		<property name="transaccionPlayaDao" ref="TransaccionPlayaDao" />
+	</bean>
+	<bean id="UsuarioService" class="tesis.playon.web.service.impl.UsuarioService">
+		<property name="usuarioDao" ref="UsuarioDao" />
+	</bean>
+	<bean id="VehiculoService" class="tesis.playon.web.service.impl.VehiculoService">
+		<property name="vehiculoDao" ref="VehiculoDao" />
+	</bean>
+	<bean id="LiquidacionService" class="tesis.playon.web.service.impl.LiquidacionService">
+		<property name="liquidacionDao" ref="LiquidacionDao" />
+	</bean>
+
+
+	<!-- User DAO Declaration -->
+	<bean id="AbonoDao" class="tesis.playon.web.dao.impl.AbonoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="BarrioDao" class="tesis.playon.web.dao.impl.BarrioDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CalificacionDao" class="tesis.playon.web.dao.impl.CalificacionDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CategoriaVehiculoDao" class="tesis.playon.web.dao.impl.CategoriaVehiculoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CargoEmpleadoDao" class="tesis.playon.web.dao.impl.CargoEmpleadoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="ClienteDao" class="tesis.playon.web.dao.impl.ClienteDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="ColorVehiculoDao" class="tesis.playon.web.dao.impl.ColorVehiculoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="ComentarioDao" class="tesis.playon.web.dao.impl.ComentarioDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CuentaClienteDao" class="tesis.playon.web.dao.impl.CuentaClienteDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="CuentaPlayaDao" class="tesis.playon.web.dao.impl.CuentaPlayaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="DenunciaPlayaDao" class="tesis.playon.web.dao.impl.DenunciaPlayaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="DenunciaVehiculoDao" class="tesis.playon.web.dao.impl.DenunciaVehiculoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="DetalleEstadiaDao" class="tesis.playon.web.dao.impl.DetalleEstadiaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="EstadiaDao" class="tesis.playon.web.dao.impl.EstadiaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="EstadoPlayaDao" class="tesis.playon.web.dao.impl.EstadoPlayaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="EstadoPromocionDao" class="tesis.playon.web.dao.impl.EstadoPromocionDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="EstadoDenunciaDao" class="tesis.playon.web.dao.impl.EstadoDenunciaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="EstadoPublicidadDao" class="tesis.playon.web.dao.impl.EstadoPublicidadDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="EmpleadoDao" class="tesis.playon.web.dao.impl.EmpleadoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="FavoritoDao" class="tesis.playon.web.dao.impl.FavoritoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="FotoDao" class="tesis.playon.web.dao.impl.FotoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
+	<bean id="FotoPublicidadDao" class="tesis.playon.web.dao.impl.FotoPublicidadDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="FotoUsuarioDao" class="tesis.playon.web.dao.impl.FotoUsuarioDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
+	<bean id="LocalidadDao" class="tesis.playon.web.dao.impl.LocalidadDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="MarcaVehiculoDao" class="tesis.playon.web.dao.impl.MarcaVehiculoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="ModeloVehiculoDao" class="tesis.playon.web.dao.impl.ModeloVehiculoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="PaisDao" class="tesis.playon.web.dao.impl.PaisDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="PerfilPlayaDao" class="tesis.playon.web.dao.impl.PerfilPlayaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="PlayaDao" class="tesis.playon.web.dao.impl.PlayaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="PromocionDao" class="tesis.playon.web.dao.impl.PromocionDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="ProvinciaDao" class="tesis.playon.web.dao.impl.ProvinciaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
+	<bean id="PublicidadDao" class="tesis.playon.web.dao.impl.PublicidadDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	
+	<bean id="RolesPorUsuarioDao" class="tesis.playon.web.dao.impl.RolesPorUsuarioDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="RolUsuarioDao" class="tesis.playon.web.dao.impl.RolUsuarioDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="TarifaDao" class="tesis.playon.web.dao.impl.TarifaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="TipoDocDao" class="tesis.playon.web.dao.impl.TipoDocDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="TipoEstadiaDao" class="tesis.playon.web.dao.impl.TipoEstadiaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="TipoPagoDao" class="tesis.playon.web.dao.impl.TipoPagoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="TransaccionClienteDao" class="tesis.playon.web.dao.impl.TransaccionClienteDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="TransaccionPlayaDao" class="tesis.playon.web.dao.impl.TransaccionPlayaDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="UsuarioDao" class="tesis.playon.web.dao.impl.UsuarioDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="VehiculoDao" class="tesis.playon.web.dao.impl.VehiculoDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+	<bean id="LiquidacionDao" class="tesis.playon.web.dao.impl.LiquidacionDao">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+
+	<!-- Provider Declaration -->
+	<bean id="rememberMeAuthenticationProvider"
+		class="org.springframework.security.authentication.RememberMeAuthenticationProvider">
+		<property name="key" value="jsfspring-sec" />
+	</bean>
+
+	<!-- Filter Declaration -->
+	<bean id="rememberMeFilter"
+		class="org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter">
+		<property name="rememberMeServices" ref="rememberMeServices" />
+		<property name="authenticationManager" ref="authenticationManager" />
+	</bean>
+
+	<!-- User Service Declaration -->
+	<bean id="rememberMeServices"
+		class="org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices">
+		<property name="key" value="jsfspring-sec" />
+		<property name="userDetailsService" ref="customJDBCUserService" />
+		<property name="alwaysRemember" value="true" />
+		<property name="tokenValiditySeconds" value="28800" />
+	</bean>
+	<bean id="customJDBCUserService" class="tesis.playon.web.dao.impl.CustomJDBCDao">
+		<property name="dataSource" ref="dataSource" />
+		<property name="enableAuthorities" value="true" />
+		<property name="usersByUsernameQuery">
+			<value>
+				SELECT usuario, password, enable FROM usuario WHERE usuario =
+				?
+			</value>
+		</property>
+		<property name="authoritiesByUsernameQuery">
+			<value>
+				SELECT usuario, rolUsuario FROM roles_por_usuario WHERE
+				usuario = ?
+			</value>
+		</property>
+	</bean>
+
+	<!-- Data Source Declaration -->
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="com.mysql.jdbc.Driver" />
+		<property name="jdbcUrl"
+			value="jdbc:mysql://localhost:3306/tesis_playon?useUnicode=true&amp;characterEncoding=UTF-8" />
+		<property name="user" value="playonAdmin" />
+		<property name="password" value="playon" />
+		<property name="maxPoolSize" value="10" />
+		<property name="maxStatements" value="0" />
+		<property name="minPoolSize" value="5" />
+	</bean>
+
+	<!-- Session Factory Declaration -->
+	<bean id="SessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="annotatedClasses">
+			<list>
+				<value>tesis.playon.web.model.Abono</value>
+				<value>tesis.playon.web.model.Barrio</value>
+				<value>tesis.playon.web.model.Calificacion</value>
+				<value>tesis.playon.web.model.CargoEmpleado</value>
+				<value>tesis.playon.web.model.CategoriaVehiculo</value>
+				<value>tesis.playon.web.model.Cliente</value>
+				<value>tesis.playon.web.model.ColorVehiculo</value>
+				<value>tesis.playon.web.model.Comentario</value>
+				<value>tesis.playon.web.model.CuentaCliente</value>
+				<value>tesis.playon.web.model.CuentaPlaya</value>
+				<value>tesis.playon.web.model.DenunciaPlaya</value>
+				<value>tesis.playon.web.model.DenunciaVehiculo</value>
+				<value>tesis.playon.web.model.DetalleEstadia</value>
+				<value>tesis.playon.web.model.Empleado</value>
+				<value>tesis.playon.web.model.Estadia</value>
+				<value>tesis.playon.web.model.EstadoDenuncia</value>
+				<value>tesis.playon.web.model.EstadoPlaya</value>
+				<value>tesis.playon.web.model.EstadoPromocion</value>
+				<value>tesis.playon.web.model.EstadoPublicidad</value>
+				<value>tesis.playon.web.model.Favorito</value>
+				<value>tesis.playon.web.model.Foto</value>
+				<value>tesis.playon.web.model.FotoPublicidad</value>
+				<value>tesis.playon.web.model.FotoUsuario</value>
+				<value>tesis.playon.web.model.HistorialDeCambio</value>
+				<value>tesis.playon.web.model.Liquidacion</value>
+				<value>tesis.playon.web.model.Localidad</value>
+				<value>tesis.playon.web.model.MarcaVehiculo</value>
+				<value>tesis.playon.web.model.ModeloVehiculo</value>
+				<value>tesis.playon.web.model.Pais</value>
+				<value>tesis.playon.web.model.PerfilPlaya</value>
+				<value>tesis.playon.web.model.Playa</value>
+				<value>tesis.playon.web.model.Posicion</value>
+				<value>tesis.playon.web.model.Promocion</value>
+				<value>tesis.playon.web.model.Provincia</value>
+				<value>tesis.playon.web.model.Publicidad</value>
+				<value>tesis.playon.web.model.RolesPorUsuario</value>
+				<value>tesis.playon.web.model.RolUsuario</value>
+				<value>tesis.playon.web.model.Sesion</value>
+				<value>tesis.playon.web.model.Tarifa</value>
+				<value>tesis.playon.web.model.TipoDoc</value>
+				<value>tesis.playon.web.model.TipoEstadia</value>
+				<value>tesis.playon.web.model.TipoPago</value>
+				<value>tesis.playon.web.model.TransaccionCliente</value>
+				<value>tesis.playon.web.model.TransaccionPlaya</value>
+				<value>tesis.playon.web.model.Usuario</value>
+				<value>tesis.playon.web.model.Vehiculo</value>
+				<value>tesis.playon.web.model.Liquidacion</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- Enable the configuration of transactional behavior based on annotations -->
+	<tx:annotation-driven transaction-manager="txManager" />
+
+	<!-- Transaction Manager is defined -->
+	<bean id="txManager"
+		class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="SessionFactory" />
+	</bean>
+</beans>

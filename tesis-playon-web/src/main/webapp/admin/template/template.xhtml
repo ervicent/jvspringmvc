@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:c="http://java.sun.com/jsf/jstl/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<f:view contentType="text/html">
+
+	<h:head>
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+		<h:outputStylesheet library="css" name="style_admin.css" />
+
+		<ui:include src="../../template/loadscripts.xhtml" />
+
+		<title>Playon | Administración</title>
+		<ui:insert name="head"></ui:insert>
+
+	</h:head>
+
+	<h:body>
+		<div class="mainbody">
+
+			<div class="admin-header ui-corner-all">
+				<div id="header"
+					class="ui-widget ui-widget-header ui-corner-all ui-shadow">
+
+					<ui:include src="header.xhtml" />
+
+				</div>
+			</div>
+
+			<div class="ui-corner-all ui-shadow admin-menubar">
+
+				<ui:fragment rendered="#{loginMB.logueado}">
+					<ui:fragment rendered="#{loginMB.rol eq '[ROLE_ADMIN]'}">
+						<ui:include src="menubar.xhtml" />
+					</ui:fragment>
+					<ui:fragment rendered="#{loginMB.rol eq '[ROLE_AUDITOR]'}">
+						<ui:include src="menubarAudit.xhtml" />
+					</ui:fragment>
+				</ui:fragment>
+
+
+			</div>
+
+			<div class="admin-container-nomenu">
+
+				<!-- OLD LEFT MENÚ
+				<div class="ui-widget-content ui-corner-all ui-shadow admin-menu">
+					<ui:include src="menu.xhtml" />
+				</div>
+				-->
+
+				<div class=" ui-corner-all admin-content-nomenu ui-content-personal">
+					<h:form id="mainForm">
+
+						<c:if test="#{panelTitle}">
+							<c:set var="panelTitle"
+								value="Playon (Red de playas) - Panel de administración" />
+						</c:if>
+
+						<p:panel header="#{panelTitle}" styleClass="ui-shadow">
+							<ui:insert name="panelContent">Contenido</ui:insert>
+						</p:panel>
+
+					</h:form>
+					<div id="footer"
+						class="ui-widget ui-widget-header ui-corner-all admin-footer ui-widget-content ui-shadow">
+						<ui:include src="footer.xhtml" />
+					</div>
+				</div>
+			</div>
+			<!-- 			<div style="clear: both;"></div> -->
+			<!-- 			<div id="footer" -->
+			<!-- 				class="ui-widget ui-widget-header ui-corner-all admin-footer"> -->
+			<!-- 				<ui:include src="footer.xhtml" /> -->
+			<!-- 			</div> -->
+		</div>
+
+
+
+
+	</h:body>
+</f:view>
+
+</html>

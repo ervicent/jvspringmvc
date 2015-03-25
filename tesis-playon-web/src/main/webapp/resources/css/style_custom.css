@@ -1,0 +1,171 @@
+@CHARSET "UTF-8";
+
+.vert-align-top {
+	vertical-align: top;
+}
+
+/* <PRIMEFACES> */
+.ui-widget {
+	font-size: 12px;
+}
+
+.ui-widget .ui-widget {
+	font-size: 12px;
+}
+
+.ui-menu { /*     width: 200px; */
+	font-size: 10px;
+}
+
+.ui-menu-child {
+	width: 200px;
+}
+
+.ui-paginator {
+	line-height: 1.4em;
+}
+
+/* </PRIMEFACES> */
+.no-border {
+	border: 0px solid white;
+}
+
+.negative-row {
+	color: red;
+}
+
+/* <SIDE MENU> */
+#sidebar .ui-widget .ui-widget {
+	font-size: 14px;
+}
+
+.side-menu {
+	font-size: 14px;
+	width: 180px;
+	height: 100%;
+}
+
+.side-menu li {
+	font-size: 14px;
+	width: 180px;
+}
+
+.side-menu .ui-menu {
+	width: 180px;
+}
+
+#sidebar .box { /* 	background-color: red; */
+	margin-top: 0;
+	height: 100%;
+	psition: relative;
+}
+/* </SIDE MENU> */
+
+/* <TABLA DE ALTA TARIFAS> */
+#tabla-tarifas {
+	width: 600px;
+	/* 	height: 244px; */
+	/* 	border: 1px solid grey; */
+	text-align: center;
+	/* 	padding: 2px; */
+	border-collapse: collapse;
+}
+
+#tabla-tarifas th,#tabla-tarifas td {
+	width: 120px;
+	/* 	border: 1px solid grey; */
+	padding: 5px;
+}
+/* </TABLA DE ALTA TARIFAS> */
+#content {
+	text-align: justify;
+	/* 	margin-right: -5px; */
+	/* 	background-color: white; */
+	/* 	padding: 5px 5px 5px 5px; */
+	padding-right: 10px;
+}
+
+#content h1 {
+	padding: 0;
+	padding-bottom: 5px;
+	margin-bottom: 20px;
+	border-bottom: 1px solid rgb(166, 201, 226);
+}
+
+#content h2,#content h3,#content h4 {
+	border-bottom: 1px dotted rgb(166, 201, 226);
+	color: white;
+}
+
+#content ul {
+	list-style: disc;
+	list-style-type: circle;
+}
+
+#page-bottom-menu {
+	padding: 10px 45px 0 45px;
+}
+
+#page-bottom-menu ul.list {
+	
+}
+
+#page-bottom-menu li {
+	display: inline;
+	padding-right: 20px;
+}
+
+#page-bottom-menu {
+	text-align: center;
+	margin-bottom: 0em;
+}
+
+#page-bottom {
+	text-align: center;
+	margin-bottom: 0em;
+}
+
+#loginform {
+	padding: 5px 0 0 0;
+	position: absolute;
+	right: 45px;
+	top: 20px;
+}
+
+.logo {
+	width: 320px;
+	height: 133px;
+	padding: 10px 0 0 10px;
+	/* 	background-color: white; */
+}
+
+#header a {
+	color: GhostWhite;
+}
+
+#header a:hover {
+	color: white;
+}
+
+#tos {
+	margin: 0 25px 0 25px;
+	padding: 0 5px 0 5px;
+	/* 	padding: 0 25px 0 25px; */
+	/* 	border-right: 1px solid rgb(166, 201, 226); */
+	/* 	border-left: 1px solid rgb(166, 201, 226); */
+	/* 	border-left: 1px solid rgb(192, 191, 191); */
+	/* 	border-right: 1px solid rgb(192, 191, 191); */
+}
+
+#tos p {
+	text-align: justify;
+	margin-bottom: 0.26cm;
+	font-size: 12px;
+	line-height: 1.7em;
+}
+
+#tos .playon { /* 	color: rgb(62, 61, 61); */
+	color: #006B8F;
+	/* 	font-weight: bold; */
+	/* 	font-style: italic; */}
+}

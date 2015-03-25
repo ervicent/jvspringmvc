@@ -1,0 +1,440 @@
+<ui:composition template="../admin/template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Auditoría de Publicidades" />
+
+	<ui:define name="panelContent" class="admin-font">
+		<p:growl id="messages" autoUpdate="false" showDetail="true"
+			globalOnly="true" />
+
+		<p:tabView id="tabView">
+
+			<p:tab id="tab1" title="Pendientes">
+				<p:dataTable id="publicidadesPendientes" var="publicidad"
+					widgetVar="publicidadTablePendientes"
+					value="#{auditoriaPublicidadesMB.publicidadesPendientesList}"
+					paginatorPosition="bottom" paginator="true" rows="5"
+					emptyMessage="¡No existen publicidades pendientes!"
+					text-align="center">
+
+					<p:column headerText="Nombre Empresa" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Nombre empresa" />
+						</f:facet>
+						<h:outputText value="#{publicidad.nombreEmpresa}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Referente" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Referente" />
+						</f:facet>
+						<h:outputText
+							value="#{publicidad.nombreResponsable}&#160;#{publicidad.apellidoResponsable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Teléfono" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Teléfono" />
+						</f:facet>
+						<h:outputText value="#{publicidad.telefonoResponsable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="E-mail" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="E-mail" />
+						</f:facet>
+						<h:outputText value="#{publicidad.emailRespondable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Período" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Período" />
+						</f:facet>
+						<h:outputText value="#{publicidad.fechaDesde}" text-align="center">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						<h:outputText value="&#160;-&#160;" text-align="center">></h:outputText>
+						<h:outputText value="#{publicidad.fechaHasta}" text-align="center">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Opciones" styleClass="column-options"
+						exportable="false" style="text-align:center; width:150px;">
+
+						<p:commandLink id="view" update=":mainForm:carDlg"
+							oncomplete="popupClienteDatos.show();" title="Datos publicidad">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="search.png" />
+						</p:commandLink>
+
+
+
+						<p:commandLink id="aceptar" title="Aprobar publicidad"
+							action="#{auditoriaPublicidadesMB.approvePublicidad}"
+							ajax="false">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="check.png" />
+						</p:commandLink>
+
+						<p:commandLink id="viewFoto" title="Foto a publicar"
+							oncomplete="popupFoto.show();" update=":mainForm:displayFoto">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="image.png" />
+						</p:commandLink>
+
+						<p:commandLink id="rechazar" title="Rechazar publicidad"
+							action="#{auditoriaPublicidadesMB.rejectPublicidad}" ajax="false">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="rejected.png" />
+						</p:commandLink>
+					</p:column>
+					<f:facet name="footer">
+
+						<div align="center">
+							<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+								<h:commandLink title="Exportar a excel">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/excel.png" />
+									<p:dataExporter type="xls" target="publicidadesPendientes"
+										fileName="Publicidades Pendientes" />
+								</h:commandLink>
+
+								<h:commandLink title="Exportar a PDF">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/pdf.png" />
+									<p:dataExporter type="pdf" target="publicidadesPendientes"
+										preProcessor="#{documentExporterMB.listadoPublicidadesPendientesPDF}"
+										fileName="Publicidades Pendientes" />
+								</h:commandLink>
+							</h:panelGrid>
+						</div>
+					</f:facet>
+				</p:dataTable>
+
+			</p:tab>
+
+			<p:tab id="tab2" title="Aprobadas">
+				<p:dataTable id="publicidadesAprobadas" var="publicidad"
+					value="#{auditoriaPublicidadesMB.publicidadesAprobadasList}"
+					paginatorPosition="bottom" paginator="true" rows="5"
+					emptyMessage="¡No existen publicidades aprobadas!"
+					text-align="center">
+
+					<p:column headerText="Nombre Empresa" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Nombre empresa" />
+						</f:facet>
+						<h:outputText value="#{publicidad.nombreEmpresa}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Referente" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Referente" />
+						</f:facet>
+						<h:outputText
+							value="#{publicidad.nombreResponsable}&#160;#{publicidad.apellidoResponsable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Teléfono" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Teléfono" />
+						</f:facet>
+						<h:outputText value="#{publicidad.telefonoResponsable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="E-mail" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="E-mail" />
+						</f:facet>
+						<h:outputText value="#{publicidad.emailRespondable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Período" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Período" />
+						</f:facet>
+						<h:outputText value="#{publicidad.fechaDesde}" text-align="center">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						<h:outputText value="&#160;-&#160;" text-align="center">></h:outputText>
+						<h:outputText value="#{publicidad.fechaHasta}" text-align="center">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Opciones" styleClass="column-options"
+						exportable="false" style="text-align:center; width:120px;">
+
+						<p:commandLink id="view2" update=":mainForm:carDlg"
+							oncomplete="popupClienteDatos.show();" title="Datos publicidad">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="search.png" />
+						</p:commandLink>
+
+						<p:commandLink id="rechazar2" title="Rechazar publicidad"
+							action="#{auditoriaPublicidadesMB.rejectPublicidad}" ajax="false">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="rejected.png" />
+						</p:commandLink>
+					</p:column>
+					<f:facet name="footer">
+
+						<div align="center">
+							<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+								<h:commandLink title="Exportar a excel">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/excel.png" />
+									<p:dataExporter type="xls" target="publicidadesAprobadas"
+										fileName="Publicidades aprobadas" />
+								</h:commandLink>
+
+								<h:commandLink title="Exportar a PDF">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/pdf.png" />
+									<p:dataExporter type="pdf" target="publicidadesAprobadas"
+										preProcessor="#{documentExporterMB.listadoPublicidadesAprobadasPDF}"
+										fileName="Publicidades aprobadas" />
+								</h:commandLink>
+							</h:panelGrid>
+						</div>
+					</f:facet>
+				</p:dataTable>
+			</p:tab>
+
+			<p:tab id="tab3" title="Rechazadas">
+				<p:dataTable id="publicidadesRechazadas" var="publicidad"
+					widgetVar="publicidadesRechazadasTable"
+					value="#{auditoriaPublicidadesMB.publicidadRechazadasList}"
+					paginatorPosition="bottom" paginator="true" rows="5"
+					emptyMessage="¡No existen publicidades rechazadas!"
+					text-align="center">
+
+					<p:column headerText="Nombre Empresa" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Nombre empresa" />
+						</f:facet>
+						<h:outputText value="#{publicidad.nombreEmpresa}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Referente" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Referente" />
+						</f:facet>
+						<h:outputText
+							value="#{publicidad.nombreResponsable}&#160;#{publicidad.apellidoResponsable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Teléfono" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Teléfono" />
+						</f:facet>
+						<h:outputText value="#{publicidad.telefonoResponsable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="E-mail" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="E-mail" />
+						</f:facet>
+						<h:outputText value="#{publicidad.emailRespondable}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Período" styleClass="column-font">
+						<f:facet name="header">
+							<h:outputText value="Período" />
+						</f:facet>
+						<h:outputText value="#{publicidad.fechaDesde}" text-align="center">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+						<h:outputText value="&#160;-&#160;" text-align="center">></h:outputText>
+						<h:outputText value="#{publicidad.fechaHasta}" text-align="center">
+							<f:convertDateTime pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Opciones" styleClass="column-options"
+						exportable="false" style="text-align:center; width:120px;">
+
+						<p:commandLink id="view3" oncomplete="popupClienteDatos.show();"
+							update=":mainForm:carDlg" title="Datos publicidad">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="search.png" />
+						</p:commandLink>
+
+						<p:commandLink id="aceptar2" title="Aprobar publicidad"
+							action="#{auditoriaPublicidadesMB.approvePublicidad}"
+							ajax="false">
+							<f:setPropertyActionListener value="#{publicidad}"
+								target="#{auditoriaPublicidadesMB.publicidadSelected}" />
+							<h:graphicImage library="images/icons" name="check.png" />
+						</p:commandLink>
+					</p:column>
+					<f:facet name="footer">
+
+						<div align="center">
+							<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+								<h:commandLink title="Exportar a excel">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/excel.png" />
+									<p:dataExporter type="xls" target="publicidadesRechazadas"
+										fileName="Publicidades rechazadas" />
+								</h:commandLink>
+
+								<h:commandLink title="Exportar a PDF">
+									<p:graphicImage
+										value="http://www.primefaces.org/showcase/images/pdf.png" />
+									<p:dataExporter type="pdf" target="publicidadesRechazadas"
+										preProcessor="#{documentExporterMB.listadoPublicidadesRechazadasPDF}"
+										fileName="Publicidades rechazadas" />
+								</h:commandLink>
+							</h:panelGrid>
+						</div>
+					</f:facet>
+				</p:dataTable>
+			</p:tab>
+		</p:tabView>
+
+		<p:dialog header="Foto a publicar" widgetVar="popupFoto" modal="true"
+			resizable="false" id="fotoDlg" draggable="false">
+
+			<h:panelGrid id="displayFoto" columns="2" cellpadding="8"
+				style="margin:0 auto;" update="@this">
+				<h:graphicImage library="fotos_publicidad"
+					name="#{auditoriaPublicidadesMB.publicidadSelected.fotoPublicidad.id}_#{auditoriaPublicidadesMB.publicidadSelected.fotoPublicidad.nombre}"
+					style="width:200px;heigth:360px;" />
+			</h:panelGrid>
+		</p:dialog>
+
+		<!-- DIALOG PARA VER LOS DATOS DE LA PUBLICIDAD SELECCIONADA "Datos de la Publicidad" -->
+		<p:dialog header="Datos de la Publicidad"
+			widgetVar="popupClienteDatos" modal="true" resizable="false"
+			id="carDlg" draggable="false">
+
+			<h:panelGrid id="displayView" columns="2" cellpadding="8"
+				style="margin:0 auto;" update="@this">
+
+				<p:column>
+					<h:outputText value="Nombre empresa: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.nombreEmpresa}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Referente: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{publicidad.nombreResponsable}&#160;#{publicidad.apellidoResponsable}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Teléfono" />
+				</p:column>
+
+				<p:column>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.telefonoResponsable}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="E-mail" />
+				</p:column>
+
+				<p:column>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.emailRespondable}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Dirección web: " />
+				</p:column>
+
+				<p:column>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.fotoPublicidad.url}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Fecha de inicio: " />
+				</p:column>
+
+				<p:column>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.fechaDesde}"
+						style="font-weight:bold">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Fecha de finalización: " />
+				</p:column>
+
+				<p:column>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.fechaHasta}"
+						style="font-weight:bold">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Período" />
+				</p:column>
+
+				<p:column>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.fechaDesde}"
+						style="font-weight:bold">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+					<h:outputText value="&#160;-&#160;" text-align="center">></h:outputText>
+					<h:outputText
+						value="#{auditoriaPublicidadesMB.publicidadSelected.fechaHasta}"
+						style="font-weight:bold">
+						<f:convertDateTime pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="text-align:right">
+					<div align="right">
+						<h:commandButton id="btnAceptar3" value="Aceptar"
+							oncomplete="carDialog.hide();" />
+					</div>
+				</p:column>
+
+			</h:panelGrid>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

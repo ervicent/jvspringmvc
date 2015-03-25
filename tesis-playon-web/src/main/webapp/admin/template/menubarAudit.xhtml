@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<!-- Iconos del menu:
+			http://jquery-ui.googlecode.com/svn/tags/1.6rc5/tests/static/icons.html
+	 -->
+
+	<h:form>
+		<p:menubar style="font-size: 0.8em;">
+			<p:menuitem value="Inicio"
+				url="#{request.contextPath}/../auditoria/index.html" />
+
+			<p:menuitem value="Playas"
+				url="#{request.contextPath}/../auditoria/playaslist.html"
+				icon="ui-icon-zoomin" />
+
+			<p:menuitem value="Denuncias a vehículos"
+				url="#{request.contextPath}/../auditoria/denunciasvehiculos.html"
+				icon="ui-icon-pin-w" />
+
+			<p:menuitem value="Denuncias a playas"
+				url="#{request.contextPath}/../auditoria/denunciasplayas.html"
+				icon="ui-icon-pin-w" />
+
+			<p:menuitem value="Publicidades"
+				url="#{request.contextPath}/../auditoria/publicidadeslist.html"
+				icon="ui-icon-clipboard" />
+
+			<p:submenu label="Configuración de Cuenta">
+				<p:menuitem value="Cambiar Contraseña"
+					url="#{request.contextPath}/../auditoria/cambiarpassword.html"
+					icon="ui-icon-key" />
+				<p:menuitem value="Cambiar Mi Foto"
+					url="#{request.contextPath}/../admin/cambiarfotoperfil.html"
+					icon="ui-icon-image" />
+				<p:menuitem value="Cerrar sesión" icon="ui-icon-power"
+					action="#{loginMB.logout}" />
+			</p:submenu>
+		</p:menubar>
+	</h:form>
+</ui:composition>

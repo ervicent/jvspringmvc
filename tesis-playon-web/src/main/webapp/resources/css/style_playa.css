@@ -1,0 +1,86 @@
+#perfil-playa h1 {
+	border: 0px solid black;
+	font-size: 40px;
+	font-style: italic;
+	color: #192129;
+	line-height: 120%;
+}
+
+#perfil-playa img {
+	margin: 0px 20px 10px 0px;
+}
+
+#perfil-playa-frente p {
+	font-size: 15px;
+	font-style: italic;
+	color: #707070;
+	margin: 5px 10px 5px 10px;
+}
+
+.fuente-perfil {
+	font-style: italic;
+	font-style: bolder;
+	font-size: large;
+	color: #192129;
+}
+
+.fuente-outputtext {
+	font-size: large;
+	color: black;
+	margin-right: 10px;
+}
+
+.fuente-encabezado-panel{
+	font-size: larger;
+	color: black;
+	margin-right: 10px;
+}
+
+.fuente-subtitle {
+	font-size: 20px;
+	font-style: italic;
+	color: #192129;
+	line-height: 120%;
+}
+
+.fuente-comentario-frente {
+	font-family: Lucida Console;
+	font-size: 18px;
+	font-style: italic;
+	color: #5E6971;
+	margin: 5px 10px 5px 10px;
+}
+
+.imagen-fondo-comment {
+	background: url("#{resource['images:comment.png']}") no-repeat;
+	margin: 5px 5px 5px 5px;
+}
+
+.contenido-textarea {
+	font-size: 15px;
+	font-style: italic;
+	color: #707070;
+	margin: 0px 10px 5px 0px;
+	width:95%;
+}
+
+.fuente-link-denuncia {
+	font-size: 12px;
+	font-style: italic;
+	color: #1045B4;
+}
+
+.bordes-foto-perfil {
+	width: 151px;
+	height: 151px;
+	border: 3px solid #D9D9D9;
+	border-radius: 25px;
+	height: 151px;
+}
+
+.bordes-foto-perfil-comentario {
+	border: 3px solid #D9D9D9;
+	border-radius: 25px;
+	width: 75px;
+	height: 75px;
+}

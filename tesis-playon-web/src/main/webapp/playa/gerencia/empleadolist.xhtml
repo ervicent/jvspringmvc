@@ -1,0 +1,252 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Nuevo empleado
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Empleados de la playa</h1>
+		<h:form>
+			<p:dataTable id="empleados" var="empleado" paginator="true" rows="5"
+				value="#{empleadoMB.empleadoList}"
+				filteredValue="#{empleadoMB.filteredEmploy}"
+				emptyMessage="No existen empleados en su playa"
+				paginatorPosition="bottom">
+
+
+				<p:column headerText="Legajo" style="text-align:center">
+
+					<f:facet name="header">
+						<h:outputText value="Legajo" />
+					</f:facet>
+					<h:outputText value="#{empleado.legajo}" />
+
+				</p:column>
+
+				<p:column headerText="Apellido" style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="apellido" />
+					</f:facet>
+					<h:outputText value="#{empleado.usuario.apellido}" />
+				</p:column>
+
+				<p:column headerText="Nombre" style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Nombre" />
+					</f:facet>
+					<h:outputText value="#{empleado.usuario.nombre}" />
+				</p:column>
+
+				<p:column headerText="Usuario" style="text-align:center">
+
+					<f:facet name="header">
+						<h:outputText value="Usuario" />
+					</f:facet>
+					<h:outputText value="#{empleado.usuario.nombreUser}" />
+				</p:column>
+
+				<p:column headerText="Cargo" style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Cargo" />
+					</f:facet>
+					<h:outputText value="#{empleado.cargoEmpleado.nombre}" />
+				</p:column>
+
+				<p:column headerText="Habilitado" style="text-align:center;">
+					<f:facet name="header">
+						<h:outputText value="Hab." />
+					</f:facet>
+					<h:outputText
+						value="#{empleado.usuario.enable == true ? 'Si' : 'No'}" />
+				</p:column>
+
+				<p:column headerText="Opciones" styleClass="column-options"
+					style="text-align:center;width:120px;" exportable="false">
+
+					<p:commandLink id="view" title="Ver Empleado"
+						oncomplete="viewDialog.show();" update=":displayView">
+						<f:setPropertyActionListener value="#{empleado}"
+							target="#{empleadoMB.empleadoSelected}" />
+						<h:graphicImage library="images/icons" name="search.png"
+							width="20" height="20" />
+					</p:commandLink>
+
+					<p:commandLink id="edit" title="Editar Empleado"
+						action="/playa/gerencia/empleadoedit.html?faces-redirect=true"
+						ajax="false">
+						<f:setPropertyActionListener value="#{empleado}"
+							target="#{empleadoMB.empleadoSelected}" />
+						<h:graphicImage library="images/icons" name="pencil.png"
+							width="20" height="20" />
+					</p:commandLink>
+
+					<p:commandLink id="darBaja" title="Dar de baja"
+						action="#{empleadoMB.deleteEmpleado}" ajax="false">
+						<f:setPropertyActionListener value="#{empleado}"
+							target="#{empleadoMB.empleadoSelected}" />
+						<h:graphicImage library="images/icons" name="trash.png" width="20"
+							height="20" />
+					</p:commandLink>
+
+					<p:commandLink id="keys" title="Resetear clave de acceso"
+						type="button" onclick="confirmationClave.show();">
+						<f:setPropertyActionListener value="#{empleado.usuario}"
+							target="#{usuarioMB.usuarioSelected}" />
+						<h:graphicImage library="images/icons" name="keys.png" width="24"
+							height="24" />
+					</p:commandLink>
+					<p:confirmDialog id="confirmDialogClave"
+						message="¿Está seguro que desea generar una nueva clave de acceso para este Empleado?"
+						header="Nueva contraseña" severity="alert"
+						widgetVar="confirmationClave">
+						<div align="right">
+							<p:commandButton id="confirmClave" value="Aceptar"
+								update="messages" oncomplete="confirmationClave.hide();"
+								action="#{usuarioMB.generarNuevaContraseñaUsuario}" ajax="false">
+							</p:commandButton>
+							<p:commandButton id="declineClave" value="Cancelar"
+								onclick="confirmationClave.hide();" type="button" />
+						</div>
+					</p:confirmDialog>
+				</p:column>
+				<f:facet name="footer">
+
+					<div align="center">
+						<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+							<h:commandLink title="Exportar a excel">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/excel.png" />
+								<p:dataExporter type="xls" target="empleados"
+									fileName="Empleados" />
+							</h:commandLink>
+
+							<h:commandLink title="Exportar a PDF">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/pdf.png" />
+								<p:dataExporter type="pdf" target="empleados"
+									preProcessor="#{empleadoMB.listadoEmpleadosPDF}"
+									fileName="Empleados" />
+							</h:commandLink>
+						</h:panelGrid>
+					</div>
+				</f:facet>
+			</p:dataTable>
+			<br></br>
+			<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+				<p:commandButton id="addEmpleado" value="Nuevo Empleado"
+					action="/playa/gerencia/empleadoadd.html?faces-redirect=true"
+					ajax="false" />
+			</h:panelGroup>
+
+
+		</h:form>
+
+
+
+
+
+		<!-- DIALOG PARA VER LOS DATOS DEL USUARIO SELECCIONADO -->
+		<p:dialog header="Datos del Empleado" widgetVar="viewDialog"
+			resizable="false" id="viewDlg" showEffect="fade" modal="true"
+			draggable="false">
+
+			<h:panelGrid id="displayView" columns="2" cellpadding="4"
+				cellspacing="15">
+
+				<p:column>
+					<h:outputText value="Legajo: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{empleadoMB.empleadoSelected.legajo}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Apellido: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{empleadoMB.empleadoSelected.usuario.apellido}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Nombre: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{empleadoMB.empleadoSelected.usuario.nombre}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Usuario: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{empleadoMB.empleadoSelected.usuario.nombreUser}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Cargo: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{empleadoMB.empleadoSelected.cargoEmpleado.nombre}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="E-mail: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{empleadoMB.empleadoSelected.usuario.email}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Tipo Doc.: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{empleadoMB.empleadoSelected.usuario.tipoDoc.nombre}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Nro. Documento: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{empleadoMB.empleadoSelected.usuario.nroDoc}"
+						style="font-weight:bold; font-style:italic;" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Habilitado: " />
+				</p:column>
+				<p:column style="align-text:center;">
+					<h:selectBooleanCheckbox
+						value="#{empleadoMB.empleadoSelected.usuario.enable}"
+						style="font-weight:bold" disabled="true" />
+				</p:column>
+
+				<p:column>
+				</p:column>
+				<p:column style="text-align:right">
+					<div align="right">
+						<h:commandButton id="btnAceptar" value="Aceptar"
+							style="padding:4px" onclick="viewDialog.hide();" type="button" />
+					</div>
+				</p:column>
+
+			</h:panelGrid>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

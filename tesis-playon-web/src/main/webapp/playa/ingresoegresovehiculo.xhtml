@@ -1,0 +1,399 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<script type="text/javascript">
+		var pagina = "http://localhost:8080/tesis-playon-web/playa/ingresoegresovehiculo.html"
+		function redireccionar() {
+			location.href = pagina
+		}
+		setTimeout("redireccionar()", 1000);
+	</script>
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Solicitud de registro de vehículo
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>¡Registre el ingreso y egreso de sus clientes!</h1>
+
+		<h:form id="form" style="margin: 10px 0px 0px 30px;">
+			<p:growl id="messages" globalOnly="true" autoUpdate="false" redisplay="false" />
+
+			<ui:fragment id="searchVehiculoFragment">
+				<div id="perfil-playa">
+					<h:panelGrid columns="4" cellpadding="8" cellspacing="10">
+						<h:outputLabel for="patente" value="Ingrese la patente: "
+							styleClass="fuente-outputtext" />
+						<p:inputText id="patente" style="width:100px"
+							value="#{detalleEstadiaMB.patente}" required="true"
+							requiredMessage="Campo obligatorio"
+							validatorMessage="La patente debe tener como mínimo 6 caracteres">
+							<f:validateLength minimum="6" />
+							<p:ajax event="blur" update="patenteMsg" />
+						</p:inputText>
+						<p:message id="patenteMsg" for="patente" display="icon" />
+						<p:commandButton id="buscarVehiculo" value="Buscar vehículo"
+							action="#{detalleEstadiaMB.searchVehiculo}" ajax="false"
+							style="width:150px" />
+					</h:panelGrid>
+				</div>
+			</ui:fragment>
+
+			<ui:fragment id="vehiculoSinAbonoFragment"
+				rendered="#{detalleEstadiaMB.existeVehiculo 
+					and detalleEstadiaMB.existeAbonoVehiculo == false}">
+				<div id="perfil-playa">
+
+					<p:panel style="text-align:left;" styleClass="fuente-outputtext">
+
+						<f:facet name="header">
+							<h:outputText
+								value="Cliente:&#160;#{detalleEstadiaMB.usuarioCliente.nombre}&#160;
+									#{detalleEstadiaMB.usuarioCliente.apellido}" />
+						</f:facet>
+						<div align="center">
+							<h:panelGrid columns="5" cellpadding="10" cellspacing="5">
+								<p:column>
+									<div align="right">
+										<h:outputText value="Saldo: " />
+									</div>
+								</p:column>
+								<h:outputText id="txt_saldo"
+									value="#{detalleEstadiaMB.cliente.cuentaCliente.saldo}">
+									<f:convertNumber type="currency" currencySymbol="$ " />
+								</h:outputText>
+
+								<p:column>&#160;&#160;&#160;&#160;&#160;</p:column>
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Vehiculo: " />
+									</div>
+								</p:column>
+								<h:outputText id="txt_mod_vehiculo"
+									value="#{detalleEstadiaMB.vehiculo.modeloVehiculo.marcaVehiculo.nombre}&#160;
+									#{detalleEstadiaMB.vehiculo.modeloVehiculo.nombre}" />
+
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Patente: " />
+									</div>
+								</p:column>
+								<h:outputText id="txt_patente"
+									value="#{detalleEstadiaMB.vehiculo.patente}" />
+
+								<p:column>&#160;&#160;&#160;&#160;&#160;</p:column>
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Categoría: " />
+									</div>
+								</p:column>
+								<h:outputText id="txt_cat_vehiculo"
+									value="#{detalleEstadiaMB.vehiculo.modeloVehiculo.categoriaVehiculo.nombre}" />
+
+
+								<h:outputText value="Fecha ingreso: "
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}" />
+								<h:outputText id="txt_fecha_ingreso"
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}"
+									value="#{detalleEstadiaMB.fechaIngreso}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<p:column rendered="#{detalleEstadiaMB.detalleEstadia != null}">
+								&#160;&#160;&#160;&#160;&#160;</p:column>
+
+								<h:outputText value="Hora ingreso: "
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}" />
+								<h:outputText id="txt_hora_ingreso"
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}"
+									value="#{detalleEstadiaMB.horaIngreso}" />
+
+								<h:outputText value="Fecha actual: " />
+								<h:outputText id="txt_fecha_actual"
+									value="#{detalleEstadiaMB.fechaActual}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<p:column>&#160;&#160;&#160;&#160;&#160;</p:column>
+
+								<h:outputText value="Hora actual: " />
+								<h:outputText id="txt_hora_actual"
+									value="#{detalleEstadiaMB.horaActual}">
+									<f:convertDateTime pattern="hh:mm:ss" />
+								</h:outputText>
+
+								<f:facet name="footer">
+									<div align="right">
+										<p:commandButton id="calcImporte" value="Calcular importe"
+											rendered="#{detalleEstadiaMB.detalleEstadia != null}"
+											style="margin-right:15px" onclick="dlgEgreso.show();"
+											action="#{detalleEstadiaMB.calcularImporte}"
+											update=":formEgreso:panelEgreso" />
+										<p:commandButton
+											rendered="#{detalleEstadiaMB.detalleEstadia == null
+												and  detalleEstadiaMB.existeTarifa}"
+											id="ingreso" value="Registrar ingreso"
+											onclick="dlgIngreso.show();" style="margin-right:10px"
+											type="button" />
+										<p:commandButton id="cancelar" value="Cancelar"
+											immediate="true"
+											onclick="window.location.href = 'http://localhost:8080/tesis-playon-web/playa/ingresoegresovehiculo.html';" />
+									</div>
+								</f:facet>
+							</h:panelGrid>
+						</div>
+					</p:panel>
+				</div>
+			</ui:fragment>
+
+			<ui:fragment id="vehiculoConAbonoFragment"
+				rendered="#{detalleEstadiaMB.existeVehiculo
+					and detalleEstadiaMB.existeAbonoVehiculo == true}">
+				<div id="perfil-playa">
+
+					<p:panel id="vehiculoAbonado" style="text-align:left;"
+						styleClass="fuente-outputtext">
+
+						<f:facet name="header">
+							<h:outputText
+								value="Cliente abonado:&#160;#{detalleEstadiaMB.usuarioCliente.nombre}&#160;
+									#{detalleEstadiaMB.usuarioCliente.apellido}" />
+						</f:facet>
+						<div align="center">
+							<h:panelGrid columns="5" cellpadding="10" cellspacing="5">
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Patente: " />
+									</div>
+								</p:column>
+								<h:outputText id="patenteVehiculo"
+									value="#{detalleEstadiaMB.vehiculo.patente}" />
+
+								<p:column>&#160;&#160;&#160;&#160;&#160;</p:column>
+								<p:column />
+								<p:column />
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Vehiculo: " />
+									</div>
+								</p:column>
+								<h:outputText id="modeloVehiculo"
+									value="#{detalleEstadiaMB.vehiculo.modeloVehiculo.marcaVehiculo.nombre}&#160;
+									#{detalleEstadiaMB.vehiculo.modeloVehiculo.nombre}" />
+
+								<p:column>&#160;&#160;&#160;&#160;&#160;</p:column>
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Categoría: " />
+									</div>
+								</p:column>
+								<h:outputText id="categoriaVehiculo"
+									value="#{detalleEstadiaMB.vehiculo.modeloVehiculo.categoriaVehiculo.nombre}" />
+
+
+								<h:outputText value="Fecha ingreso: "
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}" />
+								<h:outputText id="fechaIngreso"
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}"
+									value="#{detalleEstadiaMB.fechaIngreso}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<p:column rendered="#{detalleEstadiaMB.detalleEstadia != null}">
+								&#160;&#160;&#160;&#160;&#160;</p:column>
+
+								<h:outputText value="Hora ingreso: "
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}" />
+								<h:outputText id="horaIngreso"
+									rendered="#{detalleEstadiaMB.detalleEstadia != null}"
+									value="#{detalleEstadiaMB.horaIngreso}" />
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Fecha actual: " />
+									</div>
+								</p:column>
+								<h:outputText id="FechaActual"
+									value="#{detalleEstadiaMB.fechaActual}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<p:column>&#160;&#160;&#160;&#160;&#160;</p:column>
+
+								<p:column>
+									<div align="right">
+										<h:outputText value="Hora actual: " />
+									</div>
+								</p:column>
+								<h:outputText id="horaActual"
+									value="#{detalleEstadiaMB.horaActual}">
+									<f:convertDateTime pattern="hh:mm:ss" />
+								</h:outputText>
+
+								<f:facet name="footer">
+									<div align="right">
+										<p:commandButton
+											rendered="#{detalleEstadiaMB.detalleEstadia == null
+												and  detalleEstadiaMB.existeTarifa and detalleEstadiaMB.existeAbonoVehiculo == true}"
+											id="ingresoAbono" value="Registrar ingreso" ajax="false"
+											action="#{detalleEstadiaMB.registrarIngresoAbono}"
+											style="margin-right:10px" />
+										<p:commandButton id="egresoAbono" value="Registrar egreso"
+											rendered="#{detalleEstadiaMB.detalleEstadia != null}"
+											style="margin-right:15px" update="form"
+											action="#{detalleEstadiaMB.registrarEgresoAbonado}" />
+										<p:commandButton id="cancelarAbono" value="Cancelar"
+											immediate="true"
+											onclick="window.location.href = 'http://localhost:8080/tesis-playon-web/playa/ingresoegresovehiculo.html';" />
+									</div>
+								</f:facet>
+							</h:panelGrid>
+						</div>
+					</p:panel>
+				</div>
+			</ui:fragment>
+
+			<p:messages id="messagesGral" showDetail="true" autoUpdate="true"
+				closable="true" showSummary="true" />
+
+		</h:form>
+
+		<h:form id="formIngreso">
+			<ui:fragment id="ingresoFragment">
+				<p:dialog header="Confirmación de ingreso de vehículo"
+					widgetVar="dlgIngreso" resizable="false">
+					<h:panelGrid columns="1">
+						<h:panelGrid columns="3" cellpadding="8" cellspacing="8"
+							id="panel">
+							<p:column>
+								<div align="right">
+									<h:outputText for="tarifas" styleClass="fuente-outputtext"
+										value="Tarifas disponibles: " />
+								</div>
+							</p:column>
+
+							<p:column style="text-align:right;">
+								<p:selectOneMenu id="tarifas"
+									value="#{detalleEstadiaMB.tarifaSeleccionada}" effect="fade">
+									<f:selectItem
+										itemLabel="&#160;&#160;Seleccione una tarifa&#160;&#160;"
+										itemValue="" />
+									<f:selectItems value="#{detalleEstadiaMB.tarifaPlayaList}"
+										var="tarifa" itemValue="#{tarifa}"
+										itemLabel="#{tarifa.tipoEstadia.nombre}&#160;-&#160;$#{tarifa.importe}" />
+									<p:ajax update="panel,promociones"
+										listener="#{detalleEstadiaMB.handleTarifa}" event="change"
+										process="@this" />
+									<f:converter converterId="tarifaConverter" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:message id="tarifasMsg" for="tarifas" display="icon" />
+
+							<p:column>
+								<div align="right">
+									<h:outputText for="promociones"
+										value="Promociones disponibles: "
+										styleClass="fuente-outputtext" />
+								</div>
+							</p:column>
+
+							<p:column style="text-align:right;">
+								<p:selectOneMenu id="promociones"
+									value="#{detalleEstadiaMB.promocionSeleccionada}" effect="fade">
+									<f:selectItem itemLabel="&#160;Seleccione una promoción&#160;"
+										itemValue="" />
+									<f:selectItems
+										value="#{detalleEstadiaMB.promocionesDisponibles}"
+										var="promocion" itemValue="#{promocion}"
+										itemLabel="#{promocion.nombre}&#160;-&#160;
+												#{promocion.descuento}%&#160;desc" />
+									<f:converter converterId="promocionConverter" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column />
+
+							<p:column>
+								<div align="right">
+									<h:outputText value="Imprimir ticket"
+										styleClass="fuente-outputtext" />
+								</div>
+							</p:column>
+							<p:column>
+								<p:selectBooleanCheckbox value="#{detalleEstadiaMB.imprimir}" />
+							</p:column>
+						</h:panelGrid>
+
+						<p:column>
+							<div align="right">
+								<p:commandButton id="registrarIngreso" value="Registrar ingreso"
+									style="margin-right:10px" update=":form:btn" ajax="false"
+									action="#{detalleEstadiaMB.registrarIngresoVehiculo}"
+									onclick="dlgIngreso.hide();">
+								</p:commandButton>
+								<p:commandButton id="cancelar" value="Cancelar" immediate="true"
+									oncomplete="dlgIngreso.hide();" />
+							</div>
+						</p:column>
+					</h:panelGrid>
+				</p:dialog>
+			</ui:fragment>
+		</h:form>
+
+		<h:form id="formEgreso">
+			<ui:fragment>
+				<p:dialog header="Confirmación de egreso de vehículo"
+					widgetVar="dlgEgreso" resizable="false">
+
+					<div align="center">
+						<h:panelGrid columns="2" cellpadding="8" cellspacing="8"
+							id="panelEgreso">
+							<p:column>
+								<div align="right">
+									<h:outputText value="Importe: " styleClass="fuente-outputtext" />
+									<h:outputText id="txt_importe_calculado"
+										value="#{detalleEstadiaMB.importe}" styleClass="fuente-perfil">
+										<f:convertNumber type="currency" currencySymbol="$ " />
+									</h:outputText>
+								</div>
+							</p:column>
+							<p:column />
+
+							<p:column>
+								<div align="right">
+									<h:outputText value="Imprimir ticket"
+										styleClass="fuente-outputtext" />
+								</div>
+							</p:column>
+							<p:column>
+								<p:selectBooleanCheckbox value="#{detalleEstadiaMB.imprimir}" />
+							</p:column>
+
+							<f:facet name="footer">
+								<div align="right" style="width: 215px;">
+									<p:commandButton id="egreso" value="Registrar egreso"
+										style="margin-right:10px;" ajax="false"
+										action="#{detalleEstadiaMB.registrarEgresoVehiculo}"
+										onclick="dlgEgreso.hide();dlgTicket.show();" />
+									<p:commandButton id="cancelar" value="Cancelar"
+										immediate="true" oncomplete="dlgEgreso.hide();" />
+								</div>
+							</f:facet>
+						</h:panelGrid>
+					</div>
+				</p:dialog>
+			</ui:fragment>
+		</h:form>
+	</ui:define>
+</ui:composition>

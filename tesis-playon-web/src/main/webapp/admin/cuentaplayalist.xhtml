@@ -1,0 +1,206 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Listado de Cuentas de Playas" />
+
+	<ui:define name="panelContent" class="admin-font">
+		<p:growl id="messages" />
+
+		<p:dataTable id="cuentasPlayas" var="cuentaPlaya" paginator="true"
+			rows="6" paginatorPosition="bottom"
+			value="#{cuentaPlayaMB.cuentaPlayaList}"
+			filteredValue="#{cuentaPlayaMB.filteredCuentaPlaya}"
+			emptyMessage="¡No existen cuentas de playas en el sistema!"
+			style="width: 100%">
+
+			<f:facet name="header">
+				
+            </f:facet>
+
+			<p:column headerText="Playa" styleClass="column-font"
+				filterBy="#{cuentaPlaya.cuentaPlaya.playa.nombreComercial}"
+				filterMatchMode="contains">
+				<h:outputText value="#{cuentaPlaya.playa.nombreComercial}" />
+			</p:column>
+
+			<p:column headerText="Domicilio" styleClass="column-font"
+				filterBy="#{cuentaPlaya.cuentaPlaya.playa.domicilio}"
+				filterMatchMode="contains">
+				<h:outputText value="#{cuentaPlaya.playa.domicilio}" />
+			</p:column>
+
+			<p:column headerText="Barrio" styleClass="column-font"
+				filterBy="#{cuentaPlaya.cuentaPlaya.playa.barrio.nombre}"
+				filterMatchMode="contains">
+				<h:outputText value="#{cuentaPlaya.playa.barrio.nombre}" />
+			</p:column>
+
+			<p:column headerText="Teléfono" styleClass="column-font"
+				filterBy="#{cuentaPlaya.cuentaPlaya.playa.telefono}"
+				filterMatchMode="contains">
+				<h:outputText value="#{cuentaPlaya.playa.telefono}" />
+			</p:column>
+
+			<p:column headerText="Nro Cuenta" styleClass="column-font"
+				filterBy="#{cuentaPlaya.nroCuenta}" filterMatchMode="exact">
+				<h:outputText value="#{cuentaPlaya.nroCuenta}" />
+			</p:column>
+
+			<p:column headerText="Saldo" styleClass="column-font"
+				filterBy="#{cuentaPlaya.saldo}" filterMatchMode="exact">
+				<h:outputText value="$#{cuentaPlaya.saldo}" />
+			</p:column>
+
+			<p:column headerText="Opciones" styleClass="column-options">
+
+				<p:commandLink id="view" oncomplete="popupClienteDatos.show();"
+					title="Datos Cuenta Playa"
+					update=":mainForm:displayViewCuenta,:mainForm:displayViewCliente">
+					<f:setPropertyActionListener value="#{cuentaPlaya}"
+						target="#{cuentaPlayaMB.cuentaSelected}" />
+					<h:graphicImage library="images/icons" name="search.png" />
+				</p:commandLink>
+
+			</p:column>
+			<f:facet name="footer">
+				<h:panelGroup id="removeFilter" layout="block"
+					style="text-align: right;">
+					<p:commandLink id="quitarFiltro" value="Quitar Filtro"
+						action="/admin/cuentaplayalist.html?faces-redirect=true"
+						ajax="false" />
+				</h:panelGroup>
+			</f:facet>
+		</p:dataTable>
+
+		<!-- DIALOG PARA VER LOS DATOS DEL CLIENTE SELECCIONADO -->
+
+		<p:dialog header="Datos de la Cuenta de la Playa"
+			widgetVar="popupClienteDatos" resizable="false" id="carDlg"
+			showEffect="fade" modal="true" draggable="false">
+			<h:panelGrid columns="1">
+				<p:panel header="Datos Cuenta">
+					<h:panelGrid id="displayViewCuenta" columns="2" cellpadding="4"
+						style="margin:0 auto;">
+
+						<p:column>
+							<h:outputText value="Nro. de Cuenta: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.nroCuenta}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Saldo: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="$#{cuentaPlayaMB.cuentaSelected.saldo}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Fecha de Creación: " />
+						</p:column>
+						<p:column>
+							<h:outputText
+								value="#{cuentaPlayaMB.cuentaSelected.fechaCreacion}"
+								style="font-weight:bold">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+					</h:panelGrid>
+				</p:panel>
+				<p:panel header="Datos Playa Propietaria de la Cuenta">
+					<h:panelGrid id="displayViewCliente" columns="2" cellpadding="4"
+						style="margin-top:10px;">
+
+						<p:column>
+							<h:outputText value="Nombre Comercial: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.nombreComercial}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="C.U.I.T.: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.cuit}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Domicilio: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.domicilio}"
+								style="font-weight:bold" />
+						</p:column>
+						
+						<p:column>
+							<h:outputText value="Barrio: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.barrio.nombre}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Teléfono: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.telefono}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="E-mail: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.email}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Dirección web: " />
+						</p:column>
+						<p:column>
+							<a href="#{cuentaPlayaMB.cuentaSelected.playa.url}"> <h:outputText
+									value="#{cuentaPlayaMB.cuentaSelected.playa.url}" style="font-weight:bold" />
+							</a>
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Disponibilidad: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.disponibilidad}"
+								style="font-weight:bold" />
+						</p:column>
+
+						<p:column>
+							<h:outputText value="Estado: " />
+						</p:column>
+						<p:column>
+							<h:outputText value="#{cuentaPlayaMB.cuentaSelected.playa.estado.nombre}"
+								style="font-weight:bold" />
+						</p:column>
+					</h:panelGrid>
+				</p:panel>
+
+				<p:column>
+					<div align="right">
+						<p:commandButton id="btnAceptarPlayas" value="Aceptar"
+							onclick="popupClienteDatos.hide()" type="button" />
+					</div>
+				</p:column>
+			</h:panelGrid>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>

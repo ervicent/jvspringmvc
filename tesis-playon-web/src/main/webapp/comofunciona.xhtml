@@ -1,0 +1,59 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="dontloadsidebar" value="true" />
+
+	<ui:define name="title">
+		¿Cómo funciona?
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>¿Cómo funciona Playón?</h1>
+		<p>Conocé los beneficios para tu negocio.</p>
+		<h:graphicImage styleClass="content-image" library="images"
+			name="paraPlayas.jpg" />
+		<h4>¿Qué es Playón?</h4>
+		<p>
+			<i>Playón</i> es una red de playas de estacionamiento que permite
+			crear un nexo de interacción y comunicación entre las playas de
+			estacionamiento y sus potenciales clientes. El objetivo principal es
+			brindar una plataforma de publicidades y promociones a las playas de
+			estacionamiento y al mismo tiempo, ofrecer un lugar en donde
+			centralizar la información.
+		</p>
+		<h4>¿Cuanto cuesta?</h4>
+		<p>
+			<i>Playón</i> cobra mensualmente un porcentaje de las transacciones
+			que tengas en tu playa. El porcentaje depende del monto total de
+			todas las transacciones del mes. Los montos y porcentajes asociados
+			son los siguientes:
+		</p>
+		<div class="table-front-info">
+			<table>
+				<tr>
+					<th>Intervalo</th>
+					<th>Porcentaje</th>
+				</tr>
+				<tr>
+					<td>menos de <b>$50.000</b></td>
+					<td><b>10%</b> del total de las transacciones del mes</td>
+				</tr>
+				<tr>
+					<td>entre <b>$50.000</b> y <b>$500.000</b></td>
+					<td><b>7.5%</b> del total de las transacciones del mes</td>
+				</tr>
+				<tr>
+					<td>más de <b>$500.000</b></td>
+					<td><b>5%</b> del total de las transacciones del mes</td>
+				</tr>
+			</table>
+		</div>
+		<br />
+		<h:button value="¡Asociate a Playón!" outcome="solicitudplayaadd" />
+	</ui:define>
+
+</ui:composition>

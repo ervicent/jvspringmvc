@@ -1,0 +1,115 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<!-- Iconos del menu:
+			http://jquery-ui.googlecode.com/svn/tags/1.6rc5/tests/static/icons.html
+	 -->
+
+	<h:form>
+
+		<p:menubar style="font-size: 0.8em;">
+
+			<p:menuitem value="Inicio" url="#{request.contextPath}/../admin" />
+
+			<!-- <p:menuitem value="Principal" url="#{request.contextPath}/../index.html" /> -->
+
+			<p:submenu label="Auditoría">
+				<p:menuitem value="Playas"
+					url="#{request.contextPath}/../auditoria/playaslist.html"
+					icon="ui-icon-alert" />
+				<p:menuitem value="Denuncia a vehículo"
+					url="#{request.contextPath}/../auditoria/denunciasvehiculos.html"
+					icon="ui-icon-alert" />
+				<p:menuitem value="Denuncia a playa"
+					url="#{request.contextPath}/../auditoria/denunciasplayas.html"
+					icon="ui-icon-alert" />
+				<p:menuitem value="Publicidades"
+					url="#{request.contextPath}/../auditoria/publicidadeslist.html"
+					icon="ui-icon-alert" />
+			</p:submenu>
+
+
+
+			<p:submenu label="Administración">
+				<p:menuitem value="Generar Liquidación"
+					url="#{request.contextPath}/../admin/liquidacionplayas.html"
+					icon="ui-icon-bookmark" />
+				<p:menuitem value="Ver liquidaciones"
+					url="#{request.contextPath}/../admin/liquidacionplayaslist.html"
+					icon="ui-icon-bookmark" />
+				<p:menuitem value="Ver Transacciones"
+					url="#{request.contextPath}/../admin/transaccionplayalist.html"
+					icon="ui-icon-tag" />
+				<p:menuitem value="Recaudación Playón"
+					url="#{request.contextPath}/../admin/informes.html"
+					icon="ui-icon-image" />
+			</p:submenu>
+
+
+			<p:submenu label="Gestión de Playas">
+				<p:menuitem value="Playas"
+					url="#{request.contextPath}/../admin/playalist.html"
+					icon="ui-icon-home" />
+				<p:menuitem value="Cuentas Playas"
+					url="#{request.contextPath}/../admin/cuentaplayalist.html"
+					icon="ui-icon-star" />
+
+
+
+			</p:submenu>
+
+			<p:submenu label="Gestión de Clientes">
+				<p:menuitem value="Clientes"
+					url="#{request.contextPath}/../admin/clientelist.html"
+					icon="ui-icon-person" />
+				<p:menuitem value="Cuentas Clientes"
+					url="#{request.contextPath}/../admin/cuentaclientelist.html"
+					icon="ui-icon-star" />
+
+			</p:submenu>
+
+
+
+
+			<p:submenu label="Gestión de Usuarios">
+				<p:menuitem value="Usuarios"
+					url="#{request.contextPath}/../admin/usuariolist.html"
+					icon="ui-icon-person" />
+				<p:menuitem value="Roles de Usuarios"
+					url="#{request.contextPath}/../admin/rolusuariolist.html"
+					icon="ui-icon-tag" />
+			</p:submenu>
+
+			<p:submenu label="Gestión de Vehículos">
+
+
+				<p:menuitem value="Modelos vehículos"
+					url="#{request.contextPath}/../admin/modelovehiculolist.html"
+					icon="ui-icon-star" />
+
+				<p:menuitem value="Marcas vehículos"
+					url="#{request.contextPath}/../admin/marcavehiculolist.html"
+					icon="ui-icon-star" />
+
+
+			</p:submenu>
+
+
+			<p:submenu label="Configuración de Cuenta">
+				<p:menuitem value="Cambiar Contraseña"
+					url="#{request.contextPath}/../admin/cambiarpassword.html"
+					icon="ui-icon-key" />
+				<p:menuitem value="Cambiar Mi Foto"
+					url="#{request.contextPath}/../admin/cambiarfotoperfil.html"
+					icon="ui-icon-image" />
+				<p:menuitem value="Cerrar sesión" icon="ui-icon-power"
+					action="#{loginMB.logout}" />
+			</p:submenu>
+
+		</p:menubar>
+
+	</h:form>
+</ui:composition>

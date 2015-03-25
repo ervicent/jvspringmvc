@@ -1,0 +1,103 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Historial de movimientos
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<h1>Detalle de estadías</h1>
+
+		<h:form style="margin:0 0 0 20px;">
+			<h:panelGrid columns="6" cellspacing="10">
+				<h:outputText value="Desde:" />
+				<p:calendar value="#{ingresoEgresoMB.fechaDesde}" navigator="true"
+					locale="es" showButtonPanel="true" pattern="dd/MM/yyyy HH:mm"
+					id="fechaD" />
+				<p:column>
+					<div align="right">
+						<h:outputText value="Hasta: " />
+					</div>
+				</p:column>
+
+				<p:calendar value="#{ingresoEgresoMB.fechaHasta}" navigator="true"
+					locale="es" showButtonPanel="true" pattern="dd/MM/yyyy HH:mm"
+					id="fechaH" />
+				<p:commandButton id="buscarButton" value="Buscar"
+					action="#{ingresoEgresoMB.buscarPorFecha}" icon="ui-icon-search"
+					ajax="true" update="detalles" />
+				<p:commandButton id="buscarButton2" style="width:130px;"
+					action="#{ingresoEgresoMB.updateListado}" value="Listar Todas"
+					icon="ui-icon-search" ajax="true" update="detalles" />
+
+			</h:panelGrid>
+
+			<p:dataTable id="detalles" var="detEstadia" paginator="false"
+				value="#{ingresoEgresoMB.detalles}"
+				emptyMessage="No existen movimientos en su playa"
+				paginatorPosition="bottom">
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Desde" />
+					</f:facet>
+					<h:outputText value="#{detEstadia.fechaHoraIngreso}">
+						<f:convertDateTime pattern="dd/MM/yyyy - HH:mm" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Hasta" />
+					</f:facet>
+					<h:outputText value="#{detEstadia.fechaHoraEgreso}">
+						<f:convertDateTime pattern="dd/MM/yyyy -  HH:mm" />
+					</h:outputText>
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Patente" />
+					</f:facet>
+
+					<h:outputText value="#{detEstadia.vehiculo.patente}" />
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Tipo Estadía" />
+					</f:facet>
+
+					<h:outputText value="#{detEstadia.tarifa.tipoEstadia.nombre}" />
+				</p:column>
+
+				<f:facet name="footer">
+					<div align="center">
+						<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+							<h:commandLink title="Exportar a excel">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/excel.png" />
+								<p:dataExporter type="xls" target="detalles" fileName="Detalles" />
+							</h:commandLink>
+
+							<h:commandLink title="Exportar a PDF">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/pdf.png" />
+								<p:dataExporter type="pdf" target="detalles"
+									preProcessor="#{ingresoEgresoMB.preProcessPDF}"
+									fileName="Detalles" />
+							</h:commandLink>
+						</h:panelGrid>
+					</div>
+				</f:facet>
+			</p:dataTable>
+		</h:form>
+	</ui:define>
+</ui:composition>

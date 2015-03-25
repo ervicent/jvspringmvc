@@ -1,0 +1,30 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuperfil" value="true" />
+
+	<ui:define name="title">
+		Abono mensual
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Abono mensual registrado</h1>
+		<div style="margin: 0 50px 0 50px;">
+			<p:messages id="message" closable="true" />
+			<div align="right">
+				<p>
+					El equipo de <i>Playón, Red de Playas.</i>
+				</p>
+			</div>
+			<div align="right">
+				<p>
+					<h:link value="Ver todas los abonados" outcome="abonolist" />
+				</p>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,16 @@
+#content {
+	width: 865px;
+	/* 	width: 865px; */
+	float: left;
+	padding: 0;
+}
+
+#content-box1 {
+	width: 320px;
+	float: left;
+}
+
+#content-box2 {
+	margin: 0 0 0 345px;
+	width: 320px;
+}

@@ -1,0 +1,80 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Listado de Tipos de Estadía" />
+
+	<ui:define name="panelContent">
+		<h:form>
+			<p:dataTable id="tiposEstadia" var="tipoEstadia"
+				paginator="true" rows="5" paginatorPosition="bottom"
+				value="#{tipoEstadiaMB.tipoEstadiaList}"
+				style="width: 35%">
+
+				<f:facet name="header">
+				Tipos de estadía
+            </f:facet>
+
+				<p:column headerText="ID" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tipoEstadia.id}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tipoEstadia.id}" styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Nombre" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tipoEstadia.nombre}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tipoEstadia.nombre}" styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Descripcion" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tipoEstadia.descripcion}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tipoEstadia.descripcion}"
+								styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+				
+				<p:column>
+					<h:commandButton id="editar" class="ui-icon ui-icon-pencil"
+						style="height:20px; width:22px;">
+					</h:commandButton>
+					<p:tooltip for="editar" value="Editar Tipo Estadía" />
+				</p:column>
+
+				<p:column>
+					<h:commandButton id="delete" class="ui-icon ui-icon-trash"
+						style="height:20px; width:22px;"
+						action="#{tipoEstadiaMB.deleteTipoEstadia(tipoEstadia)}"
+						onclick="if(!confirm('¿Está seguro que desea eliminar el Tipo Estadía?')) return false;">
+					</h:commandButton>
+					<p:tooltip for="delete" value="Eliminar Tipo Estadía" />
+				</p:column>
+
+			</p:dataTable>
+			<p>
+				<h:panelGroup layout="block" style="text-align: right; width: 35%;">
+					<p:commandButton id="addUsuario" value="Nuevo Tipo Estadía"
+						action="/admin/tipoestadiaadd.html?faces-redirect=true" ajax="false" />
+				</h:panelGroup>
+			</p>
+		</h:form>
+	</ui:define>
+</ui:composition>

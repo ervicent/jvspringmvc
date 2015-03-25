@@ -1,0 +1,42 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Página para probar los datos del usuario
+    </ui:define>
+
+	<ui:define name="content">
+
+		<ui:fragment rendered="#{loginMB.logueado}">
+			<h:outputText value="Nombre Usuario: #{datosUsuarioMB.nombreUsuario}" />
+			<br /><br />
+			<h:outputText value="#{datosUsuarioMB.usuario}" />
+			<br /><br />
+			<h:outputText value="#{datosUsuarioMB.rolesPorUsuario}" />
+
+			<ui:fragment rendered="#{loginMB.rol eq '[ROLE_CLIENT]'}">
+				<br /><br />
+				<h:outputText value="#{datosUsuarioMB.cliente}" />
+			</ui:fragment>
+
+			<ui:fragment
+				rendered="#{loginMB.rol eq '[ROLE_PLAYA_GERENTE]' or loginMB.rol eq '[ROLE_PLAYA_EMPLEADO]'}">
+				<br /><br />
+				<h:outputText value="#{datosUsuarioMB.playa}" />
+				<br /><br />
+				<h:outputText value="#{datosUsuarioMB.empleado}" />
+				<br /><br />
+				<h:outputText value="#{datosUsuarioMB.cargoEmpleado}" />
+			</ui:fragment>
+		</ui:fragment>
+		
+		<ui:fragment rendered="#{!loginMB.logueado}">
+			<h:outputText value="No Logueado!!!" />
+		</ui:fragment>
+
+	</ui:define>
+</ui:composition>

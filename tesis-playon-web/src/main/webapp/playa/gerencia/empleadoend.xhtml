@@ -1,0 +1,30 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Registro de empleado
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Registro de empleado</h1>
+		
+		<p:growl id="messages" />
+		
+		<p>
+			El proceso de registro de empleado se ha completado exitosamente.
+		</p>
+		<p>
+			El equipo de <i>Playón, Red de Playas.</i>
+		</p>
+		<p>
+			<h:link value="Ver todos los empleados" outcome="empleadolist" />
+		</p>
+		
+	</ui:define>
+</ui:composition>

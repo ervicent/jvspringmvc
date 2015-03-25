@@ -1,0 +1,76 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div id="sidebar">
+		<ui:fragment rendered="#{loginMB.rol eq '[ROLE_CLIENT]'}">
+
+			<ui:fragment rendered="#{!empty loadmenuclientes}">
+				<div class="box">
+					<p:menu style="width: 95%;" styleClass="side-menu">
+						<p:submenu label="Administración">
+							<p:menuitem value="Ver perfil" outcome="/cliente/perfilcliente"
+								icon="ui-icon-person" />
+
+							<p:menuitem value="Mis Vehículos" outcome="/cliente/vehiculolist"
+								icon="ui-icon-radio-on" />
+							<p:menuitem value="Ver Cuenta" outcome="/cliente/cuentacliente"
+								icon="ui-icon-contact" />
+							<p:menuitem value="Cargar Saldo" outcome="/cliente/cargarcredito"
+								icon="ui-icon-cart" />
+							<p:menuitem value="Historial de movimientos"
+								outcome="/cliente/transaccioneslist" icon="ui-icon-calculator" />
+							<p:menuitem value="Informe sobre consumos"
+								outcome="/cliente/informeconsumo" icon="ui-icon-clock" />
+							<p:menuitem value="Cambiar Password"
+								outcome="/cliente/cambiarpassword" icon="ui-icon-key" />
+						</p:submenu>
+					</p:menu>
+
+				</div>
+				<div class="box">
+					<h:form id="frmMenuFav"
+						rendered="#{favoritoMB.favoritosListPerfil != null}">
+						<p:menu id="menuFavorito" style="width: 95%;"
+							styleClass="side-menu" model="#{favoritoMB.model}">
+						</p:menu>
+						<p:overlayPanel id="favoritoPanel" for="itemAdminFav"
+							hideEffect="fade" dynamic="true">
+
+							<p:dataTable id="tablaFavoritos" var="favorito"
+								value="#{favoritoMB.favoritosListPerfil}" rows="10"
+								paginator="true" paginatorPosition="bottom">
+
+								<f:facet name="header">
+									<h:outputText value="Administración de Playas Favoritas" />
+								</f:facet>
+
+								<p:column headerText="Playa de Estacionamiento">
+									<h:outputText value="#{favorito.playa.nombreComercial}" />
+								</p:column>
+
+								<p:column headerText="Opción"
+									style="text-align:center; width:40px;">
+									<div align="center">
+										<p:commandLink id="darBaja" title="Quitar Favorito"
+											action="#{favoritoMB.quitarFavorito}" ajax="false"
+											update=":frmMenuFav:menuFavorito, :frmMenuFav:tablaFavoritos">
+											<f:setPropertyActionListener value="#{favorito}"
+												target="#{favoritoMB.favoritoSelected}" />
+											<h:graphicImage library="images/icons" name="trash.png"
+												style="width:25px; height:25px;" />
+										</p:commandLink>
+									</div>
+								</p:column>
+							</p:dataTable>
+						</p:overlayPanel>
+
+					</h:form>
+				</div>
+			</ui:fragment>
+		</ui:fragment>
+	</div>
+
+</ui:composition>

@@ -1,0 +1,107 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+
+	<ui:define name="title">
+		Registro de abono mensual
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Registrar abonado mensual</h1>
+
+		<h:form id="form" style="margin: 10px 0 0 0;">
+			<p:growl id="messages" />
+			<div id="perfil-playa" align="center" style="margin: 0 20px 0 20px">
+				<h:panelGrid columns="1" width="100%" cellspacing="10"
+					cellpadding="10">
+					<p:panel header="Nueva estadía mensual"
+						styleClass="fuente-outputtext">
+						<h:panelGrid columns="3" cellspacing="10" cellpadding="10">
+							<h:outputLabel value="Patente: " />
+							<p:inputText id="patente" value="#{abonoMB.patente}"
+								style="width: 200px" required="true"
+								validator="#{abonoMB.validateVehiculo}"
+								requiredMessage="Campo patente obligatorio" minlength="6">
+								<f:validateLength minimum="6" />
+								<p:ajax event="blur"
+									update="patenteMsg, promociones, cliente, tarifa" />
+							</p:inputText>
+							<p:message id="patenteMsg" for="patente" display="icon" />
+
+							<h:outputLabel value="Cliente: " />
+							<h:outputText id="cliente"
+								value="#{abonoMB.usuario.apellido}&#160;
+									#{abonoMB.usuario.nombre}" />
+							<p:column />
+
+							<h:outputLabel value="Fecha de inicio: " />
+							<p:calendar value="#{abonoMB.fechaDesde}" required="true"
+								navigator="true" locale="es" showButtonPanel="true"
+								requiredMessage="Campo obligatorio"
+								validator="#{abonoMB.validateFechaVencimiento}"
+								pattern="dd/MM/yyyy" mindate="#{abonoMB.today}">
+								<p:ajax event="blur" update="fechaMsg" />
+								<p:ajax event="dateSelect" update="fechaVencimiento" />
+							</p:calendar>
+							<p:message id="fechaMsg" for="patente" display="icon" />
+
+
+							<h:outputText value="Fecha de vencimiento: "
+								for="fechaVencimiento" />
+							<p:inputText id="fechaVencimiento" value="#{abonoMB.fechaHasta}"
+								readonly="true">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
+							<p:column />
+
+							<h:outputLabel value="Tarifa: " />
+							<h:outputText id="tarifa" value="#{abonoMB.tarifa.importe}">
+								<f:convertNumber type="currency" currencySymbol="$" />
+							</h:outputText>
+							<p:column />
+
+							<h:outputLabel value="Promoción: " />
+							<p:column style="text-align:right;">
+								<p:selectOneMenu id="promociones" value="#{abonoMB.promocion}"
+									effect="fade" style="width: 230px">
+									<f:selectItem itemLabel="&#160;Seleccione una promoción&#160;"
+										itemValue="" />
+									<f:selectItems value="#{abonoMB.promocionesDisponibles}"
+										var="promocion" itemValue="#{promocion}"
+										itemLabel="#{promocion.nombre}&#160;-&#160;
+												#{promocion.descuento}%&#160;desc" />
+									<f:converter converterId="promocionConverter" />
+									<p:ajax event="change" update="tarifaConDecuento" />
+								</p:selectOneMenu>
+							</p:column>
+							<p:column />
+
+							<h:outputLabel value="Tarifa con descuento: " />
+							<h:outputText id="tarifaConDecuento"
+								value="#{abonoMB.importeConDescuento}">
+								<f:convertNumber type="currency" currencySymbol="$" />
+							</h:outputText>
+						</h:panelGrid>
+						<p:column>
+							<div align="center">
+								<p:commandButton id="registrar" value="Registrar"
+									action="#{abonoMB.abonoAddFromPlaya}" ajax="false" />
+								<p:commandButton id="cancelar" value="Cancelar" immediate="true"
+									ajax="false" style="margin-left:10px;"
+									action="/playa/panelcontrol.html?faces-redirect=true" />
+							</div>
+						</p:column>
+					</p:panel>
+
+					<p:messages id="message" closable="true" />
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

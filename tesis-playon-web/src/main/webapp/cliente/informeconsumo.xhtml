@@ -1,0 +1,56 @@
+<ui:composition template="../template/templateCliente.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		informes
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Informe de consumos por período</h1>
+
+		<h:form>
+			<div>
+				<p:panel id="pnlCosumo">
+					<h:panelGrid columns="1" width="100%">
+						<p:column>
+							<h:panelGrid columns="5" width="100%">
+								<h:outputLabel value="Fecha Desde: " />
+								<p:calendar value="#{estadisticaClienteMB.fechaDesde}"
+									id="fechaDesde" required="true" navigator="true" locale="es"
+									showButtonPanel="true" pattern="dd/MM/yyyy"
+									requiredMessage="Campo fecha desde obligatorio" />
+								<h:outputLabel value="Fecha Hasta: " />
+								<p:calendar value="#{estadisticaClienteMB.fechaHasta}"
+									id="fechaHasta" required="true" navigator="true" locale="es"
+									showButtonPanel="true" pattern="dd/MM/yyyy"
+									requiredMessage="Campo fecha hasta obligatorio" />	
+								<p:commandButton id="getGrafico" value="Ver Reporte"
+									action="#{estadisticaClienteMB.calcularConsumoPorPeriodo}"
+									ajax="false" update="consumoChart">
+								</p:commandButton>
+							</h:panelGrid>
+						</p:column>
+						<p:column>
+							<ui:fragment
+								rendered="#{estadisticaClienteMB.lModelConsumo != null}">
+								<p:lineChart id="consumoChart"
+									datatipFormat="#{estadisticaClienteMB.datatipFormat}"
+									xaxisLabel="Período agrupado por mes" yaxisLabel="Consumo en $"
+									value="#{estadisticaClienteMB.lModelConsumo}"
+									legendPosition="s" legendRows="1" animate="true"
+									title="Consumo en playas de estacionamiento por período mensual"
+									minY="0" maxY="#{estadisticaClienteMB.maximoConsumo}"
+									style="margin-top:20px" shadow="true" />
+							</ui:fragment>
+						</p:column>
+					</h:panelGrid>
+				</p:panel>
+			</div>
+		</h:form>
+
+	</ui:define>
+</ui:composition>

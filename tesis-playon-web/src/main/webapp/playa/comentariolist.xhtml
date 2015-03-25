@@ -1,0 +1,105 @@
+
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuperfil" value="true" />
+
+
+	<ui:define name="title">
+			Perfil de playa
+	    </ui:define>
+
+	<ui:define name="content">
+		<h1>Comentarios a mi playa</h1>
+		<h:form id="form">
+			<div align="center">
+				<h:panelGrid columns="1" width="95%">
+					<p:dataTable id="comentarios"
+						value="#{comentarioMB.comentariosList}" var="comentario"
+						emptyMessage="No existen comentarios en esta playa de estacionamiento"
+						paginator="true" paginatorPosition="bottom">
+
+						<p:column headerText="Usuario" style="width:90px;">
+							<div align="center">
+								<h:graphicImage library="fotos_perfil_usuarios"
+									name="#{comentario.usuario.nombreUser}.jpg"
+									styleClass="bordes-foto-perfil-comentario"
+									rendered="#{comentario.usuario.fotoUsuario != null}" />
+								<h:graphicImage library="fotos_perfil_usuarios"
+									name="sinfoto.jpg" styleClass="bordes-foto-perfil-comentario"
+									rendered="#{comentario.usuario.fotoUsuario == null}" />
+							</div>
+						</p:column>
+
+						<p:column headerText="Comentario">
+							<table class="no-border">
+								<tr>
+									<td style="text-align: left; border-style: none;"><h:outputText
+											value="#{comentario.fecha}">
+											<f:convertDateTime pattern="dd/MM/yyyy HH:mm"
+												timeStyle="short" type="both" />
+										</h:outputText></td>
+									<td style="text-align: right; border-style: none;"><h:commandLink
+											id="denunciaComentario" value="Denunciar"
+											update="comentarios" ajax="true"
+											action="#{comentarioMB.denunciarComentarioGerente}"
+											immediate="true" styleClass="fuente-link-denuncia">
+											<f:setPropertyActionListener value="#{comentario}"
+												target="#{comentarioMB.comentarioDenunciado}" />
+										</h:commandLink></td>
+								</tr>
+								<tr>
+									<td colspan="2" id="perfil-playa-frente"
+										style="border-style: none;"><p>#{comentario.comentario}</p></td>
+								</tr>
+							</table>
+						</p:column>
+
+						<f:facet name="footer">
+							<h:panelGrid columns="2" cellspacing="15" width="90%">
+								<p:column style="heigth:20px;">
+									<div align="center">
+										<h:graphicImage library="fotos_perfil_usuarios"
+											name="sinfoto.jpg" styleClass="bordes-foto-perfil-comentario" />
+									</div>
+								</p:column>
+
+								<h:panelGrid columns="1" cellspacing="15">
+
+									<p:column>
+										<h:panelGrid columns="1">
+											<p:inputTextarea id="comentario" cols="69" rows="2"
+												value="#{comentarioMB.comentario}" required="true"
+												requiredMessage="El campo comentario no puede estar vacio"
+												styleClass="contenido-textarea">
+												<f:validateLength minimum="3" update=":form:messageComentario" />
+												<p:ajax event="blur" update=":form:messageComentario" />
+											</p:inputTextarea>
+											<p:column>
+												<div align="right">
+													<p:commandButton id="enviarComentario"
+														value="Enviar comentario" update="comentarios"
+														action="#{comentarioMB.addComentarioPerfil}" ajax="false"
+														style="margin:5px 6px 0 5px">
+													</p:commandButton>
+												</div>
+											</p:column>
+
+										</h:panelGrid>
+									</p:column>
+								</h:panelGrid>
+							</h:panelGrid>
+						</f:facet>
+
+					</p:dataTable>
+					<p:messages id="messageComentario" showDetail="true"
+						autoUpdate="true" closable="true" />
+				</h:panelGrid>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

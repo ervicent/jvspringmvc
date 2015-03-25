@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<h:panelGrid columns="3">
+		<p:column>
+			<a href="http://localhost:8080/tesis-playon-web/"><p:graphicImage
+					value="http://code.google.com/p/tesis-playon/logo?cct=1341892556" /></a>
+		</p:column>
+		<div>
+			<h3>Panel de administración</h3>
+		</div>
+		<p:column>
+			<h:panelGrid column="1"
+				style="width:350px; vertical-align:text-bottom; text-align:right;"
+				layout="block">
+				<h:form id="Logout">
+					<h:commandLink id="logout" action="#{loginMB.logout}"
+						title="Cerrar Sesión" style="margin:0px 0px 0px 0px;">
+						<h:graphicImage library="images/icons" name="exit.png"
+							style="width:50px; heigh:50px; vertical-align:bottom; margin:0px 0px 0px 0px;" />
+					</h:commandLink>
+				</h:form>
+
+			</h:panelGrid>
+		</p:column>
+	</h:panelGrid>
+
+</ui:composition>

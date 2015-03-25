@@ -1,0 +1,32 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuperfil" value="true" />
+
+	<ui:define name="title">
+		Denuncia de vehículo
+    </ui:define>
+
+	<ui:define name="content">
+	<h1>Denuncia de vehículo registrada</h1>
+		<div style="margin: 0 50px 0 50px;">
+			<p:messages id="message" closable="true" />
+			<p>Hemos recibido su denuncia y la misma será analizada por
+				nuestro equipo de auditoría</p>
+			<div align="right">
+				<p>
+					El equipo de <i>Playón, Red de Playas.</i>
+				</p>
+			</div>
+			<div align="right">
+				<p>
+					<h:link value="volver al perfil de la playa" outcome="/playa/perfilplaya" />
+				</p>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

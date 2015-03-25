@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+	<!-- Iconos del menu:
+			http://jquery-ui.googlecode.com/svn/tags/1.6rc5/tests/static/icons.html
+	 -->
+	<h:form>
+		<p:menu style="width:95%; border:0;">
+			<p:submenu label="Menú principal">
+				<p:menuitem value="Home" url="#{request.contextPath}/../admin"
+					icon="ui-icon-home" />
+				<p:menuitem value="Usuarios"
+					url="#{request.contextPath}/../admin/usuariolist.html"
+					icon="ui-icon-person" />
+				<p:menuitem value="Cliente"
+					url="#{request.contextPath}/../admin/clientelist.html"
+					icon="ui-icon-person" />
+				<p:menuitem value="Playas"
+					url="#{request.contextPath}/../admin/playalist.html"
+					icon="ui-icon-arrowthick-1-e" />
+				<p:menuitem value="Roles de Usuarios"
+					url="#{request.contextPath}/../admin/rolusuariolist.html"
+					icon="ui-icon-tag" />
+				<p:menuitem value="Tarifas"
+					url="#{request.contextPath}/../admin/tarifalist.html"
+					icon="ui-icon-note" />
+				<p:menuitem value="Tipo Estadías"
+					url="#{request.contextPath}/../admin/tipoestadialist.html"
+					icon="ui-icon-arrowthick-1-e" />
+				<p:menuitem value="Auditoría de playa"
+					url="#{request.contextPath}/../admin/playaspendienteslist.html"
+					icon="ui-icon-wrench" />
+			</p:submenu>
+			<p:submenu label="Usuario">
+				<p:menuitem value="Cambiar Contraseña"
+					url="#{request.contextPath}/../admin/"
+					icon="ui-icon-locked" />
+				<p:menuitem value="Cerrar sesión" icon="ui-icon-circle-close"
+					action="#{loginMB.logout}" />
+			</p:submenu>
+		</p:menu>
+	</h:form>
+
+</ui:composition>

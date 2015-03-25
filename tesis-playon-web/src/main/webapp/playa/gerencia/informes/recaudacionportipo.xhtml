@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<script type="text/javascript">
+		function customExtender() {
+			this.cfg.highlighter = {
+				useAxesFormatters : false,
+				tooltipAxes : 'y'
+			}
+		}
+	</script>
+	<h:form>
+		<div>
+			<p:panel id="ingresosXHorasDelDia">
+				<h:panelGrid columns="1" width="100%">
+					<p:column>
+						<h:panelGrid columns="5" width="100%">
+							<h:outputLabel value="Fecha Desde: " />
+							<p:calendar value="#{estadisticaGerenteMB.fechaDesde}"
+								navigator="true" locale="es" showButtonPanel="true"
+								id="fechaDesde" pattern="dd/MM/yyyy" />
+							<h:outputLabel value="Fecha Hasta: " />
+							<p:calendar value="#{estadisticaGerenteMB.fechaHasta}"
+								navigator="true" locale="es" showButtonPanel="true"
+								id="fechaHasta" pattern="dd/MM/yyyy" />
+							<p:commandButton id="getGrafico" value="Ver Reporte"
+								action="#{estadisticaGerenteMB.recaudacionPorTipoVehiculo}"
+								ajax="false" update="recaudacionPorTipoVehiculo">
+							</p:commandButton>
+						</h:panelGrid>
+					</p:column>
+					<p:column>
+						<ui:fragment
+							rendered="#{estadisticaGerenteMB.lmRecaudacionPorTipoVehiculo != null}">
+							<p:barChart id="recaudacionPorTipoVehiculo"
+								datatipFormat="#{estadisticaGerenteMB.datatipFormat}"
+								xaxisLabel="Tipo de vehículo" yaxisLabel="Recaudacion en $"
+								value="#{estadisticaGerenteMB.lmRecaudacionPorTipoVehiculo}"
+								legendPosition="ne" legendRows="1" animate="true"
+								title="Monto recaudado por tipo de vehículo por período"
+								minY="0" maxY="#{estadisticaGerenteMB.mayorRecaudacion}"
+								style="margin-top:20px" />
+						</ui:fragment>
+					</p:column>
+				</h:panelGrid>
+			</p:panel>
+		</div>
+	</h:form>
+
+</ui:composition>

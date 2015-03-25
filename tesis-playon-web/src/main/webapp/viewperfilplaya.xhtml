@@ -1,0 +1,389 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Perfil de playa
+    </ui:define>
+
+	<ui:define name="content">
+
+		<h1>
+			<h:outputText value="Perfil de la playa" />
+			<ui:fragment>
+				<p:commandButton style="position: absolute; right:270px;"
+					value="Volver" icon="ui-icon-arrowthick-1-w"
+					onclick="history.back();" />
+			</ui:fragment>
+		</h1>
+		
+		#{perfilPlayaMB.findPlayaById()}
+		#{tarifaMB.findPlayaById()}
+		#{comentarioMB.findPlayaById()}
+		#{calificacionMB.findPlayaById()}
+		#{favoritoMB.findPlayaById()}
+		#{promocionMB.findPlayaById()}
+		
+		<h:form id="form">
+			<p:growl id="messages" />
+			<p:focus id="focusMessageComentario" for=":form:pnlRoot" />
+			<h:panelGrid id="pnlRoot" columns="1" cellspacing="10" width="95%">
+				<p:column>
+					<div id="perfil-playa">
+						<h:panelGrid columns="2">
+							<h:graphicImage library="fotos_perfil_playas"
+								name="#{perfilPlayaMB.perfilSelected.id}_#{perfilPlayaMB.perfilSelected.nombreFoto}"
+								styleClass="bordes-foto-perfil"
+								rendered="#{perfilPlayaMB.perfilSelected.nombreFoto != null}" />
+							<h:graphicImage library="fotos_perfil_playas" name="sinfoto.jpg"
+								styleClass="bordes-foto-perfil"
+								rendered="#{perfilPlayaMB.perfilSelected.nombreFoto == null}" />
+							<h1 style="width: 100%">#{perfilPlayaMB.playaSelected.nombreComercial}</h1>
+						</h:panelGrid>
+					</div>
+				</p:column>
+
+				<h:panelGrid columns="2" style="margin-left:20px;width:600px;"
+					rendered="#{loginMB.rol eq '[ROLE_CLIENT]'}" width="90%">
+					<h:panelGrid columns="2">
+						<h:graphicImage library="images/icons" name="star.png" />
+						<p:commandLink id="favorito" immediate="true" ajax="true"
+							actionListener="#{favoritoMB.addFavorito}" update="messages"
+							style="vertical-align:text-center;">
+							<h:outputText value="Agregar a favoritos" />
+						</p:commandLink>
+					</h:panelGrid>
+					<p:column style="text-align: right;">
+						<div align="right">
+							<h:graphicImage library="images/icons" name="denuncia.png"
+								style="vertical-align:text-bottom;" />
+							<p:commandLink id="denunciaPlaya" value="Denunciar Playa"
+								ajax="true" action="/denunciaplayaadd.html?faces-redirect=true"
+								immediate="true" style="vertical-align:text-bottom;">
+								<f:setPropertyActionListener
+									value="#{perfilPlayaMB.playaSelected}"
+									target="#{denunciaPlayaMB.playaSelected}" />
+							</p:commandLink>
+						</div>
+					</p:column>
+				</h:panelGrid>
+
+				<h:panelGrid columns="3" cellpadding="5" style="margin-left:20px;">
+					<h:outputText value="Calificación:" styleClass="fuente-outputtext" />
+
+					<p:rating id="rating" value="#{calificacionMB.calificacionPlaya}"
+						stars="10" cancel="false"
+						onRate="if(!confirm('¿Está seguro que desea calificar la playa con '
+								+ value +' puntos'))return false;">
+						<p:ajax event="rate" listener="#{calificacionMB.onrate}"
+							update="rating,messages,puntos" />
+					</p:rating>
+
+					<h:outputLabel id="puntos"
+						value="&#160;&#160;&#160;#{calificacionMB.calificacionPlaya} ptos." />
+
+				</h:panelGrid>
+
+				<p:column>
+					<div align="center" style="margin: 15px 50px 15px 50px;">
+						<h:outputText value="#{perfilPlayaMB.perfilSelected.descripcion}"
+							styleClass="fuente-comentario-frente" />
+					</div>
+				</p:column>
+
+				<p:column>
+					<p:accordionPanel id="acordeonPnl" multiple="true" dynamic="true">
+						<p:tab title="Información">
+							<div style="margin: 0 0 0 10px;">
+								<h:panelGrid columns="3" cellpadding="8">
+									<h:outputText value="Domicilio: "
+										styleClass="fuente-outputtext" />
+									<h:outputText
+										value="#{perfilPlayaMB.playaSelected.domicilio}, Córdoba "
+										styleClass="fuente-perfil" />
+									<p:commandLink id="view2" oncomplete="dlg2.show();"
+										title="Ver Mapa">
+										<h:graphicImage library="images/icons" name="search-map.png"
+											style="height:40px; width:40px; margin-left:10px;" />
+									</p:commandLink>
+
+									<h:outputText value="Barrio: " styleClass="fuente-outputtext" />
+									<h:outputText
+										value="#{perfilPlayaMB.playaSelected.barrio.nombre}"
+										styleClass="fuente-perfil" />
+									<p:column />
+
+									<h:outputText value="Teléfono: " styleClass="fuente-outputtext" />
+									<h:outputText value="#{perfilPlayaMB.playaSelected.telefono}"
+										styleClass="fuente-perfil" />
+									<p:column />
+
+									<h:outputText value="E-mail: " styleClass="fuente-outputtext" />
+									<h:outputText value="#{perfilPlayaMB.playaSelected.email}"
+										styleClass="fuente-perfil" />
+									<p:column />
+
+									<h:outputText value="Dirección web: "
+										styleClass="fuente-outputtext" />
+									<p:column>
+										<a href="#{perfilPlayaMB.playaSelected.url}" target="_blank">
+											<h:outputText value="#{perfilPlayaMB.playaSelected.url}"
+												styleClass="fuente-perfil" />
+										</a>
+									</p:column>
+									<p:column />
+
+									<h:outputText value="Disponibilidad: "
+										styleClass="fuente-outputtext" />
+									<h:outputText
+										value="#{perfilPlayaMB.playaSelected.disponibilidad}"
+										styleClass="fuente-perfil" />
+									<p:column />
+								</h:panelGrid>
+							</div>
+						</p:tab>
+
+						<p:tab title="Tarifas">
+							<p:dataTable id="tarifas" value="#{tarifaMB.tarifaListSelected}"
+								var="tarifa"
+								emptyMessage="No existen tarifas en esta playa de estacionamiento">
+
+								<p:column headerText="Tipo Estadía">
+									<h:outputText value="#{tarifa.tipoEstadia.nombre}" />
+								</p:column>
+
+								<p:column headerText="Categoría">
+									<h:outputText value="#{tarifa.categoriaVehiculo.nombre}" />
+								</p:column>
+
+								<p:column headerText="Importe">
+									<h:outputText value="#{tarifa.importe}">
+										<f:convertNumber type="currency" currencySymbol="$ " />
+									</h:outputText>
+								</p:column>
+							</p:dataTable>
+
+							<h:panelGrid columns="2" cellpadding="10">
+								<p:column>
+
+								</p:column>
+								<p:column>
+
+								</p:column>
+							</h:panelGrid>
+						</p:tab>
+
+						<p:tab title="Promociones">
+							<p:dataGrid var="promocion"
+								value="#{promocionMB.promocionPlayaListSelected}" columns="1"
+								rows="6" paginator="true"
+								emptyMessage="No existen promociones en esta playa"
+								paginatorPosition="bottom">
+
+								<p:panel header="#{promocion.nombre}" style="text-align:left">
+									<h:outputText value="Descripción: " />
+									<h:outputText value="#{promocion.descripcion}" />
+
+									<h:panelGrid columns="4"
+										style="width:100%; margin:5px 0 0 10px;" cellpadding="2"
+										cellspacing="2">
+										<h:outputText value="Fecha de inicio: " />
+										<h:outputText value="#{promocion.fechaInicio}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+
+										<h:outputText value="Fecha de finalización: " />
+										<h:outputText value="#{promocion.fechaFin}">
+											<f:convertDateTime pattern="dd/MM/yyyy" />
+										</h:outputText>
+
+										<h:outputText value="Hora de inicio: " />
+										<h:outputText value="#{promocion.horaInicio}">
+											<f:convertDateTime pattern="HH:mm" />
+										</h:outputText>
+
+										<h:outputText value="Hora de finalización: " />
+										<h:outputText value="#{promocion.horaFin}">
+											<f:convertDateTime pattern="HH:mm" />
+										</h:outputText>
+
+										<h:outputText value="Tipo de estadía: " />
+										<h:outputText value="#{promocion.tarifa.tipoEstadia.nombre}" />
+
+										<h:outputText value="Categoría de vehículo: " />
+										<h:outputText
+											value="#{promocion.tarifa.categoriaVehiculo.nombre}" />
+
+										<h:outputText value="Monto fijo: " />
+										<h:outputText value="#{promocion.montoFijo}">
+											<f:convertNumber type="currency" currencySymbol="$ " />
+										</h:outputText>
+
+										<h:outputText value="Monto con descuento: " />
+										<h:outputText
+											value="#{promocion.montoFijo * (1- promocion.descuento/100)}">
+											<f:convertNumber type="currency" currencySymbol="$ " />
+										</h:outputText>
+
+										<p:column>
+											<h:outputText value="Descuento: " />
+											<h:outputText value="&#160;#{promocion.descuento}%" />
+										</p:column>
+									</h:panelGrid>
+								</p:panel>
+							</p:dataGrid>
+						</p:tab>
+
+						<p:tab id="tabComentarios" title="Comentarios">
+
+							<div align="left" style="width: 90%;">
+								<p:dataTable id="comentarios"
+									value="#{comentarioMB.comentariosListPerfil}" var="comentario"
+									emptyMessage="No existen comentarios en esta playa de estacionamiento">
+
+									<p:column headerText="Usuario" style="width:90px;">
+										<div id="userImg" align="center">
+											<h:graphicImage id="userImg1" library="fotos_perfil_usuarios"
+												name="#{comentario.usuario.nombreUser}.jpg"
+												styleClass="bordes-foto-perfil-comentario"
+												rendered="#{comentario.usuario.fotoUsuario != null}" />
+											<h:graphicImage id="userImg2" library="fotos_perfil_usuarios"
+												name="sinfoto.jpg"
+												styleClass="bordes-foto-perfil-comentario"
+												rendered="#{comentario.usuario.fotoUsuario == null}" />
+											<p:tooltip for="userImg1" showEffect="fade" hideEffect="fade"
+												style="font-weight:bold;line-height: 1.1em;"
+												value="#{comentario.usuario.nombre} #{comentario.usuario.apellido}" />
+											<p:tooltip for="userImg2" showEffect="fade" hideEffect="fade"
+												style="font-weight:bold;line-height: 1.1em;"
+												value="#{comentario.usuario.nombre} #{comentario.usuario.apellido}" />
+										</div>
+									</p:column>
+
+									<p:column headerText="Comentario">
+										<table style="border: 0px solid transparent;">
+											<tr>
+												<td style="text-align: left; border-style: none;"><h:outputText
+														value="#{comentario.fecha}">
+														<f:convertDateTime pattern="dd/MM/yyyy hh:mm"
+															timeStyle="short" type="both" />
+													</h:outputText></td>
+												<td style="text-align: right; border-style: none;"><h:commandLink
+														id="denunciaComentario" value="Denunciar"
+														update="comentarios"
+														action="#{comentarioMB.denunciarComentario}"
+														immediate="true" styleClass="fuente-link-denuncia">
+														<f:setPropertyActionListener value="#{comentario}"
+															target="#{comentarioMB.comentarioDenunciado}" />
+													</h:commandLink></td>
+											</tr>
+											<tr>
+												<td colspan="2" id="perfil-playa-frente"
+													style="border-style: none;"><p>#{comentario.comentario}</p></td>
+											</tr>
+										</table>
+									</p:column>
+
+									<f:facet name="footer">
+										<h:panelGrid columns="2">
+											<p:column>
+												<div align="left" style="width: 100px;">
+													<h:graphicImage library="fotos_perfil_usuarios"
+														name="sinfoto.jpg"
+														styleClass="bordes-foto-perfil-comentario"
+														rendered="#{comentarioMB.usuario.fotoUsuario == null}" />
+													<h:graphicImage library="fotos_perfil_usuarios"
+														name="#{comentarioMB.usuario.nombreUser}.jpg"
+														styleClass="bordes-foto-perfil-comentario"
+														rendered="#{comentarioMB.usuario.fotoUsuario != null}" />
+												</div>
+											</p:column>
+
+											<p:column>
+												<table style="border: 0px solid transparent">
+													<tr>
+														<td style="text-align: left; border-style: none;">
+															<div style="width: 100%;">
+																<p:inputTextarea id="comentario" cols="60" rows="2"
+																	value="#{comentarioMB.comentario}" required="true"
+																	requiredMessage="El campo comentario no puede estar vacio"
+																	styleClass="contenido-textarea">
+																</p:inputTextarea>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td style="text-align: right; border-style: none;">
+															<div align="right" style="width: 97%;">
+																<p:commandButton id="enviarComentario"
+																	value="Enviar comentario"
+																	action="#{comentarioMB.addComentario}" ajax="false"
+																	style="margin:5px 5px 0 5px" update=":comentarios, :focusMessageComentario">
+																</p:commandButton>
+															</div>
+														</td>
+													</tr>
+												</table>
+											</p:column>
+										</h:panelGrid>
+									</f:facet>
+								</p:dataTable>
+							</div>
+						</p:tab>
+					</p:accordionPanel>
+					<p:messages id="messageComentario" showDetail="true"
+						closable="true" />
+
+					<p:dialog widgetVar="dlg2" width="828" height="460" modal="true"
+						id="dialog" draggable="false">
+						<f:facet name="header">
+							<h:outputText
+								value="Ubicación de #{perfilPlayaMB.playaSelected.nombreComercial}" />
+						</f:facet>
+						<div align="center" style="margin: 15px 0 0 0;">
+							<f:view id="vistaGMap" contentType="text/html">
+								<script src="http://maps.google.com/maps/api/js?sensor=false"
+									type="text/javascript"></script>
+
+								<p:gmap center="#{perfilPlayaMB.coordenadas}" zoom="15"
+									streetView="true" type="ROADMAP"
+									model="#{perfilPlayaMB.advancedModel}"
+									style="width:780px ;height:420px; 
+									border:2px solid #819FF7;
+									margin:10px 10px 10px 10px">
+
+									<p:ajax event="overlaySelect"
+										listener="#{perfilPlayaMB.onMarkerSelect}" />
+								</p:gmap>
+							</f:view>
+						</div>
+					</p:dialog>
+				</p:column>
+				<p:column>
+					<div align="center" style="margin: 0 10px 0 10px">
+						<h:panelGrid id="pnlFotos" columns="1" width="500" height="360"
+							rendered="#{perfilPlayaMB.fotosListSelected !=null}">
+							<p:column />
+							<h:outputText value="Fotos" />
+
+							<p:separator id="separatorFoto" />
+							<p:column>
+								<p:imageSwitch effect="shuffle">
+									<ui:repeat value="#{perfilPlayaMB.fotosListSelected}"
+										var="image">
+										<p:graphicImage library="fotos_playas"
+											style="width:500px;height:360px;"
+											name="#{image.id}_#{image.nombre}" />
+									</ui:repeat>
+								</p:imageSwitch>
+							</p:column>
+						</h:panelGrid>
+					</div>
+				</p:column>
+			</h:panelGrid>
+		</h:form>
+	</ui:define>
+</ui:composition>

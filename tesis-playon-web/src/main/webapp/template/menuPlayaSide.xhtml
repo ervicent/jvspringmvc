@@ -1,0 +1,157 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div id="sidebar">
+		<ui:fragment rendered="#{loginMB.rol eq '[ROLE_PLAYA_GERENTE]'}">
+			<ui:fragment rendered="#{!empty loadmenuempleados}">
+				<div class="box">
+					<h3>Empleados</h3>
+					<ul class="list">
+						<li class="first"><a href="#">Ver Empleados</a></li>
+						<li><a href="#">Nuevo Empleado</a></li>
+						<li><a href="#">Borrar Empleado</a></li>
+						<li class="last"><a href="#">Editar Empleado</a></li>
+					</ul>
+				</div>
+			</ui:fragment>
+
+			<ui:fragment rendered="#{!empty loadmenuperfil}">
+				<div class="box">
+					<p:menu style="width: 95%;" styleClass="side-menu">
+						<p:submenu label="Edición del perfil">
+							<p:menuitem value="Ver perfil"
+								outcome="/playa/gerencia/perfilplaya" icon="ui-icon-script" />
+							<p:menuitem value="Fotos" outcome="/playa/gerencia/fotoadd"
+								icon="ui-icon-image" />
+							<p:menuitem value="Comentarios" outcome="/playa/comentariolist"
+								icon="ui-icon-comment" />
+						</p:submenu>
+						<p:submenu label="Adminsitración">
+							<p:menuitem value="Empleados"
+								outcome="/playa/gerencia/empleadolist" icon="ui-icon-person" />
+							<p:menuitem value="Tarifas"
+								outcome="/playa/gerencia/tarifaplayalist" icon="ui-icon-note" />
+							<p:menuitem value="Promociones"
+								outcome="/playa/gerencia/promocioneslist"
+								icon="ui-icon-suitcase" />
+							<p:menuitem value="Abonados"
+								outcome="/playa/gerencia/listadoabonados" icon="ui-icon-person" />
+							<p:menuitem value="Ingreso / Egreso"
+								outcome="/playa/ingresoegresovehiculo"
+								icon="ui-icon-transferthick-e-w" />
+
+						</p:submenu>
+						<p:submenu label="Informes y Reportes">
+							<p:menuitem value="Ver transacciones"
+								outcome="/playa/gerencia/transaccionplayalist"
+								icon="ui-icon-calculator" />
+							<p:menuitem value="Informes de ingresos"
+								outcome="/playa/gerencia/informes/informeporhora"
+								icon="ui-icon-image" />
+
+							<p:menuitem value="Recaudacion por tipo"
+								outcome="/playa/gerencia/informes/informerecaudacion"
+								icon="ui-icon-image" />
+
+							<p:menuitem value="Estadías tipo vehículo"
+								outcome="/playa/gerencia/informes/informeportipo"
+								icon="ui-icon-image" />
+
+
+						</p:submenu>
+						<p:submenu label="Configuración de Cuenta">
+							<p:menuitem value="Cambiar Password"
+								outcome="/playa/gerencia/cambiarpassword" icon="ui-icon-key" />
+							<p:menuitem value="Cambiar mi foto"
+								outcome="/playa/cambiarfotoperfil" icon="ui-icon-image" />
+						</p:submenu>
+
+					</p:menu>
+				</div>
+			</ui:fragment>
+
+
+			<ui:fragment rendered="#{!empty loadmenuadmin}">
+				<div class="box">
+
+					<p:menu style="width: 95%;" styleClass="side-menu">
+						<p:submenu label="Adminsitración">
+							<p:menuitem value="Ver perfil"
+								outcome="/playa/gerencia/perfilplaya" icon="ui-icon-plus" />
+							<p:menuitem value="Empleados"
+								outcome="/playa/gerencia/empleadolist" icon="ui-icon-person" />
+							<p:menuitem value="Tarifas"
+								outcome="/playa/gerencia/tarifaplayalist" icon="ui-icon-note" />
+							<p:menuitem value="Promociones"
+								outcome="/playa/gerencia/promocioneslist"
+								icon="ui-icon-suitcase" />
+							<p:menuitem value="Abonados"
+								outcome="/playa/gerencia/listadoabonados" icon="ui-icon-person" />
+							<p:menuitem value="Ingreso / Egreso"
+								outcome="/playa/ingresoegresovehiculo"
+								icon="ui-icon-transferthick-e-w" />
+
+						</p:submenu>
+						<p:submenu label="Informes y Reportes">
+							<p:menuitem value="Ver transacciones"
+								outcome="/playa/gerencia/transaccionplayalist"
+								icon="ui-icon-calculator" />
+							<p:menuitem value="Informes de ingresos"
+								outcome="/playa/gerencia/informes/informeporhora"
+								icon="ui-icon-image" />
+
+							<p:menuitem value="Recaudacion por tipo"
+								outcome="/playa/gerencia/informes/informerecaudacion"
+								icon="ui-icon-image" />
+
+							<p:menuitem value="Estadías tipo vehículo"
+								outcome="/playa/gerencia/informes/informeportipo"
+								icon="ui-icon-image" />
+
+
+						</p:submenu>
+						<p:submenu label="Configuración de Cuenta">
+							<p:menuitem value="Cambiar Password"
+								outcome="/playa/gerencia/cambiarpassword" icon="ui-icon-key" />
+							<p:menuitem value="Cambiar mi foto"
+								outcome="/playa/cambiarfotoperfil" icon="ui-icon-image" />
+						</p:submenu>
+					</p:menu>
+				</div>
+			</ui:fragment>
+		</ui:fragment>
+		<ui:fragment rendered="#{loginMB.rol eq '[ROLE_PLAYA_EMPLEADO]'}">
+			<div class="box">
+				<p:menu style="width: 95%;" styleClass="side-menu">
+					<p:submenu label="Menú">
+						<p:menuitem value="Perfil de playa" outcome="/playa/perfilplaya"
+							icon="ui-icon-script" />
+						<p:menuitem value="Ingreso / Egreso"
+							outcome="/playa/ingresoegresovehiculo"
+							icon="ui-icon-transferthick-e-w" />
+						<p:menuitem value="Consultar tarifas"
+							outcome="/playa/consultartarifas" icon="ui-icon-note" />
+						<p:menuitem value="Consultar promociones"
+							outcome="/playa/consultarpromociones" icon="ui-icon-suitcase" />
+						<p:menuitem value="Consultar abonados" outcome="/playa/abonolist"
+							icon="ui-icon-contact" />
+						<p:menuitem value="Denunciar vehículo"
+							outcome="/playa/denunciarvehiculo" icon="ui-icon-print" />
+					</p:submenu>
+				</p:menu>
+				<p:menu style="width: 95%; margin-top:5px;" styleClass="side-menu">
+					<p:submenu label="Configuración de Cuenta">
+						<p:menuitem value="Cambiar Password"
+							outcome="/playa/cambiarpassword" icon="ui-icon-key" />
+						<p:menuitem value="Cambiar mi foto"
+							outcome="/playa/cambiarfotoperfil" icon="ui-icon-image" />
+					</p:submenu>
+				</p:menu>
+			</div>
+		</ui:fragment>
+	</div>
+
+</ui:composition>

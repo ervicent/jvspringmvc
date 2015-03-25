@@ -1,0 +1,118 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Perfil de playa
+    </ui:define>
+
+	<ui:define name="content">
+		<h:form style="margin:0 0 0 30px;">
+			<h1>
+				<h:outputText value="Perfil de la playa" />
+				<ui:fragment>
+					<p:commandButton id="addEmpleado" value="Editar Perfil"
+						style="position: absolute; right:270px;" icon="ui-icon-pencil"
+						action="/playa/gerencia/perfilplayaedit.html?faces-redirect=true"
+						ajax="false" />
+				</ui:fragment>
+
+			</h1>
+			<div style="margin: 0 20px 0 20px;">
+				<p:panel>
+					<div id="perfil-playa" style="margin: 0 20px 0 20px;">
+						<h:panelGrid columns="2">
+							<p:column>
+								<h:graphicImage library="fotos_perfil_playas"
+									name="#{perfilPlayaMB.perfil.id}_#{perfilPlayaMB.perfil.nombreFoto}"
+									styleClass="bordes-foto-perfil"
+									rendered="#{perfilPlayaMB.perfil.nombreFoto != null}" />
+								<h:graphicImage library="fotos_perfil_playas" name="sinfoto.jpg"
+									styleClass="bordes-foto-perfil"
+									rendered="#{perfilPlayaMB.perfil.nombreFoto == null}" />
+							</p:column>
+							<p:column>
+								<h1 style="width: 400px">
+									<h:outputText
+										value="#{perfilPlayaMB.perfil.playa.nombreComercial}" />
+								</h1>
+							</p:column>
+						</h:panelGrid>
+					</div>
+				</p:panel>
+			</div>
+
+			<div id="perfil-playa" style="margin: 20px 50px 0 50px;">
+				<p:panel header="Datos de la Playa" styleClass="fuente-outputtext">
+					<h:panelGrid columns="2" cellpadding="5">
+
+						<h:outputText value="Calificación:" styleClass="fuente-outputtext" />
+						<p:rating value="#{calificacionMB.calificacion}" readonly="true"
+							stars="10" />
+
+						<h:outputText value="Domicilio: " styleClass="fuente-outputtext" />
+						<h:outputText
+							value="#{perfilPlayaMB.perfil.playa.domicilio}, Córdoba "
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Barrio: " styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilPlayaMB.perfil.playa.barrio.nombre}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Teléfono: " styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilPlayaMB.perfil.playa.telefono}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="E-mail: " styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilPlayaMB.perfil.playa.email}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Dirección web: "
+							styleClass="fuente-outputtext" />
+						<p:column>
+							<a href="#{perfilPlayaMB.perfil.playa.url}" target="_blank"><h:outputText
+									value="#{perfilPlayaMB.perfil.playa.url}"
+									styleClass="fuente-outputtext" /></a>
+						</p:column>
+
+						<h:outputText value="Disponibilidad: "
+							styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilPlayaMB.perfil.playa.disponibilidad}"
+							styleClass="fuente-perfil" />
+					</h:panelGrid>
+				</p:panel>
+			</div>
+
+			<div id="perfil-playa" style="margin: 20px 50px 0 50px;">
+				<p:panel header="Ubicación" styleClass="fuente-outputtext">
+					<h:panelGrid columns="1" width="100%">
+						<f:view id="vistaGMap" contentType="text/html">
+							<script src="http://maps.google.com/maps/api/js?sensor=false"
+								type="text/javascript"></script>
+
+							<p:gmap center="#{perfilPlayaMB.coordenadas}" zoom="15"
+								streetView="true" type="ROADMAP"
+								model="#{perfilPlayaMB.advancedModel}"
+								style="width:100%;height:300px; border:2px solid #819FF7;">
+
+								<p:ajax event="overlaySelect"
+									listener="#{perfilPlayaMB.onMarkerSelect}" />
+							</p:gmap>
+						</f:view>
+					</h:panelGrid>
+				</p:panel>
+			</div>
+
+			<div align="center" style="margin: 10px 50px 0px 50px;">
+				<h:outputText value="#{perfilPlayaMB.perfil.descripcion}"
+					styleClass="fuente-comentario-frente" />
+			</div>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

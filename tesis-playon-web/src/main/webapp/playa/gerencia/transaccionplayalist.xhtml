@@ -1,0 +1,321 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Historial de movimientos
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<h1>Mis Transacciones</h1>
+
+		<h:form id="mainForm" style="margin:0 0 0 0px;">
+			<h:panelGrid columns="6" cellspacing="10">
+				<h:outputText value="Desde:" />
+				<p:calendar value="#{ingresoEgresoMB.fechaDesde}" id="calDesde"
+					navigator="true" locale="es" showButtonPanel="true"
+					pattern="dd/MM/yyyy" />
+
+				<p:column>
+					<div align="right">
+						<h:outputText value="Hasta: " />
+					</div>
+				</p:column>
+				<p:calendar value="#{ingresoEgresoMB.fechaHasta}" id="calHasta"
+					navigator="true" locale="es" showButtonPanel="true"
+					pattern="dd/MM/yyyy" />
+
+				<p:commandButton id="buscarButton" value="Buscar"
+					action="#{ingresoEgresoMB.updateTransaccionesPlayas()}"
+					icon="ui-icon-search" ajax="true" update="transacciones" />
+				<p:commandButton id="buscarButton2"
+					action="#{ingresoEgresoMB.updateListado}" value="Todas"
+					icon="ui-icon-search" ajax="true" update="transacciones" />
+
+			</h:panelGrid>
+
+
+			<p:dataTable id="transacciones" var="transaccionPlaya"
+				rowStyleClass="#{transaccionPlaya.importe >= 0 ? null : 'negative-row'}"
+				paginator="true" value="#{ingresoEgresoMB.transaccionesPlayas}"
+				rows="12" emptyMessage="No han realizado transacciones"
+				paginatorPosition="bottom">
+
+				<p:column styleClass="column-font" style="width:120px;">
+					<f:facet name="header">
+						<h:outputText value="Fecha" />
+					</f:facet>
+					<h:outputText value="#{transaccionPlaya.fecha}">
+						<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Tipo Pago" styleClass="column-font">
+					<f:facet name="header">
+						<h:outputText value="Tipo Pago" />
+					</f:facet>
+					<h:outputText value="#{transaccionPlaya.tipoPago.nombre}" />
+				</p:column>
+
+				<p:column styleClass="column-font">
+					<f:facet name="header">
+						<h:outputText value="Detalles" />
+					</f:facet>
+
+					<ui:fragment rendered="#{transaccionPlaya.detalleEstadia != null}">
+						<h:outputText value="Vehículo: " />
+						<b> <h:outputText
+								value="#{transaccionPlaya.detalleEstadia.vehiculo.patente}" /></b>
+
+						<h:outputText value=" - Empleado: " />
+						<h:outputText
+							value="#{transaccionPlaya.detalleEstadia.empleado.usuario.nombre} 
+					#{transaccionPlaya.detalleEstadia.empleado.usuario.apellido}" />
+					</ui:fragment>
+
+					<ui:fragment rendered="#{transaccionPlaya.detalleEstadia == null}">
+
+						<ui:fragment rendered="#{transaccionPlaya.importe lt 0}">
+
+							<h:outputText value="Comisión Servicios PLAYÓN. Liquidación: " />
+							<h:outputText value="#{transaccionPlaya.liquidacion.fecha}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</ui:fragment>
+
+						<ui:fragment rendered="#{transaccionPlaya.importe gt 0}">
+							<h:outputText value="Nuevo Abono " />
+						</ui:fragment>
+
+					</ui:fragment>
+
+				</p:column>
+
+				<p:column style="text-align:center">
+					<f:facet name="header">
+						<h:outputText value="Importe" />
+					</f:facet>
+
+					<h:outputText value="#{transaccionPlaya.importe}">
+						<f:convertNumber type="currency" currencySymbol="$ " />
+					</h:outputText>
+				</p:column>
+
+				<p:column headerText="Opc." styleClass="column-options"
+					exportable="false" style="text-align:center; width:40px;">
+
+
+					<ui:fragment rendered="#{transaccionPlaya.detalleEstadia != null}">
+
+						<p:commandLink id="view3" oncomplete="estadiasDialog.show();"
+							update=":mainForm:estadiasDlg" title="Detalle de estadía">
+							<f:setPropertyActionListener value="#{transaccionPlaya}"
+								target="#{transaccionPlayaMB.transaccionSelected}" />
+							<h:graphicImage library="images/icons" name="search.png" />
+						</p:commandLink>
+
+					</ui:fragment>
+
+					<ui:fragment rendered="#{transaccionPlaya.detalleEstadia == null}">
+						<h:graphicImage library="images/icons" name="transparent.png" />
+					</ui:fragment>
+
+
+				</p:column>
+
+				<p:dataTable id="transaccionesP" var="transaccionPlaya"
+					paginator="true" value="#{ingresoEgresoMB.transaccionesPlayas}"
+					rows="12" emptyMessage="No han realizado transacciones"
+					paginatorPosition="bottom" style="display:none">
+
+					<p:column style="text-align:center">
+						<f:facet name="header">
+							<h:outputText value="Fecha" />
+						</f:facet>
+						<h:outputText value="#{transaccionPlaya.fecha}">
+							<f:convertDateTime pattern="dd/MM/yyyy hh:mm" />
+						</h:outputText>
+					</p:column>
+
+					<p:column style="text-align:center">
+						<f:facet name="header">
+							<h:outputText value="Datos de vehículo" />
+						</f:facet>
+						<h:outputText
+							value="#{transaccionPlaya.detalleEstadia.vehiculo.patente}" />
+					</p:column>
+
+					<p:column style="text-align:center">
+						<f:facet name="header">
+							<h:outputText value="Importe" />
+						</f:facet>
+
+						<h:outputText value="#{transaccionPlaya.importe}">
+							<f:convertNumber type="currency" currencySymbol="$" />
+						</h:outputText>
+					</p:column>
+
+				</p:dataTable>
+
+				<f:facet name="footer">
+					<div align="center">
+						<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+							<h:commandLink title="Exportar a excel">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/excel.png" />
+								<p:dataExporter type="xls" target="transaccionesP"
+									fileName="Transacciones" />
+							</h:commandLink>
+
+							<h:commandLink title="Exportar a PDF">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/pdf.png" />
+								<p:dataExporter type="pdf" target="transaccionesP"
+									preProcessor="#{empleadoMB.listadoTransaccionesPDF}"
+									fileName="Transacciones" />
+							</h:commandLink>
+						</h:panelGrid>
+					</div>
+				</f:facet>
+			</p:dataTable>
+
+			<!-- DIALOG PARA VER LOS DATOS DE LA ESTADIA DE LA TRANSACCION SELECCIONADA -->
+			<p:dialog header="Datos de la Estadía" widgetVar="estadiasDialog"
+				dynamic="false" resizable="false" id="estadiasDlg" showEffect="fade"
+				position="center,center" modal="true" draggable="false">
+
+				<h:panelGrid id="displayView" columns="2" cellpadding="8"
+					styleClass="ui-datatable ui-widget"
+					style="margin:0 auto;width:300px;border: 1px solid rgb(197, 219, 236);">
+
+					<p:column style="width:100px; ">
+						<b> <h:outputText style="color: rgb(46, 110, 158); "
+								value="Datos estadía" />
+						</b>
+					</p:column>
+
+					<p:column />
+
+					<p:column style="width:100px;">
+						<h:outputText value="Ingreso: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.fechaHoraIngreso}"
+							style="font-weight:bold">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Egreso " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.fechaHoraEgreso}"
+							style="font-weight:bold">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+
+
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Importe total: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.importeTotal}"
+							style="font-weight:bold">
+							<f:convertNumber type="currency" currencySymbol="$ " />
+						</h:outputText>
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Cobrado: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.cobrado ? 'Si' : 'No'}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Promoción: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.promocion.descripcion ? 'Si' : 'No'}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Empleado: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.empleado.usuario.nombre} 
+                                                #{transaccionPlayaMB.transaccionSelected.detalleEstadia.empleado.usuario.apellido}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column style="width:100px; ">
+						<b> <h:outputText style="color: rgb(46, 110, 158); "
+								value="Datos vehículo" />
+						</b>
+					</p:column>
+
+					<p:column />
+
+					<p:column>
+						<h:outputText value="Patente: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.vehiculo.patente}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Modelo: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.vehiculo.modeloVehiculo.marcaVehiculo.nombre}"
+							style="font-weight:bold" />
+						<h:outputText
+							value=" #{transaccionPlayaMB.transaccionSelected.detalleEstadia.vehiculo.modeloVehiculo.nombre}"
+							style="font-weight:bold" />
+					</p:column>
+
+					<p:column>
+						<h:outputText value="Cliente: " />
+					</p:column>
+					<p:column>
+						<h:outputText
+							value="#{transaccionPlayaMB.transaccionSelected.detalleEstadia.vehiculo.cliente.usuario.nombre} 
+						#{transaccionPlayaMB.transaccionSelected.detalleEstadia.vehiculo.cliente.usuario.apellido}"
+							style="font-weight:bold" />
+					</p:column>
+
+
+				</h:panelGrid>
+
+				<br />
+				<div align="right">
+					<p:commandButton id="btnAceptar" value="Aceptar"
+						onclick="estadiasDialog.hide()" type="button" />
+				</div>
+			</p:dialog>
+
+
+		</h:form>
+
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,55 @@
+<ui:composition template="../template/templateCliente.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Carga saldo de cliente
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Estado de mi cuenta</h1>
+
+		<h:form id="contenido">
+			<p:growl id="messages" />
+			<div id="perfil-playa" style="margin: 20px 50px 0 50px;">
+				<p:panel header="Mis Datos de Cuenta" styleClass="fuente-outputtext">
+					<h:panelGrid columns="2" cellpadding="8" cellspacing="10">
+
+						<h:outputText value="Nombre de usuario: "
+							styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilClienteMB.usuario.nombreUser}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Número de Cuenta: "
+							styleClass="fuente-outputtext" />
+						<h:outputText
+							value="#{perfilClienteMB.cliente.cuentaCliente.nroCuenta}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Saldo: " styleClass="fuente-outputtext" />
+						<h:outputText
+							value="#{perfilClienteMB.cliente.cuentaCliente.saldo}"
+							styleClass="fuente-perfil">
+							<f:convertNumber type="currency" currencySymbol="$" />
+						</h:outputText>
+
+						<h:outputText value="Última recarga: "
+							styleClass="fuente-outputtext" />
+						<h:outputText value="#{perfilClienteMB.ultimaRecarga.fecha}"
+							styleClass="fuente-perfil"
+							rendered="#{perfilClienteMB.ultimaRecarga != null}">
+							<f:convertDateTime pattern="dd/MM/yyyy HH:mm" />
+						</h:outputText>
+						<h:outputText value="No ha cargado crédito aún"
+							styleClass="fuente-perfil"
+							rendered="#{perfilClienteMB.ultimaRecarga == null}" />
+
+					</h:panelGrid>
+				</p:panel>
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

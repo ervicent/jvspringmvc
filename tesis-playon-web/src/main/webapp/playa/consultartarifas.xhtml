@@ -1,0 +1,111 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuperfil" value="true" />
+
+
+	<ui:define name="title">
+		Tarifas
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Tarifas vigentes</h1>
+
+		<h:form id="form" style="margin: 10px 0px 0px 30px;">
+			<p:growl id="messages" />
+
+			<p:dataTable id="tarifas" var="tarifa" paginator="true" rows="5"
+				paginatorPosition="bottom" value="#{tarifaMB.tarifaListEmpleados}"
+				emptyMessage="No existen tarifas en la playa seleccionada"
+				filteredValue="#{tarifaMB.filteredTarifas}">
+
+
+				<p:column headerText="Tipo Estadía" styleClass="column-font"
+					filterMatchMode="exact" filterBy="#{tarifa.tipoEstadia}"
+					filterOptions="#{tarifaMB.tipoEstadiaOptions}">
+					<div align="center">
+						<h:outputText value="#{tarifa.tipoEstadia.nombre}" />
+					</div>
+				</p:column>
+
+				<p:column headerText="Categoría" styleClass="column-font"
+					filterMatchMode="exact"
+					filterOptions="#{tarifaMB.categoriaOptions}"
+					filterBy="#{tarifa.categoriaVehiculo}">
+					<div align="center">
+						<h:outputText value="#{tarifa.categoriaVehiculo.nombre}" />
+					</div>
+				</p:column>
+
+				<p:column headerText="Importe" filterBy="#{tarifa.importe}"
+					filterMatchMode="contains">
+					<div align="center">
+						<h:outputText value="#{tarifa.importe}">
+							<f:convertNumber type="currency" currencySymbol="$" />
+						</h:outputText>
+					</div>
+				</p:column>
+
+				<p:column headerText="Vigente" styleClass="column-font">
+					<div align="center">
+						<h:outputText value="#{tarifa.vigente == true ? 'Si' : 'No'}" />
+					</div>
+				</p:column>
+
+				<p:column headerText="Ver" style="text-align:center;">
+					<p:commandLink id="view" title="Ver Tarifa"
+						oncomplete="viewDialog.show();" update=":form:displayView">
+						<f:setPropertyActionListener value="#{tarifa}"
+							target="#{tarifaMB.tarifaSelected}" />
+						<h:graphicImage library="images/icons" name="search.png" />
+					</p:commandLink>
+
+				</p:column>
+
+			</p:dataTable>
+
+			<p:dialog header="Datos de la Tarifa" widgetVar="viewDialog"
+				resizable="false" id="viewDlg" showEffect="fade" modal="true"
+				draggable="false">
+
+				<h:panelGrid id="displayView" columns="2" cellpadding="4"
+					cellspacing="15">
+
+					<h:outputText value="Tipo Estadía: " />
+					<h:outputText value="#{tarifaMB.tarifaSelected.tipoEstadia.nombre}"
+						style="font-weight:bold; font-style:italic;" />
+
+					<h:outputText value="Categoría Vehículo: " />
+					<h:outputText
+						value="#{tarifaMB.tarifaSelected.categoriaVehiculo.nombre}"
+						style="font-weight:bold; font-style:italic;" />
+
+					<h:outputText value="Importe: " />
+					<h:outputText value="#{tarifaMB.tarifaSelected.importe}"
+						style="font-weight:bold; font-style:italic;" />
+
+					<h:outputText value="Vigente: " />
+					<p:column style="align-text:center;">
+						<div align="center">
+							<h:selectBooleanCheckbox
+								value="#{tarifaMB.tarifaSelected.vigente}"
+								style="font-weight:bold" disabled="true" />
+						</div>
+					</p:column>
+					<p:column />
+					<p:column style="text-align:right">
+						<div align="right">
+							<p:commandButton id="btnAceptar" value="Aceptar"
+								style="padding:4px" onclick="viewDialog.hide();" type="button" />
+						</div>
+					</p:column>
+				</h:panelGrid>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+</ui:composition>

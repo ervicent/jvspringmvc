@@ -1,0 +1,128 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Editar usuario" />
+
+	<ui:define name="panelContent">
+		<p:growl id="messages" autoUpdate="false" showDetail="true"
+			globalOnly="true" />
+
+		<div align="center">
+			<h:panelGrid columuns="1">
+				<h:panelGrid id="displayView" columns="3" cellpadding="8"
+					styleClass="admin-input-text" width="80%">
+
+					<p:column>
+						<h:outputLabel for="nombreUser" value="Usuario: " />
+					</p:column>
+					<p:column>
+						<p:inputText id="nombreUser"
+							value="#{usuarioMB.usuarioSelected.nombreUser}" required="true"
+							requiredMessage="Campo obligatorio" readonly="true">
+							<f:validateLength minimum="4" />
+							<p:ajax event="blur" update="nombreUserMsg" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:message id="nombreUserMsg" for="nombreUser" display="icon" />
+					</p:column>
+
+					<p:column>
+						<h:outputLabel for="nombre" value="Nombre: " />
+					</p:column>
+					<p:column>
+						<p:inputText id="nombre"
+							value="#{usuarioMB.usuarioSelected.nombre}" required="true"
+							requiredMessage="Campo obligatorio" maxlength="40">
+							<f:validateLength minimum="3" />
+							<p:ajax event="blur" update="nombreMsg" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:message id="nombreMsg" for="nombre" display="icon" />
+					</p:column>
+
+					<p:column>
+						<h:outputLabel for="apellido" value="Apellido: " />
+					</p:column>
+					<p:column>
+						<p:inputText id="apellido"
+							value="#{usuarioMB.usuarioSelected.apellido}" required="true"
+							requiredMessage="Campo obligatorio" maxlength="40">
+							<f:validateLength minimum="4" />
+							<p:ajax event="blur" update="apellidoMsg" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:message id="apellidoMsg" for="apellido" display="icon" />
+					</p:column>
+
+					<p:column>
+						<h:outputLabel for="email" value="E-mail: " />
+					</p:column>
+					<p:column>
+						<p:inputText id="email" value="#{usuarioMB.usuarioSelected.email}"
+							required="true" requiredMessage="Campo obligatorio" type="email"
+							maxlength="100">
+							<f:validateLength minimum="5" />
+							<p:ajax event="blur" update="emailMsg" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:message id="emailMsg" for="email" display="icon" />
+					</p:column>
+
+					<p:column>
+						<h:outputText for="tipoDoc" value="Tipo Doc.: " />
+					</p:column>
+					<p:column>
+						<p:selectOneMenu style="width: 293px"
+							value="#{usuarioMB.usuarioSelected.tipoDoc}" effect="fade">
+							<f:selectItems value="#{tipoDocMB.tipoDocList}" var="tipoDoc"
+								itemValue="#{tipoDoc}" itemLabel="#{tipoDoc.nombre}" />
+							<f:converter converterId="tipoDocConverter" />
+						</p:selectOneMenu>
+					</p:column>
+					<p:column></p:column>
+
+					<p:column>
+						<h:outputLabel for="nroDoc" value="Nro. Documento: " />
+					</p:column>
+					<p:column>
+						<p:inputText id="nroDoc"
+							value="#{usuarioMB.usuarioSelected.nroDoc}" required="true"
+							requiredMessage="Campo obligatorio" maxlength="10" type="numeric">
+							<f:validateLength minimum="6" />
+							<p:ajax event="blur" update="nroDocMsg" />
+						</p:inputText>
+					</p:column>
+					<p:column>
+						<p:message id="nroDocMsg" for="nroDoc" display="icon" />
+					</p:column>
+
+					<p:column>
+						<h:outputLabel for="enable" value="Habilitado: " />
+					</p:column>
+					<p:column>
+						<p:selectBooleanCheckbox id="enable"
+							value="#{usuarioMB.usuarioSelected.enable}">
+						</p:selectBooleanCheckbox>
+					</p:column>
+				</h:panelGrid>
+				<p:column>
+					<div align="center">
+						<p:commandButton id="updateUser" value="Modificar Usuario"
+							action="#{usuarioMB.updateUsuarioAdmin}" ajax="false" />
+						<p:commandButton id="reset" value="Cancelar" immediate="true"
+							action="/admin/usuariolist.html?faces-redirect=true" ajax="false"
+							style="margin-right:15px" />
+					</div>
+				</p:column>
+			</h:panelGrid>
+		</div>
+	</ui:define>
+</ui:composition>

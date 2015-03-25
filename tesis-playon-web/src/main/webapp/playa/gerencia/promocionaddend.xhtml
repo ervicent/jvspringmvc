@@ -1,0 +1,29 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Nueva promoción
+    </ui:define>
+
+	<ui:define name="content">
+		<h1>Nueva promoción</h1>
+		<div style="margin: 0 20px 0 40px;">
+			<p:messages id="message" closable="true" />
+			
+			<p>
+				El equipo de <i>Playón, Red de Playas.</i>
+			</p>
+			<div align="right">
+				<p>
+					<h:link value="Ver todas las promociones" outcome="promocioneslist" />
+				</p>
+			</div>
+		</div>
+	</ui:define>
+</ui:composition>

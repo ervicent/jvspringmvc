@@ -1,0 +1,239 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Auditoría de Denuncias a Vehiculos" />
+
+	<ui:define name="panelContent" class="admin-font">
+
+		<p:tabView id="tabView">
+
+			<p:tab id="tab1" title="Pendientes">
+				<p:growl id="messages" />
+				<p:dataTable id="denunciaPendiente" var="denuncias"
+					value="#{auditoriaMB.denunciasPendientesVehiculosList}"
+					paginatorPosition="bottom" paginator="false" rows="4"
+					emptyMessage="No existen denuncias para auditar"
+					text-align="center">
+
+					<p:column headerText="Denunciante" styleClass="column-font">
+						<h:outputText value="#{denuncias.playa.nombreComercial}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Fecha " styleClass="column-font"
+						style="width:105px">
+						<h:outputText value="#{denuncias.fechaAlta}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Patente " styleClass="column-font">
+						<h:outputText value="#{denuncias.vehiculo.patente}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Opciones" styleClass="column-options"
+						style="text-align:center; width:120px;">
+
+						<p:commandLink id="view" update=":mainForm:carDlg3"
+							oncomplete="carDialog.show();" title="Ver Datos">
+							<f:setPropertyActionListener value="#{denuncias}"
+								target="#{auditoriaMB.denunciaVehiculoSeleccionada}" />
+							<h:graphicImage library="images/icons" name="search.png" />
+						</p:commandLink>
+
+
+						<p:commandLink id="procesar" title="Aceptar y procesar denuncia"
+							action="#{auditoriaMB.procesarDenunciaVehiculo}" ajax="false">
+							<f:setPropertyActionListener value="#{denuncias}"
+								target="#{auditoriaMB.denunciaVehiculoSeleccionada}" />
+							<h:graphicImage library="images/icons" name="pencil.png" />
+						</p:commandLink>
+
+						<p:commandLink id="rechazar" title="Rechazar denuncia"
+							action="#{auditoriaMB.rejectDenunciaVehiculo}" ajax="false">
+							<f:setPropertyActionListener value="#{denuncias}"
+								target="#{auditoriaMB.denunciaVehiculoSeleccionada}" />
+							<h:graphicImage library="images/icons" name="rejected.png" />
+						</p:commandLink>
+
+						<p:commandLink id="aceptar" title="Finalizar denuncia"
+							action="#{auditoriaMB.approveDenunciaVehiculo}" ajax="false">
+							<f:setPropertyActionListener value="#{denuncias}"
+								target="#{auditoriaMB.denunciaVehiculoSeleccionada}" />
+							<h:graphicImage library="images/icons" name="check.png" />
+						</p:commandLink>
+					</p:column>
+					<f:facet name="footer">
+
+					</f:facet>
+
+
+				</p:dataTable>
+
+
+			</p:tab>
+			<p:tab id="tab2" title="Proceso">
+				<p:dataTable id="denunciaproceso" var="denuncias"
+					value="#{auditoriaMB.denunciasEnProcesoVehiculosList}"
+					paginatorPosition="bottom" paginator="false"
+					emptyMessage="No existen denuncias finalizadas" text-align="center">
+
+					<p:column headerText="Denunciante" styleClass="column-font">
+						<h:outputText value="#{denuncias.playa.nombreComercial}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Fecha " styleClass="column-font"
+						style="width:105px">
+						<h:outputText value="#{denuncias.fechaAlta}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Patente " styleClass="column-font"
+						text-align="center">
+						<h:outputText value="#{denuncias.vehiculo.patente}" align="center" />
+					</p:column>
+
+					<p:column headerText="Opciones" styleClass="column-options"
+						style="text-align:center; width:120px;">
+
+						<p:commandLink id="view2" update=":mainForm:carDlg3"
+							oncomplete="carDialog.show();" title="Ver Datos">
+							<f:setPropertyActionListener value="#{denuncias}"
+								target="#{auditoriaMB.denunciaVehiculoSeleccionada}" />
+							<h:graphicImage library="images/icons" name="search.png" />
+						</p:commandLink>
+
+						<p:commandLink id="aceptar2" title="Finalizar denuncia"
+							action="#{auditoriaMB.approveDenunciaVehiculo}" ajax="false">
+							<f:setPropertyActionListener value="#{denuncias}"
+								target="#{auditoriaMB.denunciaVehiculoSeleccionada}" />
+							<h:graphicImage library="images/icons" name="check.png" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+
+
+			</p:tab>
+
+			<p:tab id="tab3" title="Finalizadas">
+				<p:dataTable id="denuncia2" var="denuncias"
+					value="#{auditoriaMB.denunciasFinalizadasVehiculosList}"
+					paginatorPosition="bottom" paginator="true" rows="8"
+					emptyMessage="No existen denuncias finalizadas" text-align="center">
+
+					<p:column headerText="Denunciante" styleClass="column-font">
+						<h:outputText value="#{denuncias.playa.nombreComercial}"
+							text-align="center" />
+					</p:column>
+
+					<p:column headerText="Fecha " styleClass="column-font"
+						style="width:105px">
+						<h:outputText value="#{denuncias.fechaAlta}">
+							<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+						</h:outputText>
+					</p:column>
+
+					<p:column headerText="Patente " styleClass="column-font">
+						<h:outputText value="#{denuncias.vehiculo.patente}" align="center" />
+					</p:column>
+
+					<p:column headerText="Opciones" styleClass="column-options"
+						style="text-align:center; width:120px;">
+
+						<p:commandLink id="view3" update=":mainForm:carDlg3"
+							oncomplete="carDialog.show();" title="Ver Datos">
+							<f:setPropertyActionListener value="#{denuncias}"
+								target="#{auditoriaMB.denunciaVehiculoSeleccionada}" />
+							<h:graphicImage library="images/icons" name="search.png" />
+						</p:commandLink>
+					</p:column>
+				</p:dataTable>
+
+
+			</p:tab>
+		</p:tabView>
+		<!-- DIALOG PARA VER LOS DATOS DE LA Denuncia SELECCIONADA -->
+		<p:dialog header="Datos de la Denuncia" widgetVar="carDialog"
+			resizable="false" id="carDlg3" showEffect="fade" modal="true"
+			draggable="false">
+
+			<h:panelGrid id="displayView3" columns="2" cellpadding="8"
+				style="margin:0 auto;">
+
+				<p:column>
+					<h:outputText value="Denunciante: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.denunciaVehiculoSeleccionada.playa.nombreComercial}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Fecha: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.denunciaVehiculoSeleccionada.fechaAlta}"
+						style="font-weight:bold">
+						<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+					</h:outputText>
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Vehiculo: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.denunciaVehiculoSeleccionada.vehiculo.patente}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Apellido del Propietario " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.denunciaVehiculoSeleccionada.vehiculo.cliente.usuario.apellido}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Teléfono del propietario: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.denunciaVehiculoSeleccionada.vehiculo.cliente.telefono}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Asunto de la denuncia " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.denunciaVehiculoSeleccionada.asunto}"
+						style="font-weight:bold">
+
+					</h:outputText>
+
+				</p:column>
+
+				<p:column style="text-align:right">
+					<div align="right">
+						<h:commandButton id="btnAceptar3" value="Aceptar"
+							oncomplete="carDialog.hide();" />
+					</div>
+				</p:column>
+
+			</h:panelGrid>
+		</p:dialog>
+	</ui:define>
+</ui:composition>

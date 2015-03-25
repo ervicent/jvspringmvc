@@ -1,0 +1,119 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Listado de Tarifas" />
+
+	<ui:define name="panelContent" class="admin-font">
+		<h:form>
+
+			<p:growl id="messages" />
+
+			<p:dataTable id="tarifas" var="tarifa" paginator="true" rows="6"
+				paginatorPosition="bottom" value="#{tarifaMB.tarifaList}"
+				emptyMessage="¡No existen tarifas!">
+
+				<f:facet name="header">
+				Tarifas
+            	</f:facet>
+
+				<p:column headerText="Playa" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarifa.playa.nombreComercial}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tarifa.playa.nombreComercial}"
+								styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Teléfono" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarifa.playa.telefono}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tarifa.playa.telefono}"
+								styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Tipo Estadía" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarifa.tipoEstadia.nombre}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tarifa.tipoEstadia.nombre}"
+								styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Categoria" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarifa.categoriaVehiculo.nombre}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tarifa.categoriaVehiculo.nombre}"
+								styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Importe" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">$
+							<h:outputText value="#{tarifa.importe}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tarifa.importe}" styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Vigente" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarifa.vigente == true ? 'Si' : 'No'}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:selectBooleanCheckbox value="#{tarifa.vigente}"
+								styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Opciones" styleClass="column-options"
+					style="text-align:center; width:75px;">
+					
+					<p:commandLink id="edit" title="Editar Datos"
+						action="#{tarifaMB.updateTarifaAdmin(tarifa)}" ajax="false">
+						<f:setPropertyActionListener value="#{playa}"
+							target="#{tarifaMB.tarifaSelected}" />
+						<h:graphicImage library="images/icons" name="pencil.png" />
+					</p:commandLink>
+					<p:commandLink id="delete" title="Dar de baja"
+						action="#{tarifaMB.deleteTarifaAdmin(tarifa)}" ajax="false"
+						onclick="if(!confirm('¿Está seguro que desea eliminar la tarifa?')) return false;">
+						<h:graphicImage library="images/icons" name="trash.png" />
+					</p:commandLink>
+				</p:column>
+			</p:dataTable>
+
+			<p>
+				<h:panelGroup layout="block" style="text-align: right;">
+					<p:commandButton id="addTarifaNueva" value="Nueva Tarifa"
+						action="/admin/tarifaadd.html?faces-redirect=true" ajax="false" />
+				</h:panelGroup>
+			</p>
+		</h:form>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,70 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<div id="sidebar">
+		<div class="box" align="right">
+			<h:form>
+				<h:panelGrid columns="1" width="200" height="360">
+					<h:link title="Publicite aquí" outcome="/solicitudpublicidadadd">
+						<p:graphicImage library="images" name="publique_aqui.png"
+							style="opacity:0.55;" width="200px" height="360px"
+							rendered="#{empty fotoPublicidadMB.fotoPublicidadImparList}" />
+					</h:link>
+					<p:column>
+						<h:form style="width:200px;">
+							<p:imageSwitch effect="fade" widgetVar="switcher"
+								slideshowAuto="true" slideshowSpeed="4000">
+								<ui:repeat value="#{fotoPublicidadMB.fotoPublicidadImparList}"
+									var="image">
+									<a href="#{image.url}" target="_blank"><p:graphicImage
+											id="imgPub1" library="fotos_publicidad"
+											name="#{image.id}_#{image.nombre}" width="200px"
+											height="360px" url="#{image.url}" /></a>
+								</ui:repeat>
+							</p:imageSwitch>
+							<div align="center">
+								<p:commandButton type="button" onclick="switcher.previous();"
+									icon="ui-icon-circle-triangle-w" />
+								<p:commandButton type="button" onclick="switcher.next();"
+									icon="ui-icon-circle-triangle-e" />
+							</div>
+						</h:form>
+					</p:column>
+				</h:panelGrid>
+			</h:form>
+		</div>
+
+		<div class="box" align="right">
+			<h:panelGrid columns="1" width="200" height="370">
+				<h:link title="Publicite aquí" outcome="/solicitudpublicidadadd">
+					<p:graphicImage library="images" name="publique_aqui.png"
+						style="opacity:0.55;" width="200px" height="360px"
+						rendered="#{empty fotoPublicidadMB.fotoPublicidadParList}" />
+				</h:link>
+				<p:column>
+					<h:form style="width:200px;">
+						<p:imageSwitch effect="fade" widgetVar="switcher"
+							slideshowAuto="true" slideshowSpeed="4000">
+							<ui:repeat value="#{fotoPublicidadMB.fotoPublicidadParList}"
+								var="image">
+								<a href="#{image.url}" target="_blank"><p:graphicImage
+										id="imgPub1" library="fotos_publicidad"
+										name="#{image.id}_#{image.nombre}" width="200px"
+										height="360px" url="#{image.url}" /></a>
+							</ui:repeat>
+						</p:imageSwitch>
+						<div align="center">
+							<p:commandButton type="button" onclick="switcher.previous();"
+								icon="ui-icon-circle-triangle-w" />
+							<p:commandButton type="button" onclick="switcher.next();"
+								icon="ui-icon-circle-triangle-e" />
+						</div>
+					</h:form>
+				</p:column>
+			</h:panelGrid>
+		</div>
+	</div>
+</ui:composition>

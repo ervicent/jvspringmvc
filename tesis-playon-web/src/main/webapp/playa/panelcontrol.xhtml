@@ -1,0 +1,77 @@
+<ui:composition template="../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:define name="title">
+		Panel de control
+    </ui:define>
+
+	<ui:define name="content">
+		<h:form style="margin: 0 0 0 30px;">
+			<p:growl id="messages" />
+			<h1>Panel de control</h1>
+			<div style="margin: 0 20px 0 20px;">
+				<p:panel>
+					<div id="perfil-playa" style="margin: 0 20px 0 20px;">
+						<h:panelGrid columns="2">
+							<p:column>
+								<h:graphicImage library="fotos_perfil_playas"
+									name="#{perfilPlayaMB.perfil.id}_#{perfilPlayaMB.perfil.nombreFoto}"
+									styleClass="bordes-foto-perfil"
+									rendered="#{perfilPlayaMB.perfil.nombreFoto != null}" />
+								<h:graphicImage library="fotos_perfil_playas" name="sinfoto.jpg"
+									styleClass="bordes-foto-perfil"
+									rendered="#{perfilPlayaMB.perfil.nombreFoto == null}" />
+							</p:column>
+							<p:column>
+								<h1 style="width: 400px">
+									<h:outputText
+										value="#{perfilPlayaMB.perfil.playa.nombreComercial}" />
+								</h1>
+							</p:column>
+						</h:panelGrid>
+					</div>
+				</p:panel>
+			</div>
+
+			<div id="perfil-playa" style="margin: 20px 50px 0 50px;">
+				<p:panel header="Datos de Usuario" styleClass="fuente-outputtext">
+					<h:panelGrid columns="2" cellpadding="8" cellspacing="10">
+						<h:outputText value="Trabaja en la playa: "
+							styleClass="fuente-outputtext" />
+						<h:outputText id="txt_playa"
+							value="#{detalleEstadiaMB.playaLoggeada.nombreComercial}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Cargo que desempeña: "
+							styleClass="fuente-outputtext" />
+						<h:outputText id="txt_cargo"
+							value="#{detalleEstadiaMB.cargoEmpleado.nombre}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Nombre de usuario: "
+							styleClass="fuente-outputtext" />
+						<h:outputText value="#{detalleEstadiaMB.usuarioLoggeado.nombreUser}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Apellido: " styleClass="fuente-outputtext" />
+						<h:outputText id="txt_apellido"
+							value="#{detalleEstadiaMB.usuarioLoggeado.apellido}"
+							styleClass="fuente-perfil" />
+
+						<h:outputText value="Nombre: " styleClass="fuente-outputtext" />
+						<h:outputText id="txt_nombre"
+							value="#{detalleEstadiaMB.usuarioLoggeado.nombre}"
+							styleClass="fuente-perfil" />
+					</h:panelGrid>
+				</p:panel>
+
+			</div>
+		</h:form>
+	</ui:define>
+</ui:composition>

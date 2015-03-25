@@ -1,0 +1,29 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="title">
+		Contacto
+    </ui:define>
+
+	<ui:define name="content">
+		<p:growl id="messages" />
+		<table>
+			<tr>
+				<td><p:graphicImage
+						value="http://www.ganardineroreal.com/imagenes/ok.jpg" /><br /></td>
+
+				<td><p>Recibimos su consulta, a la brevedad nos
+						comunicaremos con Usted, Muchas gracias</p></td>
+			</tr>
+		</table>
+		<p>
+			Regresar a la pantalla principal
+			<h:link value="Principal" outcome="index" />
+
+		</p>
+	</ui:define>
+</ui:composition>

@@ -1,0 +1,120 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle"
+		value="Modelos de vehiculos registrados en el sistema" />
+
+	<ui:define name="panelContent" class="admin-font">
+
+		<p:growl id="messages" />
+		<div align="center">
+
+
+			<p:dataGrid var="modeloVehiculo"
+				value="#{modeloVehiculoMB.modelosList}" columns="3" rows="9"
+				paginator="true" paginatorPosition="bottom"
+				paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="9,12,15">
+
+				<p:panel header=" " style="text-align:center">
+					<h:panelGrid columns="4" style="width:100%">
+
+						<p:column>
+							<p:graphicImage
+								value="/resources/images/marcas/#{modeloVehiculo.marcaVehiculo.nombre}.jpg" />
+						</p:column>
+
+
+						<h:outputText value="#{modeloVehiculo.marcaVehiculo.nombre}" />
+						<h:outputText value="#{modeloVehiculo.nombre}" />
+						<p:commandLink id="edit" title="Editar Datos"
+							action="/admin/modelovehiculoedit.html?faces-redirect=true"
+							ajax="false">
+							<f:setPropertyActionListener value="#{modeloVehiculo}"
+								target="#{modeloVehiculoMB.modeloVehiculoSelected}" />
+							<h:graphicImage library="images/icons" name="pencil.png" />
+						</p:commandLink>
+
+
+
+					</h:panelGrid>
+				</p:panel>
+
+				<p:dataTable id="modelos" var="modelo"
+					value="#{modeloVehiculoMB.modelosList}" style="display:none">
+
+					<p:column headerText="Marca" style="text-align:center">
+
+						<f:facet name="header">
+							<h:outputText value="Marca" />
+						</f:facet>
+						<h:outputText value="#{modelo.marcaVehiculo.nombre}" />
+
+					</p:column>
+
+					<p:column headerText="Modelo" style="text-align:center">
+
+						<f:facet name="header">
+							<h:outputText value="Modelo" />
+						</f:facet>
+						<h:outputText value="#{modelo.nombre}" />
+
+					</p:column>
+
+
+
+					<p:column headerText="Categoria" style="text-align:center">
+
+						<f:facet name="header">
+							<h:outputText value="Categoria" />
+						</f:facet>
+						<h:outputText value="#{modelo.categoriaVehiculo.nombre}" />
+
+					</p:column>
+
+
+				</p:dataTable>
+
+				<f:facet name="footer">
+
+					<div align="center">
+						<h:panelGrid columns="2" header="Exportar" style="width:100px;">
+							<h:commandLink title="Exportar a excel">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/excel.png" />
+								<p:dataExporter type="xls" target="modelos"
+									fileName="Modelos vehiculos" />
+							</h:commandLink>
+
+							<h:commandLink title="Exportar a PDF">
+								<p:graphicImage
+									value="http://www.primefaces.org/showcase/images/pdf.png" />
+								<p:dataExporter type="pdf" target="modelos"
+									preProcessor="#{documentExporterMB.listadoModelosPDF}"
+									fileName="Modelos" />
+							</h:commandLink>
+						</h:panelGrid>
+					</div>
+				</f:facet>
+
+
+			</p:dataGrid>
+
+			<p>
+				<h:panelGroup layout="block" style="text-align: right; width: 100%;">
+					<p:commandButton id="addModeloVehiculo" value="Agregar modelo"
+						action="/admin/modelovehiculoadd.html?faces-redirect=true"
+						ajax="false" />
+				</h:panelGroup>
+			</p>
+
+
+
+		</div>
+
+	</ui:define>
+</ui:composition>

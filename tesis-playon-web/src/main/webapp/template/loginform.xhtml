@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+
+	<h:form id="loginFormId" prependId="false">
+		<h:panelGroup rendered="#{!loginMB.logueado}">
+			<h:outputLink id="loginLink" value="javascript:void(0)"
+				onclick="dlg.show();" title="login" style="letter-spacing:1px">
+				<b>Iniciar sesi&#243;n</b>
+			</h:outputLink>
+			 |
+			<h:link outcome="/solicitudclienteadd.xhtml"
+				style="letter-spacing:1px">
+				<b>Registrarse</b>
+			</h:link>
+		</h:panelGroup>
+
+		<h:panelGroup rendered="#{loginMB.logueado}">
+			<td><b>Bienvenido "#{loginMB.usuario}"<ui:fragment
+						rendered="#{loginMB.rol eq '[ROLE_PLAYA_EMPLEADO]'}">
+						<h:outputText value=' (Playero)' />
+					</ui:fragment> <ui:fragment rendered="#{loginMB.rol eq '[ROLE_PLAYA_GERENTE]'}">
+						<h:outputText value=' (Gerente)' />
+					</ui:fragment> <ui:fragment rendered="#{loginMB.rol eq '[ROLE_ADMIN]'}">
+						<h:outputText value=' (ADMIN)' />
+					</ui:fragment> <ui:fragment rendered="#{loginMB.rol eq '[ROLE_AUDITOR]'}">
+						<h:outputText value=' (Auditor)' />
+					</ui:fragment> <ui:fragment rendered="#{loginMB.rol eq '[ROLE_CLIENT]'}">
+						<h:outputText value=' (Cliente)' />
+					</ui:fragment></b> | <h:commandLink action="#{loginMB.logout}">
+					<b>Cerrar sesi&#243;n</b>
+				</h:commandLink></td>
+			<h:panelGrid column="1" width="100%">
+				<p:columns>
+					<div align="right">
+						<ui:fragment rendered="#{loginMB.rol eq '[ROLE_ADMIN]'}">
+							<b><h:link value="Panel de administración"
+									outcome="/admin/index" /></b>
+						</ui:fragment>
+					</div>
+					<div align="right">
+						<ui:fragment rendered="#{loginMB.rol eq '[ROLE_AUDITOR]'}">
+							<b><h:link value="Panel de auditoría"
+									outcome="/auditoria/index" /></b>
+						</ui:fragment>
+					</div>
+					<div align="right">
+						<ui:fragment rendered="#{loginMB.rol eq '[ROLE_PLAYA_EMPLEADO]'}">
+							<b><h:outputText style="font-weight:bold; font-size:14pt"
+									value='"#{loginMB.usuarioLogueado.playa.nombreComercial}"' /></b>
+						</ui:fragment>
+					</div>
+					<div align="right">
+						<ui:fragment rendered="#{loginMB.rol eq '[ROLE_PLAYA_GERENTE]'}">
+							<b><h:outputText style="font-weight:bold; font-size:14pt"
+									value='"#{loginMB.usuarioLogueado.playa.nombreComercial}"' /></b>
+						</ui:fragment>
+					</div>
+				</p:columns>
+			</h:panelGrid>
+		</h:panelGroup>
+	</h:form>
+
+	<p:growl id="growl" showDetail="true" life="3000" />
+
+	<p:dialog id="dialog" header="Inicio de sesi&#243;n" widgetVar="dlg"
+		modal="true" resizable="false" draggable="false" closable="true"
+		showHeader="true" style="width:310px">
+		<f:facet name="header">
+			<h:outputText style="width:100%" value="Inicio de sesi&#243;n" />
+		</f:facet>
+		<h:form>
+
+			<h:panelGrid columns="2" cellpadding="5">
+				<h:outputLabel for="usuario" value="Usuario: " />
+				<p:inputText value="#{loginMB.usuario}" id="usuario"
+					style="width: 200px;" required="true" label="Usuario" />
+
+				<h:outputLabel for="password" value="Contraseña: " />
+				<h:inputSecret value="#{loginMB.password}" id="password"
+					class="ui-inputfield ui-corner-all ui-widget-content"
+					style="width: 200px;" required="true" label="Contraseña" />
+
+				<h:panelGroup></h:panelGroup>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox id="recordar" value="#{loginMB.recordar}"
+						label="Recordar" />
+					<h:outputLabel for="recordar" value="Recordar Usuario" />
+				</h:panelGroup>
+
+
+				<f:facet name="footer" style="text-align: right;">
+					<div align="right">
+						<p:commandButton id="btnLoginId" value="Login" update=":growl"
+							action="#{loginMB.login}"
+							oncomplete="handleLoginRequest(xhr, status, args)">
+						</p:commandButton>
+						<p:commandButton id="btnCancelar" value="Cancelar"
+							oncomplete="handleLoginRequest(xhr, status, args)"
+							onclick="dlg.hide();">
+						</p:commandButton>
+					</div>
+
+				</f:facet>
+			</h:panelGrid>
+
+		</h:form>
+	</p:dialog>
+
+	<script type="text/javascript">
+		function handleLoginRequest(xhr, status, args) {
+			if (args.validationFailed || !args.logueado) {
+				jQuery('#dialog').effect("shake", {
+					times : 3
+				}, 100);
+			} else {
+				dlg.hide();
+				//jQuery('#loginLink').fadeOut();
+				//jQuery('#loginLinklogueado').fadeOut();
+				//window.location.href = args.redirect;
+				//location.reload();
+			}
+		}
+	</script>
+</ui:composition>

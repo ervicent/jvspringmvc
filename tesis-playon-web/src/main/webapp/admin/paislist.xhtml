@@ -1,0 +1,70 @@
+<ui:composition template="template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle" value="Listado de paises"/>
+
+	<ui:define name="panelContent" class="admin-font">
+		<h:form>
+			<p:dataTable id="paises" var="pais" editable="true"
+				paginator="true" paginatorPosition="bottom" rows="5" value="#{paisMB.paisList}"
+				style="width: 40%">
+
+				<f:facet name="header">
+					Roles de usuario
+            	</f:facet>
+
+				<p:column headerText="ID" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{pais.id}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{pais.id}" styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Nombre" styleClass="column-font">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{pais.nombre}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{pais.nombre}" styleClass="input-font" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+				<p:column headerText="Opciones" styleClass="option-font">
+					<p:rowEditor />
+				</p:column>
+				
+				<p:column>
+					<p:commandButton id="editar" value=""
+							icon="ui-icon-pencil"
+							action="/admin/playapendienteedit.html?faces-redirect=true"
+							ajax="false" style="height:20px; width:34px;"/>
+					<p:tooltip for="editar" value="Editar Playa"/>
+				</p:column>
+
+				<p:column>
+					<h:commandButton value="Borrar"
+						icon="ui-icon-closethick"
+						action="#{paisMB.deletePais(pais)}" />
+				</p:column>
+				
+				
+
+			</p:dataTable>
+
+			<p>
+				<p:commandButton id="addPais" value="Agregar"
+						action="/admin/paisadd.html?faces-redirect=true" ajax="false" />
+			</p>
+		</h:form>
+	</ui:define>
+</ui:composition>

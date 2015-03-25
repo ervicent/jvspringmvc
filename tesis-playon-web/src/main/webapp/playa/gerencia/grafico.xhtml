@@ -1,0 +1,39 @@
+<ui:composition template="../../template/templatePlaya.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="loadmenuadmin" value="true" />
+
+	<ui:param name="title" value="Estadísticas" />
+
+	<ui:define name="content">
+		<h1>Estadísticas</h1>
+		<h:form>
+
+			<h:panelGrid columns="2">
+				<p:lineChart value="#{estadisticaGerenteMB.linearModel}"
+					legendRows="1"
+					title="Monto recaudado por categoria de vehículo y por año"
+					legendPosition="ne" animate="true" zoom="true" showDatatip="true"
+					yaxisLabel="Pesos Argentinos"
+					style="margin: 0px 0px 0px 0px; width:645px" minY="0"
+					maxY="1800000" widgetVar="chart" />
+
+			</h:panelGrid>
+
+			<h:panelGrid columns="2">
+				<p:barChart id="basic" value="#{estadisticaGerenteMB.categoryModel}"
+					legendPosition="ne" legendRows="1" xaxisLabel="Año"
+					yaxisLabel="Pesos Argentinos" xaxisAngle="0" animate="true"
+					zoom="true" showDatatip="true" min="0" max="1800000"
+					style="margin: 0px 0px 0px 0px; width:645px" />
+			</h:panelGrid>
+
+
+
+		</h:form>
+	</ui:define>
+</ui:composition>

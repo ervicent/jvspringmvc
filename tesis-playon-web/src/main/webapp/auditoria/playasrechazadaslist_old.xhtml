@@ -1,0 +1,189 @@
+<ui:composition template="../admin/template/template.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<ui:param name="panelTitle"
+		value="Auditoría de Playas de Estacionamiento" />
+
+	<ui:define name="panelContent" class="admin-font">
+		<p:growl id="messages" />
+		<p:dataTable id="playas" var="playa"
+			value="#{auditoriaMB.playasRechazadasList}"
+			filteredValue="#{auditoriaMB.filteredPlayas}" widgetVar="playasTable"
+			paginatorPosition="bottom" paginator="true" rows="6"
+			emptyMessage="No existen playas rechazadas">
+
+			<f:facet name="header">
+				Listado de playas rechazadas
+				</f:facet>
+
+			<p:column headerText="Razón Social" styleClass="column-font"
+				filterBy="#{playa.razonSocial}" filterMatchMode="contains">
+				<h:outputText value="#{playa.razonSocial}" />
+			</p:column>
+
+			<p:column headerText="C.U.I.T." styleClass="column-font"
+				style="width:105px" filterBy="#{playa.cuit}"
+				filterMatchMode="contains">
+				<h:outputText value="#{playa.cuit}" />
+			</p:column>
+
+			<p:column headerText="Domicilio" styleClass="column-font"
+				filterBy="#{playa.domicilio}" filterMatchMode="contains">
+				<h:outputText value="#{playa.domicilio}" />
+			</p:column>
+
+			<p:column headerText="Barrio" styleClass="column-font"
+				filterBy="#{playa.barrio}"
+				filterOptions="#{auditoriaMB.barriosOptions}"
+				filterMatchMode="exact">
+				<h:outputText value="#{playa.barrio.nombre}" />
+			</p:column>
+
+			<p:column headerText="Teléfono" styleClass="column-font"
+				filterBy="#{playa.telefono}" filterMatchMode="contains">
+				<h:outputText value="#{playa.telefono}" />
+			</p:column>
+
+			<p:column headerText="Estado" styleClass="column-font"
+				filterBy="#{playa.estado}"
+				filterOptions="#{auditoriaMB.estadosOptions}"
+				filterMatchMode="exact">
+				<h:outputText value="#{playa.estado.nombre}" />
+			</p:column>
+
+			<p:column headerText="Opciones" styleClass="column-options">
+				<p:commandLink id="view" update=":mainForm:displayView"
+					oncomplete="carDialog.show()" title="Ver Datos">
+					<f:setPropertyActionListener value="#{playa}"
+						target="#{auditoriaMB.playaSeleccionada}" />
+					<h:graphicImage library="images/icons" name="search.png" />
+				</p:commandLink>
+
+				<p:commandLink id="edit" title="Editar Datos"
+					action="/auditoria/playaedit.html?faces-redirect=true" ajax="false">
+					<f:setPropertyActionListener value="#{playa}"
+						target="#{auditoriaMB.playaSeleccionada}" />
+					<f:setPropertyActionListener value="playasrechazadaslist"
+						target="#{auditoriaMB.previusPage}" />
+					<h:graphicImage library="images/icons" name="pencil.png" />
+				</p:commandLink>
+
+				<p:commandLink id="aprobar" title="Aprobar Playa"
+					action="#{auditoriaMB.approvePlayaAuditoria}" ajax="false">
+					<f:setPropertyActionListener value="#{playa}"
+						target="#{auditoriaMB.playaSeleccionada}" />
+					<h:graphicImage library="images/icons" name="check.png" />
+				</p:commandLink>
+			</p:column>
+			<f:facet name="footer">
+				<h:panelGroup id="quitarFiltro" layout="block"
+					style="text-align: right;">
+					<p:commandLink id="removeFilter" value="Quitar Filtro"
+						action="/auditoria/playaspendienteslist.html?faces-redirect=true"
+						ajax="false" />
+				</h:panelGroup>
+			</f:facet>
+		</p:dataTable>
+
+		<!-- DIALOG PARA VER LOS DATOS DE LA PLAYA SELECCIONADA -->
+		<p:dialog header="Datos de la Playa" widgetVar="carDialog"
+			resizable="false" id="carDlg" showEffect="fade" modal="true"
+			draggable="false">
+
+			<h:panelGrid id="displayView" columns="2" cellpadding="8"
+				style="margin:0 auto;">
+
+				<p:column>
+					<h:outputText value="Razon Social: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{auditoriaMB.playaSeleccionada.razonSocial}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Nombre Comercial: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.playaSeleccionada.nombreComercial}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="C.U.I.T.: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{auditoriaMB.playaSeleccionada.cuit}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Barrio: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.playaSeleccionada.barrio.nombre}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Domicilio: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{auditoriaMB.playaSeleccionada.domicilio}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Teléfono: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{auditoriaMB.playaSeleccionada.telefono}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="E-mail: " />
+				</p:column>
+				<p:column>
+					<h:outputText value="#{auditoriaMB.playaSeleccionada.email}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Disponibilidad: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.playaSeleccionada.disponibilidad}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+					<h:outputText value="Estado: " />
+				</p:column>
+				<p:column>
+					<h:outputText
+						value="#{auditoriaMB.playaSeleccionada.estado.nombre}"
+						style="font-weight:bold" />
+				</p:column>
+
+				<p:column>
+				</p:column>
+
+				<p:column style="text-align:right">
+					<div align="right">
+						<p:commandButton id="btnAceptar" value="Aceptar"
+							oncomplete="carDialog.hide()" />
+					</div>
+				</p:column>
+			</h:panelGrid>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
