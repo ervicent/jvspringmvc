@@ -15,3 +15,6 @@ Ejemplo de uso con spring MVC 3.x, mybatis y hsqldb embebida. Desplegado en Tomc
 
 ## jaxwsExample ##
 Ejemplo de uso de la librería jaxws para montar un webservice. Necesario mínimop MAVEN 2.0.6 y servidor Tomcat 5.5. Mirar fichero leeme.txt
+
+## editoria ##
+Proyecto en spring/hibernate/primefaces. Hecho con la base de datos mysql para lanzar los script's de creación.
