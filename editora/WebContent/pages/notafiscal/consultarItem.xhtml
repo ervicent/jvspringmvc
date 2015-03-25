@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Pesquisar > Item da Nota Fiscal"
+				styleClass="title" style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="opcion">
+		<div id="nf/item">
+
+			<div id="nfs"
+				style="background: #EFF3FA; height: 55px; width: 50%; float: left; text-align: center;">
+				<br />
+				<p:commandLink
+					action="/pages/notafiscal/consultarNotaFiscal.xhtml?faces-redirect=true">
+					<h:outputText value="CONSULTAR" styleClass="OutPut" />
+					<br />
+					<h:outputText value="NOTA FISCAL" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+			<div id="itens"
+				style="background: #FFFFE4; height: 55px; width: 50%; float: right; text-align: center;">
+				<br />
+				<p:commandLink
+					action="/pages/notafiscal/consultarItem.xhtml?faces-redirect=true">
+					<h:outputText value="CONSULTAR" styleClass="OutPut" />
+					<br />
+					<h:outputText value="ITEM E ALTERAR VALOR DE VENDA" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>3}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_pesquisa_nota"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 10px;"
+					align="center">
+					<h:outputText value="CONSULTAR ITEM DA NOTA FISCAL"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset style="border: 1px solid #A6C9E2; border-top: 0;">
+
+					<p:dataTable id="dt" value="#{itemBean.itemNotaFiscal}" var="item"
+						emptyMessage="Não encontrado" paginator="true" rows="15"
+						paginatorPosition="bottom"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx">
+
+						<p:column width="95" headerText="isbn/código"
+							filterBy="#{item.produto.isbn}" filterMatchMode="exact"
+							filterMaxLength="13">
+						
+							<h:outputText value="#{item.produto.isbn}"
+								rendered="#{item.quantidadeAtual != 0}" />
+
+							<h:outputText value="#{item.produto.isbn}"
+								rendered="#{item.quantidadeAtual == 0}" style="color: red;" />					
+								
+						</p:column>
+
+						<p:column headerText="Lote" style="text-align: center;" filterStyle="max-width: 40px;" 
+						filterBy="#{item.notaFiscal.lote}-#{item.notaFiscal.dataEntrada.weekYear}" filterMatchMode="contains">
+							<h:outputText value="#{item.notaFiscal.lote}"
+								rendered="#{item.notaFiscal.lote!=null and item.quantidadeAtual != 0}" />
+							<h:outputText value="#{item.notaFiscal.lote}"
+								rendered="#{item.notaFiscal.lote!=null and item.quantidadeAtual == 0}" style="color: red;" />-<h:outputText
+								value="#{item.notaFiscal.dataEntrada.time}"
+								rendered="#{item.notaFiscal.lote!=null and item.quantidadeAtual != 0}">
+									<f:convertDateTime pattern="yyyy" />
+							</h:outputText>	
+								
+							<h:outputText style="color: red;"
+								value="#{item.notaFiscal.dataEntrada.time}"
+								rendered="#{item.notaFiscal.lote!=null and item.quantidadeAtual == 0}">
+									<f:convertDateTime pattern="yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Produto" width="260"
+							filterBy="#{item.produto.nome}" filterMatchMode="contains">
+
+							<h:outputText value="#{item.produto.tipo.nome}: "
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual != 0}" />
+
+							<h:outputText value="#{item.produto.tipo.nome}: "
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual == 0}"
+								style="color: red;" />
+
+							<h:outputText value="#{item.produto.nome}"
+								rendered="#{item.quantidadeAtual != 0}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="35" />
+							</h:outputText>
+							
+							<h:outputText value="..."
+								rendered="#{item.quantidadeAtual != 0 and item.produto.nome.length()>=36}" />
+
+							<h:outputText value="#{item.produto.nome}" style="color: red;"
+								rendered="#{item.quantidadeAtual == 0}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="35" />
+							</h:outputText>
+							
+							<h:outputText value="..." style="color: red;"
+								rendered="#{item.quantidadeAtual == 0 and item.produto.nome.length()>=36}" />
+
+						</p:column>
+
+						<p:column headerText="Fornecedor"
+							filterBy="#{item.notaFiscal.fornecedor.nome}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.notaFiscal.fornecedor.nome}"
+								rendered="#{item.quantidadeAtual != 0}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="20" />
+							</h:outputText>
+							
+							<h:outputText value="..."
+								rendered="#{item.quantidadeAtual != 0 and item.notaFiscal.fornecedor.nome.length()>=21}" />
+								
+							<h:outputText value="#{item.notaFiscal.fornecedor.nome}"
+								style="color: red;" rendered="#{item.quantidadeAtual == 0}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="20" />
+							</h:outputText>
+							
+							<h:outputText value="..." style="color: red;"
+								rendered="#{item.quantidadeAtual == 0 and item.notaFiscal.fornecedor.nome.length()>=21}" />
+						</p:column>
+
+						<p:column headerText="Entr. / Atual" style="text-align: center;">
+							<h:outputText value="#{item.quantidadeEntrada}"
+								style="color: #1874CD;" />
+							/ 
+							<h:outputText value="#{item.quantidadeAtual}"
+								style="color: blue;" rendered="#{item.quantidadeAtual != 0}" />
+							<h:outputText value="#{item.quantidadeAtual}" style="color: red;"
+								rendered="#{item.quantidadeAtual == 0}" />
+						</p:column>
+
+						<p:column headerText="Custo / Venda" style="text-align: center;">
+							<h:outputText value="#{item.valorCusto}" style="color: #1874CD;">
+								<f:convertNumber pattern="#,##0.00" />
+							</h:outputText> /	
+							<h:outputText value="#{item.valorVenda}" style="color: blue;">
+								<f:convertNumber pattern="#,##0.00" />
+							</h:outputText>
+						</p:column>
+
+						<p:column rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id ==2}">
+							<p:commandLink oncomplete="dlgAtivar.show()"
+								update=":form_ativar:display" title="Modificar preço de venda"
+								style="float: center; text-align: center;">
+								<h:outputText styleClass="ui-icon ui-icon-pencil" />
+								<f:setPropertyActionListener target="#{itemBean.item}"
+									value="#{item}" />
+							</p:commandLink>
+						</p:column>
+
+					</p:dataTable>
+
+				</fieldset><br />
+				
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<p:dialog header="Modifique o valor de custo" modal="true" resizable="false"
+			showEffect="fade" hideEffect="fade" widgetVar="dlgAtivar" width="400">
+			<h:form id="form_ativar">
+
+				<h:panelGrid id="display">
+
+					<h:outputLabel value="ISBN: " for="dialog_isbn" styleClass="OutPut" />
+					<h:outputText id="dialog_isbn"
+						value="#{itemBean.item.produto.isbn}" styleClass="OutPut" />
+					<br />
+					
+					<h:outputLabel value="Obra: " for="dialog_obra" styleClass="OutPut" />
+					<h:outputText id="dialog_obra"
+						value="#{itemBean.item.produto.nome}" styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel value="Valor de custo: " for="valorVenda" styleClass="OutPut" />
+					<p:inputText id="valorVenda"
+						value="#{itemBean.item.valorVenda}"
+						validatorMessage="VALOR DE CUSTO INVÁLIDO">
+						<f:convertNumber locale="pt_BR" pattern="#,##0.00" />
+						<f:validateDoubleRange minimum="0" />
+					</p:inputText>
+					<br />
+
+				</h:panelGrid>
+				<br />
+				
+				<div align="center">
+				<p:commandButton value="OK" ajax="false"
+					action="#{itemBean.alterItem}"
+					update=":form_pesquisa_nota:dt" icon="ui-icon-check"
+					style="float: center; text-align: center;" title="Modificar preço de custo">
+				</p:commandButton>&nbsp;&nbsp;
+				
+				<p:commandButton id="decline" value="Cancelar" style="color: red;" update=":form_pesquisa_nota:dt"
+						onclick="dlgAtivar.hide()" type="button" icon="ui-icon-close" />
+				</div>
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+</html>

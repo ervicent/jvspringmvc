@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Usuário > Autorizar Acesso" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+		<meta http-equiv="refresh" content="180" />
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>2}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<!-- 			Apenas para acesso administrador		 -->
+			<h:form id="form_acesso1"
+				rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id==2}">
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="SOLICITAÇÃO DE ACESSO"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:dataTable id="list" value="#{usuarioBean.solicitacoes}" var="u"
+						emptyMessage="Nenhuma solicitação no momento"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx" paginator="true" rows="15"
+						paginatorPosition="bottom">
+
+						<p:column headerText="ID">
+							<h:outputText value="#{u.id}" />
+						</p:column>
+
+						<p:column headerText="Nome" width="40">
+							<h:outputText value="#{u.nome}" />
+						</p:column>
+
+						<p:column headerText="Email">
+							<h:outputText value="#{u.login}" />
+						</p:column>
+
+						<p:column style="text-align: center;" headerText="Telefone"
+							width="70">
+							<h:outputText value="#{u.telefone1}" />
+						</p:column>
+
+						<p:column headerText="Vínculo">
+							<h:outputText value="#{u.universitario}" />
+						</p:column>
+
+						<p:column headerText="Local de Trabalho" width="80">
+							<h:outputText value="#{u.localTrabalho}" />
+						</p:column>
+
+						<p:column style="float: center; text-align: center;" width="15">
+
+							<p:commandLink oncomplete="dlgAtivar.show()" rendered="#{loginBean.usuario.perfil.id==1}"
+								update=":form_ativar:display"
+								style="float: center; text-align: center;"
+								title="Autorizar acesso">
+								<h:outputText styleClass="ui-icon ui-icon-circle-check"
+									title="Autorizar acesso" />
+								<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+									value="#{u}" />
+							</p:commandLink>
+							
+							<p:commandLink oncomplete="dlgAtivar2.show()" rendered="#{loginBean.usuario.perfil.id==2}"
+								update=":form_ativar_gerente:display2"
+								style="float: center; text-align: center;"
+								title="Autorizar acesso">
+								<h:outputText styleClass="ui-icon ui-icon-circle-check"
+									title="Autorizar acesso" />
+								<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+									value="#{u}" />
+							</p:commandLink>
+
+						</p:column>
+
+						<p:column style="float: center; text-align: center;" width="15">
+
+							<p:commandLink action="#{usuarioBean.naoAceitar}"
+								update=":form_acesso1:list"
+								style="float: center; text-align: center;">
+								<h:outputText styleClass="ui-icon ui-icon-circle-close"
+									title="Não aceitar solicitação" style="color: #8B0000;" />
+								<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+									value="#{u}" />
+							</p:commandLink>
+
+						</p:column>
+
+					</p:dataTable>
+
+				</fieldset>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+
+			<!-- 		dialog para perfil administrador -->
+			<p:dialog header="Escolha o perfil" modal="true" resizable="false"
+				showEffect="fade" hideEffect="fade" widgetVar="dlgAtivar"
+				width="400">
+				<h:form id="form_ativar">
+
+					<h:panelGrid id="display">
+
+						<h:outputLabel value="CPF: " for="cpf" styleClass="OutPut" />
+						<h:outputText id="cpf" value="#{usuarioBean.usuario.cpf}"
+							styleClass="OutPut" />
+						<br />
+
+						<h:outputLabel value="Nome: " for="nome" styleClass="OutPut" />
+						<h:outputText id="nome" value="#{usuarioBean.usuario.nome}"
+							styleClass="OutPut" />
+						<br />
+
+						<h:outputLabel value="Perfil" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:selectOneMenu id="perfil_tipo" rendered="#{usuarioBean.usuario.perfil.id==4}"
+							requiredMessage="SELECIONE UM PERFIL" required="true"
+							value="#{usuarioBean.usuario.perfil}"
+							converter="genericConverter" style="width: 150px;">
+							<f:selectItem noSelectionOption="true" itemLabel="" itemValue="" />
+							<f:selectItems value="#{perfilBean.solicitacaoUsuario}" var="p"
+								itemLabel="#{p.perfil}" itemValue="#{p}" />
+							<f:ajax event="blur" render="error_perfil" />
+						</p:selectOneMenu>
+						
+						<p:selectOneMenu id="perfil_tipo2" rendered="#{usuarioBean.usuario.perfil.id!=4}"
+							requiredMessage="SELECIONE UM PERFIL" required="true"
+							value="#{usuarioBean.usuario.perfil}" disabled="true"
+							converter="genericConverter" style="width: 150px;">
+							<f:selectItem noSelectionOption="true" itemLabel="" itemValue="" />
+							<f:selectItems value="#{perfilBean.solicitacaoUsuario}" var="p"
+								itemLabel="#{p.perfil}" itemValue="#{p}" />
+							<f:ajax event="blur" render="error_perfil" />
+						</p:selectOneMenu>
+						<p:message id="error_perfil" for="perfil_tipo" />
+
+					</h:panelGrid>
+					<br />					
+					<p:commandButton value="OK" actionListener="#{usuarioBean.ativarUsuario}" update=":form_acesso1:list"
+						icon="ui-icon-check" style="float: center; text-align: center;"
+						title="Ativar usuário">
+					</p:commandButton>
+					<br />
+					
+					<div align="left" style="width: 350px; margin-right: 500px;">
+						<p:messages autoUpdate="true" />
+					</div>
+					
+					<div align="right">
+					<h:panelGrid columns="2">
+					<p:ajaxStatus style="float: right;">
+						<f:facet name="start">
+							<h:graphicImage value="/resources/img/aguarde.gif" width="150" />
+						</f:facet>
+						
+						<f:facet name="start">
+							<h:graphicImage value="/resources/img/enviando.gif" />
+						</f:facet>
+			
+
+						<f:facet name="complete">
+							<h:outputText value="" />
+						</f:facet>
+					</p:ajaxStatus>
+					</h:panelGrid>					
+					</div>
+
+				</h:form>
+			</p:dialog>
+
+			<!-- 		dialog sem a opção de perfil administrador -->
+			<p:dialog header="Escolha o perfil" modal="true" resizable="false"
+				showEffect="fade" hideEffect="fade" widgetVar="dlgAtivar2"
+				width="350">
+				<h:form id="form_ativar_gerente">
+
+					<h:panelGrid id="display2">
+
+						<h:outputLabel value="CPF: " for="cpf2" styleClass="OutPut" />
+						<h:outputText id="cpf2" value="#{usuarioBean.usuario.cpf}"
+							styleClass="OutPut" />
+						<br />
+
+						<h:outputLabel value="Nome: " for="nome2" styleClass="OutPut" />
+						<h:outputText id="nome2" value="#{usuarioBean.usuario.nome}"
+							styleClass="OutPut" />
+						<br />
+
+						<h:outputLabel value="Perfil" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:selectOneMenu id="perfil_tipo2"
+							requiredMessage="SELECIONE UM PERFIL" required="true"
+							value="#{usuarioBean.usuario.perfil}"
+							converter="genericConverter" style="width: 100px;">
+							<f:selectItem noSelectionOption="true" itemLabel="" itemValue="" />
+							<f:selectItems value="#{perfilBean.gerente}" var="p"
+								itemLabel="#{p.perfil}" itemValue="#{p}" />
+						</p:selectOneMenu>
+						<p:message id="error_perfil2" for="perfil_tipo2" />
+
+					</h:panelGrid>
+					<br />
+
+					<p:commandButton value="OK" action="#{usuarioBean.ativarUsuario}" update="form_ativar_gerente"
+						icon="ui-icon-check" style="float: center; text-align: center;"
+						title="Ativar usuário">
+					</p:commandButton>
+					<br />
+					
+					<div align="left" style="width: 350px; margin-right: 500px;">
+						<p:messages autoUpdate="true" />
+					</div>
+
+					<p:ajaxStatus>
+						<f:facet name="start">
+							<h:graphicImage value="/resources/img/aguarde.gif" width="150" />
+						</f:facet>
+
+						<f:facet name="complete">
+							<h:outputText value="" />
+						</f:facet>
+					</p:ajaxStatus>
+				</h:form>
+			</p:dialog>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+
+</ui:composition>
+</html>

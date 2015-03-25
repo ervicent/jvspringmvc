@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Usuário > Modificar Perfil" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>2}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_perfil"
+				rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id==2}">
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="USUÁRIOS CADASTRADOS"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:dataGrid id="dg" var="usuario" value="#{usuarioBean.ativados}"
+						columns="3" rows="9" paginator="true" paginatorPosition="bottom"
+						emptyMessage="" rendered="#{loginBean.usuario.perfil.id==1}">
+
+						<p:panel header="#{usuario.nome}" style="text-align:center"
+							id="pnl">
+							<h:panelGrid columns="1" style="width:100%">
+
+								<h:outputText value="#{usuario.login}" />
+
+								<h:outputText value="#{usuario.cpf}" />
+
+								<h:outputText value="#{usuario.localTrabalho}" />
+
+								<h:outputText value="#{usuario.universitario}" />
+
+								<h:outputText value="#{usuario.perfil.perfil}"
+									rendered="#{usuario.perfil.id==1}" style="color: #1E90FF;" />
+								<h:outputText value="#{usuario.perfil.perfil}"
+									rendered="#{usuario.perfil.id==2}" style="color: #006400;" />
+								<h:outputText value="#{usuario.perfil.perfil}"
+									rendered="#{usuario.perfil.id==3}" style="color: #B22222;" />
+
+								<p:commandLink update=":form_dlg:display"
+									oncomplete="dlgUpdatePerfil.show()">
+									<h:outputText styleClass="ui-icon ui-icon-circle-check"
+										title="Modificar Peril" style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{usuario}"
+										target="#{usuarioBean.usuario}" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:panel>
+
+					</p:dataGrid>
+
+					<p:dataGrid id="dg_gerente" var="usuario"
+						value="#{usuarioBean.ativadosSemAdministrador}" columns="3"
+						rows="9" paginator="true" paginatorPosition="bottom"
+						emptyMessage="" rendered="#{loginBean.usuario.perfil.id==2}">
+
+						<p:panel header="#{usuario.nome}" style="text-align:center"
+							id="pnl_gerente">
+							<h:panelGrid columns="1" style="width:100%">
+
+								<h:outputText value="#{usuario.login}" />
+
+								<h:outputText value="#{usuario.cpf}" />
+
+								<h:outputText value="#{usuario.localTrabalho}" />
+
+								<h:outputText value="#{usuario.universitario}" />
+
+								<h:outputText value="#{usuario.perfil.perfil}"
+									rendered="#{usuario.perfil.id==1}" style="color: #1E90FF;" />
+								<h:outputText value="#{usuario.perfil.perfil}"
+									rendered="#{usuario.perfil.id==2}" style="color: #006400;" />
+								<h:outputText value="#{usuario.perfil.perfil}"
+									rendered="#{usuario.perfil.id==3}" style="color: #B22222;" />
+
+								<p:commandLink update=":form_dlg:display"
+									oncomplete="dlgUpdatePerfil.show()">
+									<h:outputText styleClass="ui-icon ui-icon-search"
+										title="Modificar Peril" style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{usuario}"
+										target="#{usuarioBean.usuario}" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:panel>
+
+					</p:dataGrid>
+
+				</fieldset>
+
+				<p:messages id="msg" autoUpdate=":form_perfil" />
+
+			</h:form>
+
+		</div>
+
+		<p:dialog header="Escolha o Novo perfil" modal="true"
+			resizable="false" showEffect="fade" hideEffect="fade"
+			widgetVar="dlgUpdatePerfil" width="350">
+			<h:form id="form_dlg">
+
+				<h:panelGrid id="display">
+
+					<h:outputLabel value="CPF: " for="cpf" styleClass="OutPut" />
+					<h:outputText id="cpf" value="#{usuarioBean.usuario.cpf}"
+						styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel value="Nome: " for="nome" styleClass="OutPut" />
+					<h:outputText id="nome" value="#{usuarioBean.usuario.nome}"
+						styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel value="Perfil" styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+					<p:selectOneMenu id="perfil_tipo"
+						requiredMessage="SELECIONE UM PERFIL" required="true"
+						rendered="#{loginBean.usuario.perfil.id==1}"
+						value="#{usuarioBean.usuario.perfil}" converter="genericConverter"
+						style="width: 120px;">
+						<f:selectItems value="#{perfilBean.solicitacaoUsuario}" var="p"
+							itemLabel="#{p.perfil}" itemValue="#{p}" />
+						<f:ajax event="blur" render="error_perfil" />
+					</p:selectOneMenu>
+
+					<p:selectOneMenu id="perfil_tipo2"
+						requiredMessage="SELECIONE UM PERFIL" required="true"
+						rendered="#{loginBean.usuario.perfil.id==2}"
+						value="#{usuarioBean.usuario.perfil}" converter="genericConverter"
+						style="width: 100px;">
+						<f:selectItem noSelectionOption="true" itemLabel="" itemValue="" />
+						<f:selectItems value="#{perfilBean.gerente}" var="p"
+							itemLabel="#{p.perfil}" itemValue="#{p}" />
+						<f:ajax event="blur" render="error_perfil" />
+					</p:selectOneMenu>
+					<p:message id="error_perfil" for="perfil_tipo" />
+
+				</h:panelGrid>
+				<br />
+
+				<p:commandButton id="ok" value="OK"
+					action="#{usuarioBean.updatePerfil}" icon="ui-icon-check"
+					style="float: center; text-align: center;" ajax="false"
+					title="Modificar Perfil" update=":form_perfil">
+					<f:ajax render="@all" />
+				</p:commandButton>
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+</html>

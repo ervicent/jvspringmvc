@@ -1,0 +1,467 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Produto > Cadastrar Livro" styleClass="title"
+				rendered="#{produtoBean.produto.id==null}"
+				style="line-height: 20px;" />
+			<h:outputText value="Produto > Editar Livro" styleClass="title"
+				rendered="#{produtoBean.produto.id!=null}"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="opcion">
+		<div id="livro/outros">
+
+			<div id="livro"
+				style="background: #FFFFE4; height: 55px; width: 50%; float: left; text-align: center;">
+				<br />
+				<p:commandLink
+					action="/pages/produto/cadastrarProduto.xhtml?faces-redirect=true">
+					<h:outputText value="PRODUTO" styleClass="OutPut" />
+					<br />
+					<h:outputText value="(LIVRO)" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+			<div id="outros"
+				style="background: #EFF3FA; height: 55px; width: 50%; float: right; text-align: center;">
+				<br />
+				<p:commandLink
+					action="/pages/produto/cadastrarProdutoOutros.xhtml?faces-redirect=true">
+					<h:outputText value="PRODUTO" styleClass="OutPut" />
+					<br />
+					<h:outputText value="(OUTROS)" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_cadastrar_produto"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 10px;"
+					align="center">
+					<h:outputText value="CADASTRAR LIVRO"
+						style="color: white; font-size: 12px;" styleClass="OutPut"
+						rendered="#{produtoBean.produto.id==null}" />
+					<h:outputText value="EDITAR LIVRO"
+						style="color: white; font-size: 12px;" styleClass="OutPut"
+						rendered="#{produtoBean.produto.id!=null}" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0px;">
+
+					<h:panelGrid id="botton" columns="3" style="float: right;">
+
+						<h:graphicImage value="/resources/img/edita.png"
+							onclick="dlgEditaProduto.show();"
+							style="float: right; cursor: pointer;"
+							title="Altera os dados do livro(obra) cadastrado no sistema"
+							styleClass="acende" />
+
+						<h:commandLink
+							action="/pages/fornecedor/cadastrarJFornecedor.xhtml?faces-redirect=true"
+							immediate="true">
+							<h:graphicImage value="/resources/img/fornecedor.png"
+								style="float: right; cursor: pointer;"
+								title="Opção para cadastrar fornecedor" styleClass="acende" />
+						</h:commandLink>
+
+						<h:commandLink
+							action="/pages/notafiscal/cadastrarNotaFiscal.xhtml?faces-redirect=true"
+							immediate="true">
+							<h:graphicImage value="/resources/img/notafiscal2.png"
+								style="float: right; cursor: pointer;"
+								title="Opção para cadastrar nota fiscal" styleClass="acende" />
+						</h:commandLink>
+
+						<h:graphicImage value="/resources/img/tipo-produto.png"
+							onclick="dlgTipoProduto.show();"
+							style="float: right; cursor: pointer;"
+							title="Adicionar novo tipo de produto" styleClass="acende" />
+
+						<h:graphicImage value="/resources/img/categoria.png"
+							onclick="dlgCategoria.show();"
+							style="float: right; cursor: pointer;"
+							title="Adicionar nova categoria" styleClass="acende" />
+
+					</h:panelGrid>
+
+					<p:focus context="prod_nome" for="prod_nome" />
+
+					<h:panelGrid id="grid" columns="5">
+
+						<h:outputLabel value="Tipo de Produto" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:selectOneMenu style="width: 190px;" id="prod_tipo"
+							value="#{produtoBean.produto.tipo}" converter="genericConverter"
+							rendered="#{produtoBean.produto.id==null}" required="true"
+							requiredMessage="INFORME O TIPO" styleClass="input">
+							<f:selectItems value="#{tipoProdutoBean.id1}" var="tipo"
+								itemLabel="#{tipo.nome}" itemValue="#{tipo}" />
+							<f:ajax event="blur" render="error_nome_tipo" />
+						</p:selectOneMenu>
+						<p:message id="error_nome_tipo" for="prod_tipo"
+							rendered="#{produtoBean.produto.id==null}" />
+
+						<p:selectOneMenu style="width: 190px;" id="prod_tipo2"
+							value="#{produtoBean.produto.tipo}" converter="genericConverter"
+							rendered="#{produtoBean.produto.id!=null}" required="true"
+							requiredMessage="INFORME O TIPO" styleClass="input"
+							disabled="true">
+							<f:selectItems value="#{tipoProdutoBean.id1}" var="tipo"
+								itemLabel="#{tipo.nome}" itemValue="#{tipo}" />
+							<f:ajax event="blur" render="error_nome_tipo2" />
+						</p:selectOneMenu>
+						<p:message id="error_nome_tipo2" for="prod_tipo2"
+							rendered="#{produtoBean.produto.id!=null}" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Título da Obra" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputTextarea id="prod_nome"
+							value="#{produtoBean.produto.nome}" required="true"
+							requiredMessage="INFORME O TÍTULO DA OBRA" styleClass="input"
+							maxlength="80" validatorMessage="INFORME CORRETAMENTE O TITULO DA OBRA">
+							<f:ajax event="blur" render="error_nome" />
+							<f:validateLength minimum="6" />
+						</p:inputTextarea>
+						<p:message id="error_nome" for="prod_nome" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Edição" styleClass="OutPut" />
+						<h:outputText value="" />
+						<p:inputText id="prod_edicao"
+							value="#{produtoBean.produto.edicao}"
+							converterMessage="Digite apenas números" styleClass="input">
+							<f:ajax event="blur" render="error_edicao" />
+						</p:inputText>
+						<p:message id="error_edicao" for="prod_edicao" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Coleção" styleClass="OutPut" />
+						<h:outputText value="" />
+						<p:inputText id="prod_colecao"
+							value="#{produtoBean.produto.colecao}" styleClass="input">
+							<f:ajax event="blur" render="error_colecao" />
+						</p:inputText>
+						<p:message id="error_colecao" for="prod_colecao" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Autor/organizador" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:autoComplete id="prod_autor"
+							value="#{produtoBean.produto.autor}" size="31" required="true"
+							requiredMessage="INFORME O AUTOR E ORGANIZADOR DA OBRA"
+							completeMethod="#{produtoBean.autocompleteautor}"
+							minQueryLength="4" maxResults="1" queryDelay="30" var="a"
+							itemLabel="#{a}" itemValue="#{a}"
+							validatorMessage="INFORME CORRETAMENTE O AUTOR">
+							<f:ajax event="blur" render="error_autor" />
+							<f:validateLength minimum="5" />
+						</p:autoComplete>
+						<p:message id="error_autor" for="prod_autor" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Editora" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:autoComplete id="prod_editora"
+							value="#{produtoBean.produto.editora}" styleClass="input"
+							completeMethod="#{produtoBean.autocompleteeditora}" size="31"
+							minQueryLength="2" maxResults="1" queryDelay="30" var="e"
+							itemLabel="#{e}" itemValue="#{e}" required="true"
+							requiredMessage="INFORME A EDITORA DA OBRA"
+							validatorMessage="INFORME CORRETAMENTE A EDITORA">
+							<f:ajax event="blur" render="error_editora" />
+							<f:validateLength minimum="5" />
+						</p:autoComplete>
+						<p:message id="error_editora" for="prod_editora" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Categoria" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:selectOneMenu style="width: 190px;" id="prod_categoria"
+							value="#{produtoBean.produto.categoria}"
+							converter="genericConverter" required="true"
+							requiredMessage="INFORME A CATEGORIA" styleClass="input"
+							rendered="#{produtoBean.produto.id==null}">
+							<f:selectItem itemValue="" itemLabel="" noSelectionOption="true" />
+							<f:selectItems value="#{categoriaBean.categorias}" var="c"
+								itemLabel="#{c.nome}" itemValue="#{c}" />
+							<f:ajax event="blur" render="error_nome_categoria" />
+						</p:selectOneMenu>
+						<p:message id="error_nome_categoria" for="prod_categoria"
+							rendered="#{produtoBean.produto.id==null}" />
+
+						<p:selectOneMenu style="width: 190px;" id="prod_categoria2"
+							value="#{produtoBean.produto.categoria}"
+							converter="genericConverter" required="true"
+							requiredMessage="INFORME A CATEGORIA" styleClass="input"
+							rendered="#{produtoBean.produto.id!=null}">
+							<f:selectItems value="#{categoriaBean.categorias}"
+								var="categoria" itemLabel="#{categoria.nome}"
+								itemValue="#{categoria}" />
+							<f:ajax event="blur" render="error_nome_categoria2" />
+						</p:selectOneMenu>
+						<p:message id="error_nome_categoria2" for="prod_categoria2"
+							rendered="#{produtoBean.produto.id!=null}" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Quant. mínima de estoque"
+							styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:spinner id="prod_min"
+							value="#{produtoBean.produto.quantidadeMinima}" size="5"
+							required="true"
+							requiredMessage="INFORME A QUANTIDADE MÍNIMA DE ESTOQUE" min="0"
+							max="100" title="Quantidade Mínima de Estoque"
+							validatorMessage="QUANTIDADE MÍNIMA DE ESTOQUE INVÁLIDA">
+							<f:ajax event="blur" render="error_min" />
+							<f:validateLongRange minimum="0" />
+						</p:spinner>
+						<p:message id="error_min" for="prod_min" />
+						<br />
+						<br />
+
+						<h:outputLabel value="ISBN" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputText id="prod_isbn" value="#{produtoBean.produto.isbn}"
+							styleClass="input" required="true"
+							requiredMessage="INFORME O NÚMERO ISBN"
+							rendered="#{produtoBean.produto.id==null}"
+							converterMessage="Somente números" maxlength="13"
+							validatorMessage="ISBN INVÁLIDO">
+							<f:ajax event="blur" execute="@this" render="error_codigobarra" />
+							<f:validateLength minimum="10" maximum="13" />
+						</p:inputText>
+						<p:message id="error_codigobarra" for="prod_isbn"
+							rendered="#{produtoBean.produto.id==null}" />
+
+						<p:inputText id="prod_isbn2" value="#{produtoBean.produto.isbn}"
+							styleClass="input" maxlength="13" disabled="true"
+							rendered="#{produtoBean.produto.id!=null}">
+							<f:ajax event="blur" render="error_codigobarra2" />
+						</p:inputText>
+						<p:message id="error_codigobarra2" for="prod_isbn2"
+							rendered="#{produtoBean.produto.id!=null}" />
+						<br />
+						<h:outputText value="Grupo: #{produtoBean.produto.categoria.nome}" />
+
+					</h:panelGrid>
+					<br />
+					<br />
+					<br />
+					<br /> <br />
+					<br />
+					<br />
+					<br />
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{produtoBean.addProduto}"
+						value="Cadastrar" ajax="false" icon="ui-icon-check"
+						rendered="#{produtoBean.produto.id==null}" update="@form">
+						<f:ajax render="@form" />
+					</p:commandButton>
+
+					<p:commandButton action="#{produtoBean.alterProduto}"
+						value="Editar" ajax="false" icon="ui-icon-pencil"
+						rendered="#{produtoBean.produto.id!=null}" update="@form">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton
+						action="cadastrarProduto.xhtml?faces-redirect=true"
+						value="Cancelar" ajax="false" icon="ui-icon-close"
+						immediate="true" />
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" globalOnly="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<!-- 			Aqui começa o dialog Add Tipo -->
+
+		<p:dialog header="Adicionar Tipo de Produto"
+			widgetVar="dlgTipoProduto" resizable="false" modal="true"
+			closable="false" showEffect="fold">
+			<h:form id="form_dialog_tipo">
+
+				<h:panelGrid id="grid" columns="4">
+
+					<h:outputLabel value="Tipo de Produto" styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<p:inputText id="tipo_nome" value="#{tipoProdutoBean.tipo.nome}"
+						required="true"
+						requiredMessage="INFORME O NOME DO TIPO DE PRODUTO">
+						<f:ajax event="change" />
+					</p:inputText>
+
+				</h:panelGrid>
+				<br />
+
+				<p:commandButton action="#{tipoProdutoBean.addTipoProduto}"
+					value="Cadastrar" ajax="false" icon="ui-icon-check">
+					<f:ajax render="@all" />
+				</p:commandButton>&nbsp;
+					
+					<p:commandButton type="reset" value="Cancelar" ajax="false"
+					icon="ui-icon-close" immediate="true">
+					<f:ajax render="@all" />
+				</p:commandButton>
+
+			</h:form>
+
+		</p:dialog>
+
+		<p:dialog header="Adicionar Categoria" widgetVar="dlgCategoria"
+			resizable="false" modal="true" closable="false" showEffect="fold">
+			<h:form id="form_dialog_categoria">
+
+				<h:panelGrid id="grid" columns="4">
+
+					<h:outputLabel value="Nome" styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<p:autoComplete id="cate_nome"
+						value="#{categoriaBean.categoria.nome}"
+						completeMethod="#{categoriaBean.autoComplete}" itemValue="#{c}"
+						itemLabel="#{c}" var="c" minQueryLength="1" maxResults="5"
+						converterMessage="Nome inválido" queryDelay="30" required="true"
+						requiredMessage="INFORME O NOME DA CATEGORIA">
+						<f:ajax event="change" />
+					</p:autoComplete>
+
+				</h:panelGrid>
+				<br />
+
+				<p:commandButton action="#{categoriaBean.addCategoria}"
+					value="Cadastrar" ajax="false" icon="ui-icon-check">
+					<f:ajax render="@all" />
+				</p:commandButton>&nbsp;
+					
+					<p:commandButton type="reset" value="Cancelar" ajax="false"
+					icon="ui-icon-close" immediate="true">
+					<f:ajax render="@all" />
+				</p:commandButton>
+
+			</h:form>
+
+		</p:dialog>
+
+		<!-- 			Aqui começa o dialog para Editar Produto -->
+
+		<p:dialog header="Editar Livro" widgetVar="dlgEditaProduto"
+			resizable="false" modal="true" showEffect="fold">
+			<h:form id="form_dialog_edita">
+
+				<p:dataTable value="#{produtoBean.tiposId1}" var="p"
+					id="tb_produtos" paginator="true" rows="20"
+					paginatorPosition="bottom" emptyMessage="Nenhuma obra encontrada">
+
+					<p:column headerText="ISBN" filterBy="#{p.isbn}"
+						filterMaxLength="13" filterMatchMode="contains"
+						style="text-align: center;">
+						<h:commandLink value="#{p.isbn}" onclick="dlgEditaProduto.hide()"
+							id="link_codigo">
+							<f:setPropertyActionListener target="#{produtoBean.produto}"
+								value="#{p}" />
+						</h:commandLink>
+					</p:column>
+
+					<p:column headerText="Produto" filterBy="#{p.nome}"
+						filterMatchMode="contains">
+						<h:commandLink value="#{p.nome}" onclick="dlgEditaProduto.hide()"
+							id="link_codigo2">
+							<f:setPropertyActionListener target="#{produtoBean.produto}"
+								value="#{p}" />
+						</h:commandLink>
+					</p:column>
+
+				</p:dataTable>
+
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

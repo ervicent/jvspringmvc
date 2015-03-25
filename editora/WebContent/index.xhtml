@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Editora UFRR</title>
+	<h:outputStylesheet name="leo.css" library="css" />
+	<link rel="shortcut icon" href="resources/img/favicon.ico" />
+
+	<script type="text/javascript">
+		function updatePage() {
+			window.location.reload();
+		}
+	</script>
+	
+</h:head>
+
+<h:body styleClass="shadow" onload="setInterval('updatePage()',1200000)">
+
+	<h:form id="login">
+
+		<div style="background: white;" align="center">
+
+			<div
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: left;">
+				<h:outputText value="UFRR - DTI - "
+					style="margin-left: 10px; font-size: 15px; font-weight: bold; color: white;" />
+				<h:outputText value="Sistema de Vendas Editora"
+					style="color: white; font-size: 13px;" />
+			</div>
+
+			<div id="rodape2"></div>
+
+			<div style="background: #C4D2EB; height: 60px; width: 95%">
+				<a href="http://cecomp.ufrr.br/" target="_blank"> <p:graphicImage
+						value="/resources/img/DTI100px.png" title="Site DTI"
+						style="float: left; text-align: left; width: 90px;" />
+				</a> <a href="http://www.ufrr.br" target="_blank"> <p:graphicImage
+						value="/resources/img/brasao.png" title="Site UFRR"
+						style="float: right; text-align: right; width: 66px;" />
+				</a>
+			</div>
+
+			<div style="background: #EFF3FA; height: 60px; width: 95%"
+				align="center">
+				<br />
+				<h:outputLabel value="Atenção!"
+					style="color: red; font-weight: bold;" />
+				<br />
+				<h:outputLabel
+					value="O sistema diferencia letras maiúsculas de minúsculas, portanto a senha deve ser digitada da mesma maneira do seu cadastro" />
+			</div>
+
+			<div style="width: 95%; float: center;" align="center">
+				<p:messages id="msgs" autoUpdate="true" />
+			</div>
+
+
+			<br />
+			<br />
+
+
+			<div align="center" style="width: 95%; background: white;">
+
+				<h:outputLabel value="Esqueceu a senha? " />
+				<h:outputLink onclick="dlgCPF.show()" value="javascript:void(0)"
+					style="float: center; text-align: center;">
+					<h:outputLabel value="Clique aqui para recuperá-la."
+						styleClass="OutPut" style="cursor: pointer;" />
+				</h:outputLink>
+				<br />
+				<br />
+
+				<fieldset
+					style="border-color: #C8D5EC; width: 485px; background: #C8D5EC; border: solid thick #C8D5EC; text-align: center border-top-width:  0px; border-top-right-radius: 8px; border-top-left-radius: 8px;">
+					<h:outputLabel value="Entrar no Sistema"
+						style="color: #394674; font-weight: bold; font-size: 14px;" />
+					<br />
+				</fieldset>
+
+				<fieldset
+					style="border-color: #C8D5EC; width: 500px; background: #FAFAFA; border: solid thick #C8D5EC; border-top-width: 0px; border-radius: 1em;">
+					<br />
+
+					<p:focus context="grid" />
+
+					<h:panelGrid id="grid" columns="2" cellpadding="10"
+						cellspacing="10">
+
+						<h:outputLabel value="Email: " />
+						<p:inputText id="email" value="#{loginBean.usuario.login}"
+							size="30" validatorMessage="EMAIL INVALIDO">
+							<f:ajax event="change" />
+						</p:inputText>
+
+						<h:outputLabel value="Senha: " />
+						<p:password value="#{loginBean.usuario.senha}" size="30"
+							feedback="false">
+							<f:ajax event="change" />
+						</p:password>
+
+					</h:panelGrid>
+					<br />
+
+					<p:commandButton value="Entrar" action="#{loginBean.efetuaLogin}"
+						ajax="false" update=":login">
+						<p:ajax render="@all" />
+					</p:commandButton>
+
+
+					<br />
+					<br />
+
+				</fieldset>
+				<br />
+				<br />
+
+				<h:outputLabel value="Servidor,"
+					style="font-weight: bold; float: center;" />
+				<br />
+				<h:outputLabel value="caso ainda não possua cadastro no sistema,"
+					style="float: center;" />
+				<br />
+				<h:outputLabel value="clique no link abaixo." style="float: center;" />
+				<br />
+				<br />
+
+				<h:commandLink action="solicitacao.xhtml?faces-redirect=true">
+					<p:graphicImage value="/resources/img/adduser.png" />
+					<br />
+					<h:outputText value="Cadastre-se" styleClass="OutPut" />
+				</h:commandLink>
+				<br />
+				<br />
+				<br /> <a
+					href="http://www.mozilla.org/pt-BR/download/?product=firefox-21.0&os;=win&lang;=pt-BR"
+					style="text-decoration: none;" target="_blank"> <p:graphicImage
+						value="/resources/img/firefox.png" title="Mozilla Firefox" />
+				</a>
+
+				<h:outputLabel
+					value="Este sistema é melhor visualizado utilizando o "
+					style="font-weight: bold; float: center;" />
+
+				<a
+					href="http://www.mozilla.org/pt-BR/download/?product=firefox-21.0&os;=win&lang;=pt-BR"
+					style="text-decoration: none; color: blue; font-weight: bold;"
+					target="_blank"> <h:outputLabel value="Mozilla Firefox, "
+						style="cursor: pointer;" />
+				</a>
+
+				<h:outputLabel value="para baixá-lo e instalá-lo, "
+					style="font-weight: bold; float: center;" />
+
+				<a
+					href="http://www.mozilla.org/pt-BR/download/?product=firefox-21.0&os;=win&lang;=pt-BR"
+					style="text-decoration: none; color: blue; font-weight: bold;"
+					target="_blank"> <h:outputLabel value="clique aqui."
+						style="cursor: pointer;" />
+				</a> <a
+					href="http://www.mozilla.org/pt-BR/download/?product=firefox-21.0&os;=win&lang;=pt-BR"
+					style="text-decoration: none;" target="_blank"> <p:graphicImage
+						value="/resources/img/firefox.png" title="Mozilla Firefox" />
+				</a>
+
+			</div>
+
+			<a href="http://ufrr.br/editora/" target="_blank"> <p:graphicImage
+					value="/resources/img/logoeditora.png"
+					title="Site de compras Editora UFRR"
+					style="float: left; text-align: left;" />
+			</a>
+
+			<div style="width: 95%; display: block;" align="center" />
+			<div id="rodape"
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: center;">
+				&copy; Copyright 2013 &nbsp; UFRR - Diretoria de Tecnologia da
+				Informação &nbsp; | &nbsp; Layout UFRN - SIG &nbsp;| &nbsp; Editora
+				UFRR (95)3621-3111 &nbsp; editora@ufrr.br</div>
+
+		</div>
+
+	</h:form>
+
+
+	<!-- 	dialog para campo CPF, recuperação de senha -->
+	<p:dialog widgetVar="dlgCPF" modal="true" resizable="false"
+		showEffect="fold">
+
+		<h:form>
+			<div style="background: #EFF3FA; height: 60px;" align="center">
+
+				<br />
+				<h:outputLabel value="Atenção!"
+					style="color: red; font-weight: bold;" />
+				<br />
+				<h:outputLabel style="font-weight: bold;"
+					value="Ao efetuar está solicitação o sistema irá enviar um email com o novo código." />
+			</div>
+
+			<div class="Centralizar" style="text-align: center; float: center;"
+				align="center">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="RECUPERAR ACESSO"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-bottom: white; border-top: white;">
+					<br />
+					<br />
+
+					<h:panelGrid id="grid" columns="5" style="margin-left: 37%;">
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<p:focus context="grid" for="cpf" />
+
+						<h:outputLabel value="CPF" for="cpf" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputMask id="cpf" value="#{loginBean.usuario.cpf}"
+							style="width: 134px;" mask="999.999.999-99" styleClass="input"
+							required="true" requiredMessage="INFORME O CPF CORRETAMENTE"
+							validatorMessage="CPF INVALIDO">
+							<f:ajax event="change" />
+						</p:inputMask>
+						<br />
+						<br />
+						<br />
+						<br />
+
+					</h:panelGrid>
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{loginBean.esqueceuSenha}" value="OK"
+						ajax="false" icon="ui-icon-check" update="@form">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton action="/index.xhtml?faces-redirect=true"
+						immediate="true" value="Cancelar" ajax="false"
+						icon="ui-icon-close">
+						<f:ajax render="@form" />
+					</p:commandButton>
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="msg" autoUpdate="true" />
+				</div>
+
+			</div>
+		</h:form>
+
+	</p:dialog>
+</h:body>
+</html>

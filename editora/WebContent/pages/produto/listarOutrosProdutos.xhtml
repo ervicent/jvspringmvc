@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Listar > Outros Produtos" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="opcion">
+		<div id="livro/outros">
+
+			<div id="livro"
+				style="background: #EFF3FA; height: 55px; width: 25%; float: left;">
+				<br />
+				<p:commandLink
+					action="/pages/produto/listarProduto.xhtml?faces-redirect=true">
+					<h:outputText value="CONSULTAR" styleClass="OutPut" />
+					<br />
+					<h:outputText value="LIVROS" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+			<div id="ativarL"
+				style="background: #EFF3FA; height: 55px; width: 25%; float: left;">
+				<br />
+				<p:commandLink
+					action="/pages/produto/ativarProdutos.xhtml?faces-redirect=true">
+					<h:outputText value="LIVROS" styleClass="OutPut" />
+					<br />
+					<h:outputText value="DESATIVADOS" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+			<div id="outros"
+				style="background: #FFFFE4; height: 55px; width: 25%; float: left;">
+				<br />
+				<p:commandLink
+					action="/pages/produto/listarOutrosProdutos.xhtml?faces-redirect=true">
+					<h:outputText value="CONSULTAR" styleClass="OutPut" />
+					<br />
+					<h:outputText value="OUTROS PRODUTOS" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+			<div id="ativar"
+				style="background: #EFF3FA; height: 55px; width: 25%; float: left;">
+				<br />
+				<p:commandLink
+					action="/pages/produto/ativarOutrosProdutos.xhtml?faces-redirect=true">
+					<h:outputText value="OUTROS PRODUTOS" styleClass="OutPut" />
+					<br />
+					<h:outputText value="DESATIVADOS" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_listar_produto"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 10px;"
+					align="center">
+					<h:outputText value="LISTAR PRODUTOS"
+						style="color: white; font-size: 12px;" styleClass="OutPut"
+						rendered="#{fornecedorBean.fornecedor.id==null}" />
+				</div>
+
+				<!-- 			<p:focus context="form_listar_produto" for="dt:codigo" /> -->
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<p:dataGrid id="dt" value="#{produtoBean.produtosDesativados}"
+						var="p" columns="3" rows="12" paginator="true"
+						paginatorPosition="bottom">
+
+						<p:panel header="#{p.tipo.nome}" footer="Código: #{p.id}"
+							style="text-align:center">
+							<h:panelGrid columns="1" style="width:100%">
+
+								<h:outputText value="Descrição: #{p.nome}" />
+
+								<h:outputText value="Status" />
+								<h:outputText value="Ativado" rendered="#{p.ativado==true}"
+									style="color: blue;" />
+								<h:outputText value="Desativado" rendered="#{p.ativado==false}"
+									style="color: red;" />
+
+							</h:panelGrid>
+						</p:panel>
+
+					</p:dataGrid>
+
+				</fieldset>
+				<br />
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<!-- 			Aqui começa o dialog para detalhar o produto -->
+
+		<p:dialog widgetVar="dlgD" resizable="false" modal="true"
+			showEffect="fold">
+			<h:form id="form_dialog">
+
+				<h:panelGrid id="display">
+
+					<h:outputLabel value="Código: #{produtoBean.produto.id}"
+						styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel value="Tipo: #{produtoBean.produto.tipo.nome}"
+						styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel value="Descrição: #{produtoBean.produto.nome}"
+						styleClass="OutPut" />
+					<br />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+		<!-- 			restrição de acesso -->
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

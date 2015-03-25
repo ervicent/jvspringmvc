@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Editora UFRR</title>
+	<h:outputStylesheet name="leo.css" library="css" />
+	<h:outputScript name="locale.js" library="js" />
+	<link rel="shortcut icon" href="/editora/resources/img/favicon.ico" />
+</h:head>
+
+<h:body styleClass="shadow">
+	<h:form id="form">
+
+		<div style="background: white;" align="center">
+
+			<div
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: left;">
+				<h:form>
+					<h:outputText value="UFRR - DTI - "
+						style="margin-left: 10px; font-size: 15px; font-weight: bold; color: white;" />
+					<h:outputText value="Sistema de Vendas Editora"
+						style="color: white; font-size: 13px;" />
+
+				</h:form>
+
+			</div>
+
+			<div id="rodape2" />
+
+			<div style="background: #C4D2EB; height: 60px; width: 95%"
+				align="right"></div>
+
+			<div style="background: #EFF3FA; height: 60px; width: 95%"
+				align="center">
+
+				<br />
+				<h:outputLabel value="Atenção!"
+					style="color: red; font-weight: bold;" />
+				<br />
+				<h:outputLabel
+					value="Ao informar seu login e senha o sistema diferencia letras maiúsculas de minúsculas" />
+			</div>
+
+			<div class="Centralizar" style="width: 95%; text-align: left;">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="CADASTRO DE CLIENTE"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border-color: #F8F8FF; border-bottom: white; border-top: white;">
+
+					<h:panelGrid id="grid" columns="5">
+
+						<p:focus context="grid" for="cpf" />
+
+						<h:outputLabel value="CPF" for="cpf" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputMask id="cpf" value="#{usuarioBean.usuario.cpf}"
+							style="width: 200px;" mask="999.999.999-99" styleClass="input"
+							required="true" requiredMessage="INFORME O CPF CORRETAMENTE"
+							validatorMessage="CPF INVÁLIDO">
+							<f:ajax event="blur" render="error_cpf" />
+						</p:inputMask>
+						<p:message id="error_cpf" for="cpf" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Nome Completo" for="nome"
+							styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputText id="nome" value="#{usuarioBean.usuario.nome}"
+							required="true" requiredMessage="INFORME SEU NOME COMPLETO"
+							size="35">
+							<f:ajax event="blur" render="error_nome" />
+						</p:inputText>
+						<p:message id="error_nome" for="nome" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Data de Nascimento" for="nascimento"
+							styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:calendar id="nascimento" effect="slideDown"
+							showButtonPanel="true" navigator="true" yearRange="60"
+							value="#{usuarioBean.usuario.nascimento}" required="true"
+							validatorMessage="DATA INVÁLIDA"
+							requiredMessage="INFORME A DATA DE NASCIMENTO" locale="pt_BR"
+							pattern="dd/MM/yyyy">
+							<f:ajax event="blur" render="error_nasc" />
+						</p:calendar>
+						<p:message id="error_nasc" for="nascimento" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Vínculo com a Universidade" for="univ"
+							styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:selectOneMenu id="univ" style="width: 134px;"
+							value="#{usuarioBean.usuario.universitario}" required="true"
+							requiredMessage="INFORME O VÍNCULO COM A UNIVERSIDADE"
+							styleClass="input">
+							<f:selectItem itemValue="" itemLabel="" noSelectionValue="true" />
+							<f:selectItem itemValue="ALUNO" itemLabel="ALUNO" />
+							<f:selectItem itemValue="PROFESSOR" itemLabel="PROFESSOR" />
+							<f:selectItem itemValue="SERVIDOR UFRR" itemLabel="SERVIDOR UFRR" />
+							<f:selectItem itemValue="TERCEIRIZADO" itemLabel="TERCEIRIZADO" />
+							<f:selectItem itemValue="OUTROS" itemLabel="OUTROS" />
+							<f:ajax event="blur" render="error_univ" />
+						</p:selectOneMenu>
+						<p:message id="error_univ" for="univ" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Preferencia de categoria"
+							styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:selectOneMenu style="width: 134px;" id="categoria"
+							value="#{usuarioBean.usuario.preferencia}"
+							converter="genericConverter" required="true"
+							requiredMessage="INFORME A PREFERENCIA DE CATEGORIA"
+							styleClass="input">
+							<f:selectItem itemValue="" itemLabel="" noSelectionOption="true" />
+							<f:selectItems value="#{categoriaBean.categorias}" var="c"
+								itemLabel="#{c.nome}" itemValue="#{c}" />
+							<f:ajax event="blur" render="error_nome_categoria" />
+						</p:selectOneMenu>
+						<p:message id="error_nome_categoria" for="categoria" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Telefone 1" for="fone1" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputMask id="fone1" value="#{usuarioBean.usuario.telefone1}"
+							mask="(99)9999-9999" required="true"
+							requiredMessage="INFORME O PRIMEIRO NÚMERO PARA CONTATO">
+							<f:ajax event="blur" render="error_fone1" />
+						</p:inputMask>
+						<p:message id="error_fone1" for="fone1" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Telefone 2" for="fone2" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputMask id="fone2" value="#{usuarioBean.usuario.telefone2}"
+							mask="(99)9999-9999" required="true"
+							requiredMessage="INFORME O SEGUNDO NÚMERO PARA CONTATO">
+							<f:ajax event="change" render="error_fone2" />
+						</p:inputMask>
+						<p:message id="error_fone2" for="fone2" />
+
+					</h:panelGrid>
+					<br /> <br />
+
+
+					<!-- 					Aqui começa as informações do login -->
+
+					<p:fieldset legend="Login" style="width: 77%; margin-left: 15px;">
+
+						<h:panelGrid id="grid2" columns="12" cellpadding="5"
+							cellspacing="5">
+
+							<h:outputLabel value="Email" for="email" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:inputText id="email" value="#{usuarioBean.usuario.login}"
+								size="35" required="true" requiredMessage="INFORME SEU EMAIL"
+								validatorMessage="EMAIL INVÁLIDO">
+								<f:ajax event="blur" render="error_email" />
+							</p:inputText>
+							<p:message id="error_email" for="email" display="icon" />
+
+							<h:outputLabel value="Senha" for="senha" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:password id="senha" value="#{usuarioBean.usuario.senha}"
+								feedback="true" promptLabel="Digite sua senha"
+								weakLabel="senha fácil" goodLabel="senha média"
+								strongLabel="senha segura" required="true"
+								requiredMessage="INFORME A SENHA"
+								validatorMessage="A SENHA DEVE TER NO MÍNIMO 8 CARACTERES">
+								<f:ajax event="blur" render="error_senha" />
+								<f:validateLength minimum="8" />
+							</p:password>
+							<p:message id="error_senha" for="senha" display="icon" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Repita a Senha" for="rsenha"
+								styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:password id="rsenha"
+								value="#{usuarioBean.usuario.repetirSenha}" required="true"
+								requiredMessage="SENHA INVÁLIDA">
+								<f:ajax event="blur" render="error_rsenha" />
+							</p:password>
+							<p:message id="error_rsenha" for="rsenha" display="icon" />
+
+						</h:panelGrid>
+						<br />
+						<br />
+
+					</p:fieldset>
+
+					<br />
+					<br />
+
+					<!-- 					Aqui começa as informações do endereço -->
+
+					<p:fieldset legend="Endereço"
+						style="width: 77%; margin-left: 15px;">
+
+						<h:panelGrid id="grid3" columns="8">
+
+							<h:outputLabel value="Estado" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:selectOneMenu style="width: 50px;" id="unif_sigla"
+								value="#{usuarioBean.endereco.unidade}" equired="true"
+								requiredMessage="INFORME A SIGLA DO ESTADO" styleClass="input">
+								<f:selectItem itemLabel="RR" itemValue="RR" />
+								<f:selectItem itemLabel="AM" itemValue="AM" />
+								<f:selectItem itemLabel="AC" itemValue="AC" />
+								<f:selectItem itemLabel="AL" itemValue="AL" />
+								<f:selectItem itemLabel="AP" itemValue="AP" />
+								<f:selectItem itemLabel="BA" itemValue="BA" />
+								<f:selectItem itemLabel="CE" itemValue="CE" />
+								<f:selectItem itemLabel="DF" itemValue="DF" />
+								<f:selectItem itemLabel="ES" itemValue="ES" />
+								<f:selectItem itemLabel="GO" itemValue="GO" />
+								<f:selectItem itemLabel="MA" itemValue="MA" />
+								<f:selectItem itemLabel="MG" itemValue="MG" />
+								<f:selectItem itemLabel="MS" itemValue="MS" />
+								<f:selectItem itemLabel="MT" itemValue="MT" />
+								<f:selectItem itemLabel="PA" itemValue="PA" />
+								<f:selectItem itemLabel="PB" itemValue="PB" />
+								<f:selectItem itemLabel="PE" itemValue="PE" />
+								<f:selectItem itemLabel="PI" itemValue="PI" />
+								<f:selectItem itemLabel="PR" itemValue="PR" />
+								<f:selectItem itemLabel="RO" itemValue="RO" />
+								<f:selectItem itemLabel="RJ" itemValue="RJ" />
+								<f:selectItem itemLabel="RN" itemValue="RN" />
+								<f:selectItem itemLabel="RS" itemValue="RS" />
+								<f:selectItem itemLabel="SE" itemValue="SE" />
+								<f:selectItem itemLabel="SC" itemValue="SC" />
+								<f:selectItem itemLabel="SP" itemValue="SP" />
+								<f:selectItem itemLabel="TO" itemValue="TO" />
+								<f:ajax event="blur" render="error_nome_unif" />
+							</p:selectOneMenu>
+							<p:message id="error_nome_unif" for="unif_sigla" display="icon" />
+
+							<h:outputLabel value="Município" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_municipio"
+								value="#{usuarioBean.endereco.municipio}" styleClass="input"
+								size="30" completeMethod="#{enderecoBean.autocompletemunicipio}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="m"
+								itemLabel="#{m}" itemValue="#{m}" required="true"
+								requiredMessage="INFORME O MUNICIPIO">
+								<f:ajax event="blur" render="error_municipio" />
+							</p:autoComplete>
+							<p:message id="error_municipio" for="end_municipio"
+								display="icon" />
+
+							<h:outputLabel value="Tipo Logradouro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:selectOneMenu id="end_tipo_logra"
+								value="#{usuarioBean.endereco.tipoLogradouro}"
+								styleClass="input" required="true"
+								requiredMessage="INFORME O TIPO DE LOGRADOURO"
+								style="width: 50px;">
+								<f:selectItem itemLabel="" itemValue="" />
+								<f:selectItem itemLabel="Av" itemValue="Av" />
+								<f:selectItem itemLabel="Br" itemValue="Br" />
+								<f:selectItem itemLabel="Rua" itemValue="Rua" />
+								<f:ajax event="blur" render="error_tipo" />
+							</p:selectOneMenu>
+							<p:message id="error_tipo" for="end_tipo_logra" display="icon" />
+
+							<h:outputLabel value="Logradouro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_logra"
+								value="#{usuarioBean.endereco.logradouro}" styleClass="input"
+								size="30"
+								completeMethod="#{enderecoBean.autocompletelogradouro}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="l"
+								itemLabel="#{l}" itemValue="#{l}" required="true"
+								requiredMessage="INFORME O LOGRADOURO">
+								<f:ajax event="blur" render="error_logradouro" />
+							</p:autoComplete>
+							<p:message id="error_logradouro" for="end_logra" display="icon" />
+
+							<h:outputLabel value="Número" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:inputText id="end_numero"
+								value="#{usuarioBean.endereco.numero}" style="width: 40px;"
+								required="true" requiredMessage="INFORME O NÚMERO"
+								validatorMessage="NÚMERO INVÁLIDO">
+								<f:ajax event="blur" render="error_numero" />
+							</p:inputText>
+							<p:message id="error_numero" for="end_numero" display="icon" />
+
+							<h:outputLabel value="Bairro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_bairro"
+								value="#{usuarioBean.endereco.bairro}" styleClass="input"
+								completeMethod="#{enderecoBean.autocompletebairro}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="b"
+								itemLabel="#{b}" itemValue="#{b}" size="30" required="true"
+								requiredMessage="INFORME O BAIRRO">
+								<f:ajax event="blur" render="error_bairro" />
+							</p:autoComplete>
+							<p:message id="error_bairro" for="end_bairro" display="icon" />
+
+							<h:outputLabel value="CEP" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:inputMask mask="99.999-999" id="end_cep"
+								value="#{usuarioBean.endereco.cep}" styleClass="input"
+								style="width: 100px;" required="true"
+								requiredMessage="INFORME O CEP">
+								<f:ajax event="blur" render="error_cep" />
+							</p:inputMask>
+							<p:message id="error_cep" for="end_cep" display="icon" />
+
+						</h:panelGrid>
+
+					</p:fieldset>
+					<br />
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{usuarioBean.addCliente}" value="OK"
+						ajax="false" icon="ui-icon-check" update="@form">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton action="index.xhtml?faces-redirect=true"
+						immediate="true" value="Cancelar" ajax="false"
+						icon="ui-icon-close">
+						<f:ajax render="@form" />
+					</p:commandButton>
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</div>
+
+			<h:graphicImage value="/resources/img/logoeditora.png"
+				style="float: left; opacity:0.65; -moz-opacity: 0.65; filter: alpha(opacity=65); width: 150px; " />
+			<div style="display: block;" align="center" />
+			<div id="rodape"
+				style="background: #394674; height: 20px; line-height: 20px; text-align: center;">
+				&copy; Copyright 2013 &nbsp; UFRR - Diretoria de Tecnologia da
+				Informação &nbsp;&nbsp; Layout UFRN - SIG &nbsp;&nbsp; Editora UFRR
+				(95)3621-3111 &nbsp; editora@ufrr.br</div>
+			<div style="display: block;" align="center" />
+
+		</div>
+
+	</h:form>
+
+
+
+</h:body>
+
+</html>

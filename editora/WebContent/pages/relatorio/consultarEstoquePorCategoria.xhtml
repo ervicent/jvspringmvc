@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Relatório > Estoque Por Categoria"
+				styleClass="title" style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>3}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_pesquisa_produto"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<fieldset style="border: 1px solid #A6C9E2; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="CONSULTAR ESTOQUE"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:focus context="produto" for="produto"
+						rendered="#{itemBean.box4Search == 1}" />
+
+					<h:panelGrid id="grid_pesquisa" columns="15" cellspacing="15">
+					
+<!-- 					ativado -->
+					<h:outputText value="Categoria" styleClass="OutPut" />	
+						<p:selectOneMenu style="width: 300px;" id="produto"
+							value="#{itemBean.produto.categoria}" converter="genericConverter" filterMatchMode="contains" filter="true"
+							required="true" requiredMessage="INFORME A CATEGORIA" styleClass="input"
+							rendered="#{empty itemBean.itens1}">
+							<f:selectItem itemValue="" itemLabel="" />	
+							<f:selectItems value="#{categoriaBean.categorias}" var="c"
+								itemLabel="#{c.nome}" itemValue="#{c}" />
+						</p:selectOneMenu>
+						
+<!-- 						desativado -->
+						<p:selectOneMenu style="width: 300px;" id="produto2"
+							value="#{itemBean.produto.categoria}" converter="genericConverter" styleClass="input" disabled="true"
+							rendered="#{not empty itemBean.produto.categoria and not empty itemBean.itens1}">
+							<f:selectItem itemValue="" itemLabel="" />	
+							<f:selectItems value="#{categoriaBean.categorias}" var="c"
+								itemLabel="#{c.nome}" itemValue="#{c}" />
+						</p:selectOneMenu>
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							rendered="#{empty itemBean.itens1 and itemBean.box4Search == 1}"
+							action="#{itemBean.getListaEstoqueByCategoria}" ajax="false"
+							icon="ui-icon-search" />
+
+						<p:commandButton value="Cancelar operação" id="cancelar"
+							rendered="#{not empty itemBean.itens1}" immediate="true"
+							action="consultarEstoquePorCategoria.xhtml?faces-redirect=true"
+							ajax="false" style="color: red;" icon="ui-icon-close" />
+
+					</h:panelGrid>
+
+					<fieldset
+						style="border: 1px solid #6A6A6A; border-top: 0; margin-left: 20px; margin-right: 20px;">
+
+						<div
+							style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="RESULTADO"
+								style="color: white; font-size: 12px;" styleClass="OutPut" />
+						</div>
+
+						<!-- 			grid com a lista de vendas			 		 -->
+						<p:dataTable id="dtable" var="item" value="#{itemBean.itens1}"
+							scrollable="true" scrollHeight="400"
+							emptyMessage="Nenhum produto encontrado"
+							rendered="#{not empty itemBean.itens1 and itemBean.item.id==null}"
+							rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+							rowIndexVar="rowIx">
+
+							<p:column width="100" id="isbn" headerText="isbn/código"
+								filterBy="#{item.produto.isbn}" filterMatchMode="exact"
+								filterMaxLength="13">
+								<h:outputText value="#{item.produto.isbn}" />
+							</p:column>
+
+							<p:column headerText="Produto" width="250"
+								filterBy="#{item.produto.nome}" filterMatchMode="contains">
+								<h:outputText value="#{item.produto.tipo.nome}: "
+									rendered="#{item.produto.tipo.id eq 1}" />
+								<h:outputText value="#{item.produto.nome}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="30" />
+								</h:outputText>
+								<h:outputText value="..."
+									rendered="#{item.produto.nome.length()>=31}" />
+							</p:column>
+
+							<p:column headerText="Lote" width="50" id="lote"
+								style="text-align: center;" filterStyle="max-width: 40px;"
+								filterBy="#{item.notaFiscal.lote}-#{item.notaFiscal.dataEntrada.weekYear}"
+								filterMatchMode="contains">
+								<h:outputText value="#{item.notaFiscal.lote}"
+									rendered="#{item.notaFiscal.lote!=null}" />-<h:outputText
+									value="#{item.notaFiscal.dataEntrada.time}"
+									rendered="#{item.notaFiscal.lote!=null}">
+									<f:convertDateTime pattern="yyyy" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Autor" width="200"
+								filterBy="#{item.produto.autor}" filterMatchMode="contains">
+								<h:outputText value="#{item.produto.autor}"
+									rendered="#{item.produto.autor!=null}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="30" />
+								</h:outputText>
+								<h:outputText value="..."
+									rendered="#{item.produto.autor.length()>=31}" />
+								<h:outputText value="NENHUM"
+									rendered="#{item.produto.autor==null}" />
+							</p:column>
+
+							<p:column headerText="Categoria" width="150"
+								filterBy="#{item.produto.categoria.nome}"
+								filterMatchMode="contains">
+								<h:outputText value="#{item.produto.categoria.nome}"
+									rendered="#{item.produto.categoria.nome!=null}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="22" />
+								</h:outputText>
+								<h:outputText value="..."
+									rendered="#{item.produto.categoria.nome.length()>=23}" />
+								<h:outputText value="NENHUM"
+									rendered="#{item.produto.categoria.nome==null}" />
+							</p:column>
+
+							<p:column headerText="qdt Atual" style="color: blue;" width="35">
+								<h:outputText value="#{item.quantidadeAtual}"
+									rendered="#{item.quantidadeAtual > item.produto.quantidadeMinima}" />
+								<h:outputText value="(#{item.quantidadeAtual2})"
+									style="color: #CD0000;"
+									rendered="#{item.produto.quantidadeMinima >= item.quantidadeAtual}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</fieldset>
+					<br />
+
+					<h:form rendered="#{itemBean.item.id!=null}">
+
+						<!-- 			aqui renderização dos dados da venda -->
+						<br />
+						<br />
+
+						<!-- 			Lista dos produtos da venda -->
+						<br />
+						<br />
+						<div
+							style="background: #A6C9E2; align-top: center; margin-left: 10px; margin-right: 70px; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="PRODUTOS"
+								style="color: #394674; font-size: 12px;" styleClass="OutPut" />
+						</div>
+
+						<br /><br />
+
+						<div style="background: #C4D2EB; height: 28px;" align="center">
+
+							<p:commandButton action="consultarEstoquePorProduto.xhtml"
+								style="color: none;" value="Voltar" ajax="false"
+								update=":form_pesquisa_produto:dtable"
+								icon="ui-icon-arrowthick-1-w" immediate="true"
+								rendered="#{vendaBean.venda.id!=null}" />
+							&nbsp;&nbsp;
+						</div>
+					</h:form>
+
+				</fieldset>
+
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+</html>

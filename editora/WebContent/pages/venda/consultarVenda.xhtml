@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Pesquisar > Venda" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>3}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_pesquisa_venda"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="CONSULTAR VENDA" rendered="#{vendaBean.box4Search!=2}"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+							<h:outputText value="CONSULTAR RETIRADA DE CAPITAL" rendered="#{vendaBean.box4Search==2}"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:focus context="data" for="data"
+						rendered="#{notaFiscalBean.notaFiscal.id==null}" />
+
+					<h:panelGrid id="grid_pesquisa" columns="5" cellspacing="15"
+						rendered="#{vendaBean.venda.id==null}">
+
+						<p:selectOneRadio value="#{vendaBean.box4Search}"
+							rendered="#{vendaBean.venda.id==null}" styleClass="OutPut"
+							style="width: 230px;">
+							<f:selectItem itemLabel="Filtrar venda por data" itemValue="1" />
+							<f:selectItem itemLabel="Consultar retirada de capital" itemValue="2" />
+							<f:ajax render="form_pesquisa_venda" />
+						</p:selectOneRadio>
+						
+						<p:calendar value="#{vendaBean.venda.dataVenda.time}"
+							rendered="#{vendaBean.box4Search == 1}" size="25" id="data"
+							validatorMessage="Somente numeros"
+							converterMessage="Data inválida" locale="pt_BR"
+							pattern="dd/MM/yyyy" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							rendered="#{vendaBean.box4Search == 1}"
+							action="#{vendaBean.getVendaByData}" ajax="false"
+							icon="ui-icon-search" />
+							
+						<p:commandButton value="Cancelar" id="botaoCancelar" style="color: red;"
+							rendered="#{vendaBean.box4Search==2 or vendaBean.box4Search==1}"
+							action="consultarVenda.xhtml?faces-redirect-true" ajax="false"
+							icon="ui-icon-close" />	
+
+					</h:panelGrid>
+
+					<!-- 			grid com a lista de vendas			 		 -->
+					<p:dataTable id="dtable" var="v" value="#{vendaBean.caixaEntrada}"
+						paginator="true" paginatorPosition="bottom" rows="15"
+						emptyMessage="Nenhuma venda encontrada"
+						rendered="#{vendaBean.venda.id==null and vendaBean.box4Search!=2}"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx">
+
+						<p:column headerText="Vendedor" filterBy="#{v.vendedor.nome}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{v.vendedor.nome}" styleClass="OutPut" />
+						</p:column>
+
+						<p:column headerText="Cliente" filterBy="#{v.cliente.nome}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{v.cliente.nome}"
+								rendered="#{v.cliente.id!=1}" styleClass="OutPut" />
+							<h:outputLabel value="NÃO IDENTIFICADO"
+								rendered="#{v.cliente.id==1}" style="color: #8B0000;"
+								styleClass="OutPut" />
+						</p:column>
+
+						<p:column headerText="Data" style="text-align: center;">
+							<h:outputLabel value="#{v.dataVenda.time}" styleClass="OutPut">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="Valor">
+							<h:outputLabel value="#{v.valorTotalDesconto}"
+								styleClass="OutPut">
+								<f:convertNumber type="currency" currencySymbol="R$"
+									locale="pt_BR" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column>
+							<p:commandLink update=":form_pesquisa_venda"
+								title="Detalhar dados da venda">
+								<h:outputText styleClass="ui-icon ui-icon-circle-check"
+									title="Detalhar" style="margin:0 auto;" />
+								<f:setPropertyActionListener value="#{v}"
+									target="#{vendaBean.venda}" />
+							</p:commandLink>
+						</p:column>
+
+					</p:dataTable>
+					
+					<!-- 			grid com a lista de retiradas			 		 -->
+					<p:dataTable id="dt_retirada" var="v" value="#{vendaBean.caixaSaida}"
+						paginator="true" paginatorPosition="bottom" rows="15"
+						emptyMessage="Nao encontrado"
+						rendered="#{vendaBean.venda.id==null and vendaBean.box4Search==2}"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx">
+
+						<p:column headerText="Usuário" filterBy="#{v.vendedor.nome}"
+							filterMatchMode="contains">
+							<h:outputLabel value="#{v.vendedor.nome}" styleClass="OutPut" />
+						</p:column>
+
+						<p:column headerText="Data" style="text-align: center;">
+							<h:outputLabel value="#{v.dataVenda.time}" styleClass="OutPut">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column headerText="Valor">
+							<h:outputLabel value="#{v.valorTotalDesconto}"
+								styleClass="OutPut">
+								<f:convertNumber type="currency" currencySymbol="R$"
+									locale="pt_BR" />
+							</h:outputLabel>
+						</p:column>
+						
+<!-- 						<p:column headerText="Motivo"> -->
+<!-- 							<h:outputLabel value="Doação" rendered="#{v.tituloObs==3}" styleClass="OutPut" /> -->
+<!-- 							<h:outputLabel value="Roubo" rendered="#{v.tituloObs==4}" styleClass="OutPut" /> -->
+<!-- 							<h:outputLabel value="Troca" rendered="#{v.tituloObs==5}" styleClass="OutPut" /> -->
+<!-- 							<h:outputLabel value="Venda com desconto" rendered="#{v.tituloObs==6}" styleClass="OutPut" /> -->
+<!-- 							<h:outputLabel value="Venda com valor de custo" rendered="#{v.tituloObs==7}" styleClass="OutPut" /> -->
+<!-- 							<h:outputLabel value="Devolução para fornecedor/editora" rendered="#{v.tituloObs==8}" styleClass="OutPut" /> -->
+<!-- 						</p:column> -->
+												
+						<p:column headerText="Justificativa">
+							<h:outputLabel value="#{v.obs}" styleClass="OutPut" />
+						</p:column>
+
+					</p:dataTable>
+
+					<h:form rendered="#{vendaBean.venda.id!=null}">
+
+						<!-- 			aqui renderização dos dados da venda -->
+						<br />
+						<br />
+						<p:panel header="Dados da Venda"
+							style="width: 92%; margin-left: 10px;"
+							rendered="#{vendaBean.venda.id!=null}">
+
+							<h:panelGrid id="grid" columns="3">
+
+								<h:outputLabel value="Vendedor: " styleClass="OutPut"
+									style="color: #8B0000;" />
+								<h:outputLabel value="#{vendaBean.venda.vendedor.nome}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputLabel value="Cliente: " styleClass="OutPut"
+									style="color: #8B0000;" />
+								<h:outputLabel value="#{vendaBean.venda.cliente.nome}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputLabel value="Data: " styleClass="OutPut"
+									style="color: #8B0000;" />
+								<h:outputLabel value="#{vendaBean.venda.dataVenda.time}"
+									styleClass="OutPut">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+								<br />
+								<br />
+
+								<h:outputLabel value="Forma de pagamento: " styleClass="OutPut"
+									style="color: #8B0000;" />
+								<h:outputLabel value="à vista"
+									rendered="#{vendaBean.venda.formaPagamento==1}"
+									styleClass="OutPut" />
+								<h:outputLabel
+									value="cartão(crédito) - Parcela(s): #{vendaBean.venda.quantidadeParcela}"
+									rendered="#{vendaBean.venda.formaPagamento==2 and vendaBean.venda.quantidadeParcela!=0}"
+									styleClass="OutPut" />
+								<h:outputLabel value="cartão(crédito) - Parcela(s): 0"
+									rendered="#{vendaBean.venda.formaPagamento==2 and vendaBean.venda.quantidadeParcela==0}"
+									styleClass="OutPut" />
+								<h:outputLabel value="cartão(débito)"
+									rendered="#{vendaBean.venda.formaPagamento==3}"
+									styleClass="OutPut" />
+								<h:outputLabel value="cheque(à vista)"
+									rendered="#{vendaBean.venda.formaPagamento==4}"
+									styleClass="OutPut" />
+								<h:outputLabel value="cheque(pré datado)"
+									rendered="#{vendaBean.venda.formaPagamento==5}"
+									styleClass="OutPut" />
+								<h:outputLabel value="depósito bancário"
+									rendered="#{vendaBean.venda.formaPagamento==6}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputLabel value="Valor Pago: " styleClass="OutPut"
+									style="color: #8B0000;" />
+								<h:outputLabel value="#{vendaBean.venda.valorTotalDesconto}"
+									styleClass="OutPut">
+									<f:convertNumber type="currency" currencySymbol="R$"
+										locale="pt_BR" />
+								</h:outputLabel>
+								<br />
+								<br />
+
+								<h:outputLabel value="Obs: "
+									rendered="#{vendaBean.venda.tituloObs!=0}" styleClass="OutPut"
+									style="color: #8B0000;" />
+								<h:outputLabel value="Defeito"
+									rendered="#{vendaBean.venda.tituloObs==2}" styleClass="OutPut" />
+								<h:outputLabel value="Doação"
+									rendered="#{vendaBean.venda.tituloObs==3}" styleClass="OutPut" />
+								<h:outputLabel value="Roubo"
+									rendered="#{vendaBean.venda.tituloObs==4}" styleClass="OutPut" />
+								<h:outputLabel value="Troca"
+									rendered="#{vendaBean.venda.tituloObs==5}" styleClass="OutPut" />
+								<h:outputLabel value="Venda com desconto"
+									rendered="#{vendaBean.venda.tituloObs==6}" styleClass="OutPut" />
+								<h:outputLabel value="Venda com valor de custo"
+									rendered="#{vendaBean.venda.tituloObs==7}" styleClass="OutPut" />
+								<h:outputLabel value="Devolução para fornecedor/editora"
+									rendered="#{vendaBean.venda.tituloObs==8}" styleClass="OutPut" />	
+								<br />
+								<br />
+								
+								<h:outputLabel value="Complemento: " styleClass="OutPut"
+									style="color: #8B0000;" rendered="#{vendaBean.venda.tituloObs!=0}" />
+								<h:outputLabel value="#{vendaBean.venda.obs}"
+									rendered="#{vendaBean.venda.obs!=null}" styleClass="OutPut" />
+								<br />
+								<br />
+
+							</h:panelGrid>
+
+						</p:panel>
+
+						<!-- 			Lista dos produtos da venda -->
+						<br />
+						<br />
+						<div style="background: #A6C9E2; align-top: center; margin-left: 10px; margin-right: 70px; height: 20px; line-height: 20px;" align="center">
+							<h:outputText value="PRODUTOS"
+								style="color: #394674; font-size: 12px;" styleClass="OutPut" />
+						</div>
+
+						<fieldset
+							style="border-color: #A6C9E2; margin-left: 10px; margin-right: 70px; border: 1px solid #A6C9E2; border-top: 0;">
+
+							<p:dataTable value="#{vendaBean.venda.itensVendas}" var="v"
+								styleClass="dados2" rowClasses="impar, par" id="itens"
+								rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+								rowIndexVar="rowIx" emptyMessage="adicione o(s) produto()">
+
+								<p:column width="50">
+									<f:facet name="header">isbn/código</f:facet>
+									<h:outputLabel value="#{v.item.produto.isbn}" />
+								</p:column>
+
+								<p:column>
+									<f:facet name="header">produto</f:facet>
+									<h:outputLabel value="#{v.item.produto.tipo.nome}: "
+										rendered="#{v.item.produto.tipo.id eq 1}" />
+									<h:outputLabel value="#{v.item.produto.nome}" />
+								</p:column>
+
+								<p:column style="text-align: center;">
+									<f:facet name="header">lote</f:facet>
+									<h:outputLabel value="#{v.item.notaFiscal.lote}" />
+								</p:column>
+
+								<p:column style="text-align: center;" width="15">
+									<f:facet name="header">qtd</f:facet>
+									<h:outputLabel value="#{v.quantidade}" />
+								</p:column>
+
+								<p:column width="50">
+									<f:facet name="header">vl. unit</f:facet>
+									<h:outputLabel value="#{v.item.valorVenda}">
+										<f:convertNumber type="currency" currencySymbol="R$"
+											locale="pt_BR" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column width="50" style="text-align: center;">
+									<f:facet name="header">sub total</f:facet>
+									<h:outputText value="#{v.total}">
+										<f:convertNumber type="currency" currencySymbol="R$"
+											locale="pt_BR" />
+									</h:outputText>
+								</p:column>
+
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column colspan="5" footerText="Valor Total"
+											style="text-align:right" />
+
+										<p:column>
+											<f:facet name="footer">
+												<h:outputText value="#{vendaBean.valorTotalProdutos}">
+													<f:convertNumber type="currency" currencySymbol="R$"
+														locale="pt_BR" />
+												</h:outputText>
+											</f:facet>
+										</p:column>
+
+									</p:row>
+
+									<p:row>
+										<p:column colspan="5" footerText="Valor com Desconto"
+											style="color: #8B0000; font-size: 12px; text-align:right" />
+
+										<p:column>
+											<f:facet name="footer">
+												<h:outputText value="#{vendaBean.venda.valorTotalDesconto}"
+													styleClass="OutPut"
+													style="color: #8B0000; font-size: 12px;">
+													<f:convertNumber type="currency" currencySymbol="R$"
+														locale="pt_BR" />
+												</h:outputText>
+											</f:facet>
+										</p:column>
+
+									</p:row>
+								</p:columnGroup>
+
+							</p:dataTable>
+
+						</fieldset>
+						<br />
+						<br />
+
+						<div style="background: #C4D2EB; height: 28px;" align="center">
+
+							<p:commandButton
+								action="consultarVenda.xhtml?faces-redirect=true"
+								style="color: none;" value="Voltar" ajax="false"
+								update=":form_pesquisa_venda:dtable"
+								icon="ui-icon-arrowthick-1-w" immediate="true"
+								rendered="#{vendaBean.venda.id!=null}" />
+							&nbsp;&nbsp;
+
+							<p:commandButton style="color: red;"
+								oncomplete="confirmation2.show()" value="Desativar Venda"
+								icon="ui-icon-close" immediate="true"
+								rendered="#{vendaBean.venda.id!=null and loginBean.usuario.perfil.id == 1}" />
+						</div>
+					</h:form>
+
+				</fieldset>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<p:confirmDialog id="confirmDialog2"
+			message="Deseja desativar está venda" severity="alert"
+			widgetVar="confirmation2">
+			<h:form id="form_bt2">
+
+				<div align="center">
+
+					<p:commandButton id="confirm" value="Sim"
+						onclick="confirmation2.hide()"
+						action="#{vendaBean.desativarVenda}"
+						update=":form_pesquisa_venda:dtable" />
+
+					<p:commandButton id="decline" value="Não"
+						onclick="confirmation2.hide()" type="button" />
+
+				</div>
+
+			</h:form>
+
+		</p:confirmDialog>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+</html>

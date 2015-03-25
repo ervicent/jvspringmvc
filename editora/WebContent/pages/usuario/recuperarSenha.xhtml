@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Editora UFRR</title>
+	<h:outputStylesheet name="leo.css" library="css" />
+	<link rel="shortcut icon" href="/editora/resources/img/favicon.ico" />
+	<h:outputScript name="locale.js" library="js" />
+</h:head>
+
+<h:body styleClass="shadow">
+	<h:form id="form">
+
+		<div style="background: white;" align="center">
+
+			<div
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: left;">
+				<h:form>
+					<h:outputText value="UFRR - DTI - "
+						style="margin-left: 10px; font-size: 15px; font-weight: bold; color: white;" />
+					<h:outputText value="Sistema de Vendas Editora"
+						style="color: white; font-size: 13px;" />
+
+				</h:form>
+
+			</div>
+
+			<div id="rodape2" />
+
+			<div style="background: #C4D2EB; height: 60px; width: 95%">
+				<a href="http://cecomp.ufrr.br/" target="_blank"> <p:graphicImage
+						value="/resources/img/DTI100px.png"
+						style="float: left; text-align: left; width: 90px;" />
+				</a> <a href="http://www.ufrr.br" target="_blank"> <p:graphicImage
+						value="/resources/img/brasao.png"
+						style="float: right; text-align: right; width: 66px;" />
+				</a>
+			</div>
+
+			<div style="background: #EFF3FA; height: 60px; width: 95%"
+				align="center">
+
+				<br />
+				<h:outputLabel value="Atenção!"
+					style="color: red; font-weight: bold;" />
+				<br />
+				<h:outputLabel
+					value="Ao preencher os dados o sistema enviará um email com seu login e senha corretos" />
+			</div>
+
+			<div class="Centralizar"
+				style="width: 95%; text-align: center; float: center;"
+				align="center">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="RECUPERAR ACESSO"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-bottom: white; border-top: white;">
+					<br />
+					<br />
+
+					<h:panelGrid id="grid" columns="5" style="margin-left: 40%;">
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<br />
+						<p:focus context="grid" for="cpf" />
+
+						<h:outputLabel value="CPF" for="cpf" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputMask id="cpf" value="#{loginBean.usuario.cpf}"
+							style="width: 134px;" mask="999.999.999-99" styleClass="input"
+							required="true" requiredMessage="INFORME O CPF CORRETAMENTE"
+							validatorMessage="CPF INVÁLIDO">
+							<f:ajax event="change" />
+						</p:inputMask>
+						<br />
+						<br />
+						<br />
+						<br />
+
+					</h:panelGrid>
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{loginBean.esqueceuSenha}" value="OK"
+						ajax="false" icon="ui-icon-check" update="@form">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton action="/index.xhtml?faces-redirect=true"
+						immediate="true" value="Cancelar" ajax="false"
+						icon="ui-icon-close">
+						<f:ajax render="@form" />
+					</p:commandButton>
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="msg" autoUpdate="true" />
+				</div>
+
+			</div>
+
+			<p:ajaxStatus>
+				<f:facet name="start">
+					<h:graphicImage value="/resources/img/aguarde.gif" width="150" />
+				</f:facet>
+
+				<f:facet name="complete">
+					<h:outputText value="" />
+				</f:facet>
+			</p:ajaxStatus>
+
+			<h:graphicImage value="/resources/img/logoeditora.png"
+				style="float: left; opacity:0.65; -moz-opacity: 0.65; filter: alpha(opacity=65);" />
+
+			<div style="width: 95%; display: block;" align="center" />
+			<div id="rodape3"
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: center;">
+				&copy; Copyright 2013 &nbsp;&nbsp; UFRR - DTI - CSI</div>
+
+		</div>
+
+	</h:form>
+
+
+
+</h:body>
+
+</html>

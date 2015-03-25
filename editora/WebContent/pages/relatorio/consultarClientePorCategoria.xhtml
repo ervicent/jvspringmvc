@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Relatorio > Cliente Por Categoria"
+				styleClass="title" style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+
+			<h:form id="form_acesso1"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="RELATÓRIO DE CLIENTE POR CATEGORIA"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:focus context="categoria" for="categoria" />
+
+					<h:panelGrid id="grid_pesquisa" columns="5" cellspacing="15">
+
+						<h:outputLabel value="Informe a categoria" styleClass="OutPut" />
+
+						<p:selectOneMenu style="width: 200px;" id="categoria"
+							value="#{usuarioBean.usuario.preferencia}"
+							converter="genericConverter" required="true"
+							requiredMessage="INFORME A PREFERENCIA DE CATEGORIA"
+							styleClass="input">
+							<f:selectItem itemValue="" itemLabel="" noSelectionOption="true" />
+							<f:selectItems value="#{categoriaBean.categorias}" var="c"
+								itemLabel="#{c.nome}" itemValue="#{c}" />
+							<f:ajax event="change" />
+						</p:selectOneMenu>
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							action="#{usuarioBean.getCategoria}" ajax="false"
+							icon="ui-icon-search" />
+							
+						<p:commandButton value="Emitir relatório" id="emitir" immediate="true"
+							action="relatorioClientePorCategoria.xhtml?faces-redirect=true" ajax="false"
+							icon="ui-icon-print" />	
+
+					</h:panelGrid>
+					<br />
+
+
+					<fieldset
+						style="border: 1px solid #6A6A6A; border-top: 0; margin-left: 20px; margin-right: 20px;">
+
+						<div
+							style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="RESULTADO"
+								style="color: white; font-size: 12px;" styleClass="OutPut" />
+				
+							<h:outputText value=" - #{usuarioBean.usuario.preferencia.nome}"
+								style="color: white; font-size: 12px;" styleClass="OutPut" rendered="#{not empty usuarioBean.usuariosEmpty}" />		
+						</div>
+
+						<p:dataTable id="dtable" var="usuario" value="#{usuarioBean.usuariosEmpty}"
+							emptyMessage="Não encontrado"
+							rendered="#{not empty usuarioBean.usuariosEmpty}">	
+
+							<p:column headerText="Nome">
+								<h:outputText value="#{usuario.nome}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="33" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="CPF">
+								<h:outputText value="#{usuario.cpf}"
+									rendered="#{usuario.cpf!=null}" />
+								<h:outputText value="NENHUM" rendered="#{usuario.cpf==null}" />
+							</p:column>
+
+							<p:column headerText="Cod.">
+								<h:outputText value="#{usuario.id}" />
+							</p:column>
+
+							<p:column headerText="Nascimento">
+								<h:outputText value="#{usuario.nascimento}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Tel. 1">
+								<h:outputText value="#{usuario.telefone1}"
+									rendered="#{usuario.telefone1!=null}" />
+								<h:outputText value="NENHUM"
+									rendered="#{usuario.telefone1==null}" />
+							</p:column>
+
+							<p:column headerText="Tel. 2">
+								<h:outputText value="#{usuario.telefone2}"
+									rendered="#{usuario.telefone2!=null}" />
+								<h:outputText value="NENHUM"
+									rendered="#{usuario.telefone2==null}" />
+							</p:column>
+
+							<p:column headerText="Vinculo UFRR">
+								<h:outputText value="#{usuario.universitario}"
+									rendered="#{usuario.universitario!=null}" />
+								<h:outputText value="NENHUM"
+									rendered="#{usuario.universitario==null}" />
+							</p:column>
+
+							<p:column headerText="Email">
+								<h:outputText value="#{usuario.login}"
+									rendered="#{usuario.login!=null}" />
+								<h:outputText value="NENHUM" rendered="#{usuario.login==null}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</fieldset>
+					<br />
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+
+					<p:commandButton
+						action="#{relatorioBean.relatorioClienteCategoria}"
+						value="Gerar Relatorio" ajax="false" icon="ui-icon-print"
+						rendered="#{not empty usuarioBean.usuariosE}">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton action="consultarClientePorCategoria.xhtml"
+						value="Cancelar" ajax="false" icon="ui-icon-close"
+						immediate="true" rendered="#{not empty usuarioBean.usuariosE}" />
+
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+
+</ui:composition>
+</html>

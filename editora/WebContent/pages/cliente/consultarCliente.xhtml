@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Pesquisar > Cliente" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<!-- 			acesso administrador e gerente		 -->
+			<h:form id="form_acesso1"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="CLIENTES CADASTRADOS"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:focus context="autocompletePesquisar"
+						for="autocompletePesquisar" />
+					<p:focus context="maskcpf" for="maskcpf" />
+					<p:focus context="codigo" for="codigo" />
+
+					<h:panelGrid id="grid_pesquisa" columns="5" cellspacing="15">
+
+						<p:selectOneRadio value="#{usuarioBean.box4Search}"
+							styleClass="OutPut" style="width: 80px;">
+							<f:selectItem itemLabel="Código" itemValue="3" id="id" />
+							<f:selectItem itemLabel="CPF" itemValue="2" id="cpf" />
+							<f:selectItem itemLabel="Nome" itemValue="1" id="nome" />
+							<f:ajax render="form_acesso1" />
+						</p:selectOneRadio>
+
+						<p:autoComplete value="#{usuarioBean.search}"
+							completeMethod="#{usuarioBean.autocomplete}" var="f"
+							itemValue="#{f}" itemLabel="#{f}" minQueryLength="11"
+							maxResults="5" queryDelay="30" id="autocompletePesquisar"
+							size="60" rendered="#{usuarioBean.box4Search == 1}" />
+
+						<p:inputMask mask="999.999.999-99" value="#{usuarioBean.search}"
+							rendered="#{usuarioBean.box4Search == 2}" size="60" id="maskcpf" />
+
+						<p:inputText value="#{usuarioBean.usuario.id}"
+							rendered="#{usuarioBean.box4Search == 3}" size="60" id="codigo" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							action="#{usuarioBean.getListarClientes}" ajax="false"
+							icon="ui-icon-search" rendered="#{usuarioBean.box4Search != 3}" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar2"
+							action="#{usuarioBean.getClienteById}" ajax="false"
+							icon="ui-icon-check" rendered="#{usuarioBean.box4Search == 3}" />
+
+					</h:panelGrid>
+					<br />
+
+					<p:dataGrid id="grid_dados" var="usuario"
+						value="#{usuarioBean.clientesCadastrados}" columns="3" rows="6"
+						paginator="true" paginatorPosition="bottom"
+						emptyMessage="Não encontrado">
+
+						<p:panel header="#{usuario.nome} - #{usuario.id}"
+							style="text-align:center" footer="CPF: #{usuario.cpf}">
+							<h:panelGrid columns="1" style="width:100%">
+
+								<h:outputText value="Email: #{usuario.login}"
+									rendered="#{usuario.login!=''}" />
+								<h:outputText value="Email: Sem Email"
+									rendered="#{usuario.login==''}" style="color: red;" />
+
+								<h:outputText value="Data de Nascimento"
+									rendered="#{usuario.nascimento!=null}" />
+								<h:outputText value="#{usuario.nascimento}"
+									rendered="#{usuario.nascimento!=null}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<h:outputText value="Sem Data de Nascimento"
+									rendered="#{usuario.nascimento==null}" style="color: red;" />
+
+								<h:outputText value="Cliente desde" />
+								<h:outputText value="#{usuario.data.time}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<h:outputText value="Vinculo com UFRR: #{usuario.universitario}"
+									rendered="#{usuario.universitario!=''}" />
+								<h:outputText value="Vinculo com UFRR: NENHUM"
+									rendered="#{usuario.universitario=='' or usuario.universitario!=null}" />
+
+								<h:outputText
+									value="Contato: #{usuario.telefone1}  #{usuario.telefone2}"
+									rendered="#{usuario.telefone1 != ''}" />
+
+								<h:outputText value="Contato: NENHUM"
+									rendered="#{usuario.telefone1==''}" />
+
+								<h:outputText
+									value="Preferencia por categoria: #{usuario.preferencia.nome}"
+									rendered="#{usuario.preferencia.nome!=null}" />
+
+								<h:outputText value="Preferencia por categoria: NENHUM"
+									rendered="#{usuario.preferencia.nome==null}" />
+
+								<p:commandLink update=":form_dlg:display"
+									oncomplete="dlgEnd.show()" title="Detalhar">
+									<h:outputText styleClass="ui-icon ui-icon-circle-check"
+										style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{usuario}"
+										target="#{usuarioBean.usuario}" />
+								</p:commandLink>
+								<p:separator
+									rendered="#{usuario.cpf=='' or usuario.login==null or usuario.endereco.logradouro==null}" />
+								<h:outputText value="Cliente sem CPF"
+									rendered="#{usuario.cpf==''}" style="color: red;" />
+								<h:outputText value="Cliente sem Email"
+									rendered="#{usuario.login==''}" style="color: red;" />
+								<h:outputText value="Cliente sem Contato Telefonico"
+									rendered="#{usuario.telefone1==''}" style="color: red;" />
+								<h:outputText value="Cliente sem Data de Nascimento"
+									rendered="#{usuario.nascimento.time==null}" style="color: red;" />
+								<h:outputText value="Cliente sem Endereço"
+									rendered="#{usuario.endereco.logradouro==null}"
+									style="color: red;" />
+
+								<h:outputText value="Atualize os dados do cliente 'urgente'"
+									rendered="#{usuario.cpf==''}" style="color: brown;" />
+
+
+
+							</h:panelGrid>
+						</p:panel>
+
+					</p:dataGrid>
+
+				</fieldset>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+			<p:dialog header="Endereço" modal="true" resizable="false"
+				showEffect="fade" hideEffect="fade" widgetVar="dlgEnd">
+				<h:form id="form_dlg">
+
+					<h:panelGrid id="display" columns="2" cellspacing="10">
+
+						<p:panel header="Cliente: #{usuarioBean.usuario.nome}">
+							<br />
+
+							<h:outputLabel value="Estado: " for="estado" styleClass="OutPut" />
+							<h:outputText id="estado"
+								value="#{usuarioBean.usuario.endereco.unidade}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Município: " for="muni" styleClass="OutPut" />
+							<h:outputText id="muni"
+								value="#{usuarioBean.usuario.endereco.municipio}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Logradouro: " for="logra"
+								styleClass="OutPut" />
+							<h:outputText id="tipologra"
+								value="#{usuarioBean.usuario.endereco.tipoLogradouro} "
+								styleClass="OutPut" />
+							<h:outputText id="logra"
+								value="#{usuarioBean.usuario.endereco.logradouro}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Número: " for="nu" styleClass="OutPut" />
+							<h:outputText id="nu"
+								value="#{usuarioBean.usuario.endereco.numero}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Bairro: " for="bairro" styleClass="OutPut" />
+							<h:outputText id="bairro"
+								value="#{usuarioBean.usuario.endereco.bairro}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Complemento: " for="compl"
+								styleClass="OutPut" />
+							<h:outputText id="compl"
+								value="#{usuarioBean.usuario.endereco.complemento}"
+								styleClass="OutPut"
+								rendered="#{usuarioBean.usuario.endereco.complemento != null}" />
+							<h:outputText id="compl2" value="NENHUM" styleClass="OutPut"
+								rendered="#{usuarioBean.usuario.endereco.complemento == null}" />
+							<br />
+							<br />
+
+							<h:outputLabel value="CEP: " for="cep" styleClass="OutPut" />
+							<h:outputText id="cep"
+								value="#{usuarioBean.usuario.endereco.cep}" styleClass="OutPut"
+								rendered="#{usuarioBean.usuario.endereco.cep!=null}" />
+							<h:outputText id="cep2" value="NÃO CADASTRADO"
+								styleClass="OutPut"
+								rendered="#{usuarioBean.usuario.endereco.cep==null}" />
+
+						</p:panel>
+					</h:panelGrid>
+
+				</h:form>
+			</p:dialog>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+
+</ui:composition>
+</html>

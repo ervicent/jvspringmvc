@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="header">
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Mensagem > Enviar e-mail" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_enviar_email"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="ENVIAR EMAIL"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0;">
+
+					<br /> <br />
+
+					<h:outputLabel value="Para: " styleClass="OutPut"
+						style="margin-left: 12px;" />
+					<h:outputLabel id="destinatario"
+						value="#{emailBean.email.destino.login}" styleClass="OutPut"
+						style="margin-left: 45px;" />
+					<br />
+					<br />
+
+					<h:panelGrid id="gridMail" columns="5">
+
+						<h:outputLabel value="Título" styleClass="OutPut"
+							style="margin-left: 10px;" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputText id="titulo" value="#{emailBean.email.titulo}"
+							size="75" required="true" requiredMessage="INFORME O TITULO"
+							styleClass="input">
+							<p:ajax event="blur" render="error_titulo" />
+						</p:inputText>
+						<p:message id="error_titulo" for="titulo" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Mensagem" styleClass="OutPut"
+							style="margin-left: 10px;" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputTextarea id="msg" value="#{emailBean.email.mensagem}"
+							cols="150" autoResize="true" rows="10" required="true"
+							requiredMessage="ESCREVA A MENSAGEM" styleClass="input">
+							<p:ajax event="blur" render="error_msg" />
+						</p:inputTextarea>
+						<p:message id="error_msg" for="msg" />
+						<br />
+						<br />
+
+					</h:panelGrid>
+					<br />
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{emailBean.enviar}" value="Enviar e-mail"
+						ajax="false" icon="ui-icon-mail-closed" update="gridMail">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton
+						action="/pages/email/enviarEmail.xhtml?faces-redirect=true"
+						value="Apagar" icon="ui-icon-pencil" immediate="true" />
+					&nbsp;
+
+					<p:commandButton action="#{loginBean.redirect}" value="Cancelar"
+						icon="ui-icon-close" immediate="true" />
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" id="msgs" />
+				</div>
+
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<h:graphicImage value="/resources/img/aguarde.gif" width="150" />
+					</f:facet>
+
+					<f:facet name="complete">
+						<h:outputText value="" />
+					</f:facet>
+				</p:ajaxStatus>
+
+			</h:form>
+
+			<!-- 			Dialog para destinatário -->
+
+			<p:dialog header="Clique no email para identificar o destino"
+				widgetVar="dlgMsg" resizable="false" modal="true" visible="true"
+				closable="false" rendered="#{emailBean.email.destino==null}"
+				showEffect="fold" hideEffect="fold">
+				<h:form>
+					<p:dataTable value="#{usuarioBean.clientes}" var="usuario"
+						id="tb_usuarios" paginator="true" rows="15"
+						paginatorPosition="bottom" emptyMessage="Não encontrado">
+
+						<p:column headerText="Código" filterBy="#{usuario.id}"
+							filterMatchMode="exact">
+							<h:commandLink value="#{usuario.id}" onclick="dlgMsg.hide()"
+								id="link_id">
+								<f:setPropertyActionListener target="#{emailBean.email.destino}"
+									value="#{usuario}" />
+							</h:commandLink>
+						</p:column>
+
+						<p:column headerText="Nome" filterBy="#{usuario.nome}"
+							filterMatchMode="contains">
+							<h:commandLink value="#{usuario.nome}" onclick="dlgMsg.hide()"
+								id="link_nome">
+								<f:setPropertyActionListener target="#{emailBean.email.destino}"
+									value="#{usuario}" />
+							</h:commandLink>
+						</p:column>
+
+						<p:column headerText="e-mail" filterBy="#{usuario.login}"
+							filterMatchMode="contains">
+							<h:commandLink value="#{usuario.login}" onclick="dlgMsg.hide()"
+								id="link_email">
+								<f:setPropertyActionListener target="#{emailBean.email.destino}"
+									value="#{usuario}" />
+							</h:commandLink>
+						</p:column>
+
+					</p:dataTable>
+
+					<div align="left">
+						<p:messages autoUpdate="true" id="msgs" />
+					</div>
+					<br />
+
+					<p:commandLink action="#{loginBean.redirect}">
+						<p:graphicImage value="/resources/img/inicio.png"
+							style="cursor: pointer; margin-top: 5px;" styleClass="acende" />
+					</p:commandLink>
+				</h:form>
+
+			</p:dialog>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

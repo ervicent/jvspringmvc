@@ -1,0 +1,224 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Usuário > Reativar Acesso" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>=3}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<!-- 			Apenas para acesso administrador		 -->
+			<h:form id="form_acesso1"
+				rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id==2}">
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="REATIVAR ACESSO DE USUÁRIO"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:dataTable id="list" value="#{usuarioBean.usuariosDesativados}"
+						rendered="#{loginBean.usuario.perfil.id==1}" var="u"
+						emptyMessage="Nenhuma usuário desativado no momento"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx">
+
+						<p:column headerText="ID">
+							<h:outputText value="#{u.id}" />
+						</p:column>
+
+						<p:column headerText="Nome">
+							<h:outputText value="#{u.nome}" />
+						</p:column>
+
+						<p:column headerText="Email">
+							<h:outputText value="#{u.login}" />
+						</p:column>
+
+						<p:column style="text-align: center;" headerText="Telefone">
+							<h:outputText value="#{u.telefone1}" />
+						</p:column>
+
+						<p:column headerText="Vinculo UFRR">
+							<h:outputText value="#{u.universitario}" />
+						</p:column>
+
+						<p:column headerText="Local de Trabalho">
+							<h:outputText value="#{u.localTrabalho}" />
+						</p:column>
+
+						<p:column headerText="Perfil">
+							<h:outputText value="#{u.perfil.perfil}" />
+						</p:column>
+
+						<p:column style="float: center; text-align: center;" width="30">
+							<f:facet name="header">
+								<h:outputText value="" />
+							</f:facet>
+							<p:commandLink onclick="dlgAtivar2.show()"
+								update=":form_ativar_gerente:display2" icon="ui-icon-check"
+								title="Reativar acesso">
+								<h:outputText styleClass="ui-icon ui-icon-circle-check"
+									title="Reativar usuário" style="margin:0 auto;" />
+								<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+									value="#{u}" />
+							</p:commandLink>
+						</p:column>
+
+					</p:dataTable>
+
+					<p:dataTable id="list_gerente"
+						value="#{usuarioBean.usuariosDesativados2}"
+						rendered="#{loginBean.usuario.perfil.id==2}" var="u"
+						emptyMessage="Nenhuma usuário desativado no momento"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx">
+
+						<p:column headerText="ID">
+							<h:outputText value="#{u.id}" />
+						</p:column>
+
+						<p:column headerText="Nome">
+							<h:outputText value="#{u.nome}" />
+						</p:column>
+
+						<p:column headerText="Email">
+							<h:outputText value="#{u.login}" />
+						</p:column>
+
+						<p:column style="text-align: center;" headerText="Telefone">
+							<h:outputText value="#{u.telefone1}" />
+						</p:column>
+
+						<p:column headerText="Vinculo UFRR">
+							<h:outputText value="#{u.universitario}" />
+						</p:column>
+
+						<p:column headerText="Local de Trabalho">
+							<h:outputText value="#{u.localTrabalho}" />
+						</p:column>
+
+						<p:column headerText="Perfil">
+							<h:outputText value="#{u.perfil.perfil}" />
+						</p:column>
+
+						<p:column style="float: center; text-align: center;" width="30">
+							<f:facet name="header">
+								<h:outputText value="" />
+							</f:facet>
+							<p:commandLink value="Reativar" onclick="dlgAtivar2.show()"
+								update=":form_ativar_gerente:display2" title="Reativar acesso">
+								<h:outputText styleClass="ui-icon ui-icon-circle-check"
+									title="Reativar usuário" style="margin:0 auto;" />
+								<f:setPropertyActionListener target="#{usuarioBean.usuario}"
+									value="#{u}" />
+							</p:commandLink>
+						</p:column>
+
+					</p:dataTable>
+
+				</fieldset>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+			<!-- 		dialog sem a opção de perfil administrador -->
+			<p:dialog footer="Deseja reativar usuário?" modal="true"
+				resizable="false" showEffect="fade" hideEffect="fade"
+				widgetVar="dlgAtivar2" width="300">
+				<h:form id="form_ativar_gerente">
+
+					<div align="center">
+						<h:panelGrid id="display2" columns="2" cellspacing="10"
+							cellpadding="10">
+
+							<p:commandButton value="Sim" onclick="dlgAtivar2.hide()"
+								action="#{usuarioBean.reativarUsuario}" icon="ui-icon-check"
+								update=":form_acesso1:list"
+								rendered="#{loginBean.usuario.perfil.id==1}">
+								<f:ajax render="@all" />
+							</p:commandButton>
+
+							<p:commandButton value="Sim" onclick="dlgAtivar2.hide()"
+								action="#{usuarioBean.reativarUsuario}" icon="ui-icon-check"
+								update=":form_acesso1:list_gerente"
+								rendered="#{loginBean.usuario.perfil.id==2}">
+								<f:ajax render="@all" />
+							</p:commandButton>
+
+							<p:commandButton value="Não" onclick="dlgAtivar2.hide()"
+								type="button" icon="ui-icon-close" />
+
+						</h:panelGrid>
+					</div>
+
+				</h:form>
+			</p:dialog>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+
+</ui:composition>
+</html>

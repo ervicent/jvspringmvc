@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="header">
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Mensagem > Enviar e-mail" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_enviar_email"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+
+				<br />
+				<br />
+				<h:panelGrid id="gridMail" columns="5">
+					<br />
+					<br />
+					<br />
+					<br />
+
+					<p:graphicImage value="/resources/img/confirmation_email.png" />
+					<p:messages />
+
+				</h:panelGrid>
+				<br />
+				<br />
+				<br />
+				<br />
+
+				<p:commandButton
+					action="/pages/email/enviarEmail.xhtml?faces-redirect=true"
+					value="Novo Email" icon="ui-icon-mail-closed" immediate="true" />
+
+			</h:form>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

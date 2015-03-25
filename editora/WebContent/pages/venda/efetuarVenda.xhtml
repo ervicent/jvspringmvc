@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Venda > Efetuar Venda" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_efetuar_venda"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="EFETUAR VENDA"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0px;">
+
+					<h:panelGrid id="botton" columns="2" cellspacing="5"
+						style="float: right;">
+						<h:graphicImage value="/resources/img/estoque.png"
+							onclick="dlgEstoque.show();"
+							style="float: right; cursor: pointer;" styleClass="acende"
+							title="Verificar estoque" />
+					</h:panelGrid>
+
+					<br /> <br /> <br />
+
+					<div style="float: left; margin-left: 10px">
+						<p:panel header="Dados da Venda"
+							style="height: 130px; width: 450px;">
+
+							<br />
+
+							<h:panelGrid id="grid" columns="5" cellspacing="5"
+								cellpadding="5">
+
+								<h:outputLabel value="Cliente" styleClass="OutPut"
+									rendered="#{empty vendaBean.venda.cliente.nome}" />
+								<h:outputLabel value="Cliente: " styleClass="OutPut"
+									rendered="#{not empty vendaBean.venda.cliente.nome}" />
+								<h:graphicImage value="/resources/img/as.png" styleClass="as"
+									rendered="#{empty vendaBean.venda.cliente.nome}" />
+								<p:inputText id="cliente"
+									value="#{vendaBean.venda.cliente.nome}" size="200"
+									rendered="#{empty vendaBean.venda.cliente.nome}"
+									required="true" requiredMessage="INFORME O CLIENTE"
+									styleClass="input" onclick="dlgCliente.show();" readonly="true">
+									<f:ajax event="change" />
+								</p:inputText>
+
+								<h:outputLabel id="cliente1"
+									value="#{vendaBean.venda.cliente.id} - "
+									rendered="#{not empty vendaBean.venda.cliente.nome and vendaBean.venda.cliente.id != 1}"
+									styleClass="OutPut" style="color: #8B0000;">
+								</h:outputLabel>
+
+								<h:outputLabel id="cliente2"
+									value="#{vendaBean.venda.cliente.nome}"
+									rendered="#{not empty vendaBean.venda.cliente.nome and vendaBean.venda.cliente.id != 1}"
+									styleClass="OutPut" style="color: #8B0000;">
+								</h:outputLabel>
+
+								<h:outputLabel id="cliente3"
+									value="#{vendaBean.venda.cliente.nome}"
+									rendered="#{not empty vendaBean.venda.cliente.nome and vendaBean.venda.cliente.id == 1}"
+									styleClass="OutPut" style="color: red;">
+								</h:outputLabel>
+
+							</h:panelGrid>
+							<br />
+							<br />
+
+							<h:outputLabel id="datavenda"
+								value="#{vendaBean.venda.dataVenda.time}" locale="pt_BR"
+								pattern="dd/MM/yyyy" style="float: right; text-align: right;"
+								styleClass="OutPut">
+								<f:convertDateTime dateStyle="long" timeZone="America/Sao_Paulo"
+									locale="pt_BR" type="date" />
+							</h:outputLabel>
+							<br />
+							<br />
+
+						</p:panel>
+					</div>
+
+					<div style="float: right; margin-right: 10px">
+						<p:panel header="Produto" style="height: 130px; width: 550px;">
+
+							<h:panelGrid columns="4" cellpadding="5" cellspacing="5">
+
+								<!--            		aqui a lista retorna o primeiro id depois que muda o value -->
+
+
+								<h:outputLabel value="isbn/código" styleClass="OutPut" />
+								<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+								<p:selectOneMenu style="width: 400px;" id="prod"
+									value="#{vendaBean.idItem}" styleClass="input"
+									panelStyle="width:400px" effect="fade" filter="true"
+									filterMatchMode="contains" required="true"
+									requiredMessage="ADICIONE O PRODUTO">
+									<f:selectItem itemValue="" itemLabel=""
+										noSelectionOption="true" />
+									<f:selectItems value="#{itemBean.estoque}" var="i"
+										itemLabel="#{i.produto.isbn}" itemValue="#{i.id}" />
+								</p:selectOneMenu>
+
+								<br />
+								<br />
+
+								<h:outputLabel value="Quantidade" styleClass="OutPut" />
+								<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+								<p:inputText id="qtd" value="#{vendaBean.itemVenda.quantidade}"
+									size="5" validatorMessage="QUANTIDADE INVÁLIDA">
+									<f:ajax event="blur" />
+									<f:validateLongRange minimum="0" maximum="100" />
+								</p:inputText>
+
+							</h:panelGrid>
+
+							<div>
+								<p:commandButton value="Adicionar"
+									action="#{vendaBean.guardaItem}" ajax="false">
+									<f:ajax render="@form" event="click" />
+								</p:commandButton>
+							</div>
+
+						</p:panel>
+					</div>
+
+					<!-- 				aqui começa a tabela de produtos -->
+					<br />
+					<div style="float: center">
+						<br /> <br /> <br /> <br /> <br /> <br /> <br /> <br /> <br />
+						<br /> <br />
+						<div
+							style="background: #A6C9E2; align-top: center; margin-left: 10px; margin-right: 10px; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="PRODUTOS"
+								style="color: #394674; font-size: 12px;" styleClass="OutPut" />
+						</div>
+
+						<fieldset
+							style="border-color: #A6C9E2; margin-left: 10px; margin-right: 10px; border: 1px solid #A6C9E2; border-top: 0;">
+
+							<p:dataTable value="#{vendaBean.venda.itensVendas}" var="i"
+								styleClass="dados2" rowClasses="impar, par" id="itens"
+								rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+								rowIndexVar="rowIx" emptyMessage="adicione o(s) produto()">
+
+								<p:column width="50">
+									<f:facet name="header">isbn/código</f:facet>
+									<h:outputLabel value="#{i.item.produto.isbn}"
+										rendered="#{i.item.produto.isbn!=null}" />
+									<h:outputLabel value="#{i.item.produto.id}"
+										rendered="#{i.item.produto.isbn==null}" />
+								</p:column>
+
+								<p:column>
+									<f:facet name="header">produto</f:facet>
+									<h:outputLabel value="#{i.item.produto.tipo.nome}: "
+										rendered="#{i.item.produto.tipo.id eq 1}" />
+									<h:outputLabel value="#{i.item.produto.nome}" />
+								</p:column>
+
+								<p:column width="50" style="color: #2E6EAF; text-align: center;">
+									<f:facet name="header">lote</f:facet>
+									<h:outputLabel value="#{i.item.notaFiscal.lote}" />
+								</p:column>
+
+								<p:column style="text-align: center; color: #2E6EAF" width="100">
+									<f:facet name="header">qtd atual em estoq.</f:facet>
+									<h:outputLabel value="#{i.item.quantidadeAtual-i.quantidade}"
+										rendered="#{i.item.quantidadeAtual-i.quantidade>=1}" />
+									<h:outputLabel value="sem estoque"
+										rendered="#{i.item.quantidadeAtual-i.quantidade==0}"
+										style="color: #8B0000;" />
+									<h:outputLabel value="quantidade indisponível !"
+										rendered="#{vendaBean.quantidadeN == true}"
+										style="color: red;" />
+									<h:outputLabel value="quantidade indisponível !"
+										rendered="#{vendaBean.quantidadeN == null 
+							and i.item.quantidadeAtual-i.quantidade!=0 and i.item.quantidadeAtual-i.quantidade!=1 and i.item.quantidadeAtual-i.quantidade!=2 and i.item.quantidadeAtual-i.quantidade!=3	and i.item.quantidadeAtual-i.quantidade!=4 and i.item.quantidadeAtual-i.quantidade!=5 and i.item.quantidadeAtual-i.quantidade!=6 and i.item.quantidadeAtual-i.quantidade!=7	and i.item.quantidadeAtual-i.quantidade!=8 and i.item.quantidadeAtual-i.quantidade!=9 and i.item.quantidadeAtual-i.quantidade!=10 and i.item.quantidadeAtual-i.quantidade!=11	and i.item.quantidadeAtual-i.quantidade!=12	and i.item.quantidadeAtual-i.quantidade!=13	and i.item.quantidadeAtual-i.quantidade!=14	and i.item.quantidadeAtual-i.quantidade!=15	and i.item.quantidadeAtual-i.quantidade!=16	and i.item.quantidadeAtual-i.quantidade!=17	and i.item.quantidadeAtual-i.quantidade!=18	and i.item.quantidadeAtual-i.quantidade!=19	and i.item.quantidadeAtual-i.quantidade!=20	and i.item.quantidadeAtual-i.quantidade!=21 and i.item.quantidadeAtual-i.quantidade!=22 and i.item.quantidadeAtual-i.quantidade!=23	and i.item.quantidadeAtual-i.quantidade!=24	and i.item.quantidadeAtual-i.quantidade!=25 and i.item.quantidadeAtual-i.quantidade!=26 and i.item.quantidadeAtual-i.quantidade!=27	and i.item.quantidadeAtual-i.quantidade!=28	and i.item.quantidadeAtual-i.quantidade!=29 and i.item.quantidadeAtual-i.quantidade!=30 and i.item.quantidadeAtual-i.quantidade!=31	and i.item.quantidadeAtual-i.quantidade!=32	and i.item.quantidadeAtual-i.quantidade!=33	and i.item.quantidadeAtual-i.quantidade!=34	and i.item.quantidadeAtual-i.quantidade!=35 and i.item.quantidadeAtual-i.quantidade!=36	and i.item.quantidadeAtual-i.quantidade!=37	and i.item.quantidadeAtual-i.quantidade!=38	and i.item.quantidadeAtual-i.quantidade!=39 and i.item.quantidadeAtual-i.quantidade!=40 and i.item.quantidadeAtual-i.quantidade!=41 and i.item.quantidadeAtual-i.quantidade!=42 and i.item.quantidadeAtual-i.quantidade!=43	and i.item.quantidadeAtual-i.quantidade!=44	and i.item.quantidadeAtual-i.quantidade!=45 and i.item.quantidadeAtual-i.quantidade!=46 and i.item.quantidadeAtual-i.quantidade!=47 and i.item.quantidadeAtual-i.quantidade!=48	and i.item.quantidadeAtual-i.quantidade!=49 and i.item.quantidadeAtual-i.quantidade!=50
+						    and i.item.quantidadeAtual-i.quantidade!=51 and i.item.quantidadeAtual-i.quantidade!=52 and i.item.quantidadeAtual-i.quantidade!=53 and i.item.quantidadeAtual-i.quantidade!=54	and i.item.quantidadeAtual-i.quantidade!=55 and i.item.quantidadeAtual-i.quantidade!=56 and i.item.quantidadeAtual-i.quantidade!=57 and i.item.quantidadeAtual-i.quantidade!=58	and i.item.quantidadeAtual-i.quantidade!=59 and i.item.quantidadeAtual-i.quantidade!=60	and i.item.quantidadeAtual-i.quantidade!=61	and i.item.quantidadeAtual-i.quantidade!=62	and i.item.quantidadeAtual-i.quantidade!=63	and i.item.quantidadeAtual-i.quantidade!=64	and i.item.quantidadeAtual-i.quantidade!=65	and i.item.quantidadeAtual-i.quantidade!=66	and i.item.quantidadeAtual-i.quantidade!=67	and i.item.quantidadeAtual-i.quantidade!=68	and i.item.quantidadeAtual-i.quantidade!=69	and i.item.quantidadeAtual-i.quantidade!=70	and i.item.quantidadeAtual-i.quantidade!=71 and i.item.quantidadeAtual-i.quantidade!=72 and i.item.quantidadeAtual-i.quantidade!=73	and i.item.quantidadeAtual-i.quantidade!=74	and i.item.quantidadeAtual-i.quantidade!=75 and i.item.quantidadeAtual-i.quantidade!=76 and i.item.quantidadeAtual-i.quantidade!=77	and i.item.quantidadeAtual-i.quantidade!=78	and i.item.quantidadeAtual-i.quantidade!=79 and i.item.quantidadeAtual-i.quantidade!=80 and i.item.quantidadeAtual-i.quantidade!=81	and i.item.quantidadeAtual-i.quantidade!=82	and i.item.quantidadeAtual-i.quantidade!=83	and i.item.quantidadeAtual-i.quantidade!=84	and i.item.quantidadeAtual-i.quantidade!=85 and i.item.quantidadeAtual-i.quantidade!=86	and i.item.quantidadeAtual-i.quantidade!=87	and i.item.quantidadeAtual-i.quantidade!=88	and i.item.quantidadeAtual-i.quantidade!=89 and i.item.quantidadeAtual-i.quantidade!=90 and i.item.quantidadeAtual-i.quantidade!=91 and i.item.quantidadeAtual-i.quantidade!=92 and i.item.quantidadeAtual-i.quantidade!=93	and i.item.quantidadeAtual-i.quantidade!=94	and i.item.quantidadeAtual-i.quantidade!=95 and i.item.quantidadeAtual-i.quantidade!=96 and i.item.quantidadeAtual-i.quantidade!=97 and i.item.quantidadeAtual-i.quantidade!=98	and i.item.quantidadeAtual-i.quantidade!=99 and i.item.quantidadeAtual-i.quantidade!=100
+						    and i.item.quantidadeAtual-i.quantidade!=101 and i.item.quantidadeAtual-i.quantidade!=102 and i.item.quantidadeAtual-i.quantidade!=103 and i.item.quantidadeAtual-i.quantidade!=104	and i.item.quantidadeAtual-i.quantidade!=105 and i.item.quantidadeAtual-i.quantidade!=106 and i.item.quantidadeAtual-i.quantidade!=107 and i.item.quantidadeAtual-i.quantidade!=108	and i.item.quantidadeAtual-i.quantidade!=109 and i.item.quantidadeAtual-i.quantidade!=110 and i.item.quantidadeAtual-i.quantidade!=111	and i.item.quantidadeAtual-i.quantidade!=112 and i.item.quantidadeAtual-i.quantidade!=113 and i.item.quantidadeAtual-i.quantidade!=114 and i.item.quantidadeAtual-i.quantidade!=115	and i.item.quantidadeAtual-i.quantidade!=116 and i.item.quantidadeAtual-i.quantidade!=117 and i.item.quantidadeAtual-i.quantidade!=118 and i.item.quantidadeAtual-i.quantidade!=119	and i.item.quantidadeAtual-i.quantidade!=120 and i.item.quantidadeAtual-i.quantidade!=121 and i.item.quantidadeAtual-i.quantidade!=122 and i.item.quantidadeAtual-i.quantidade!=123	and i.item.quantidadeAtual-i.quantidade!=124 and i.item.quantidadeAtual-i.quantidade!=125 and i.item.quantidadeAtual-i.quantidade!=126 and i.item.quantidadeAtual-i.quantidade!=127	and i.item.quantidadeAtual-i.quantidade!=128 and i.item.quantidadeAtual-i.quantidade!=129 and i.item.quantidadeAtual-i.quantidade!=130 and i.item.quantidadeAtual-i.quantidade!=131	and i.item.quantidadeAtual-i.quantidade!=132 and i.item.quantidadeAtual-i.quantidade!=133 and i.item.quantidadeAtual-i.quantidade!=134 and i.item.quantidadeAtual-i.quantidade!=135 and i.item.quantidadeAtual-i.quantidade!=136 and i.item.quantidadeAtual-i.quantidade!=137 and i.item.quantidadeAtual-i.quantidade!=138	and i.item.quantidadeAtual-i.quantidade!=139 and i.item.quantidadeAtual-i.quantidade!=140 and i.item.quantidadeAtual-i.quantidade!=141 and i.item.quantidadeAtual-i.quantidade!=142 and i.item.quantidadeAtual-i.quantidade!=143 and i.item.quantidadeAtual-i.quantidade!=144 and i.item.quantidadeAtual-i.quantidade!=145 and i.item.quantidadeAtual-i.quantidade!=146 and i.item.quantidadeAtual-i.quantidade!=147 and i.item.quantidadeAtual-i.quantidade!=148 and i.item.quantidadeAtual-i.quantidade!=149 and i.item.quantidadeAtual-i.quantidade!=150
+						    and i.item.quantidadeAtual-i.quantidade!=151 and i.item.quantidadeAtual-i.quantidade!=152 and i.item.quantidadeAtual-i.quantidade!=153 and i.item.quantidadeAtual-i.quantidade!=154	and i.item.quantidadeAtual-i.quantidade!=155 and i.item.quantidadeAtual-i.quantidade!=156 and i.item.quantidadeAtual-i.quantidade!=157 and i.item.quantidadeAtual-i.quantidade!=158	and i.item.quantidadeAtual-i.quantidade!=159 and i.item.quantidadeAtual-i.quantidade!=160 and i.item.quantidadeAtual-i.quantidade!=161	and i.item.quantidadeAtual-i.quantidade!=162 and i.item.quantidadeAtual-i.quantidade!=163 and i.item.quantidadeAtual-i.quantidade!=164 and i.item.quantidadeAtual-i.quantidade!=165	and i.item.quantidadeAtual-i.quantidade!=166 and i.item.quantidadeAtual-i.quantidade!=167 and i.item.quantidadeAtual-i.quantidade!=168 and i.item.quantidadeAtual-i.quantidade!=169	and i.item.quantidadeAtual-i.quantidade!=170 and i.item.quantidadeAtual-i.quantidade!=171 and i.item.quantidadeAtual-i.quantidade!=172 and i.item.quantidadeAtual-i.quantidade!=173	and i.item.quantidadeAtual-i.quantidade!=174 and i.item.quantidadeAtual-i.quantidade!=175 and i.item.quantidadeAtual-i.quantidade!=176 and i.item.quantidadeAtual-i.quantidade!=177	and i.item.quantidadeAtual-i.quantidade!=178 and i.item.quantidadeAtual-i.quantidade!=179 and i.item.quantidadeAtual-i.quantidade!=180 and i.item.quantidadeAtual-i.quantidade!=181	and i.item.quantidadeAtual-i.quantidade!=182 and i.item.quantidadeAtual-i.quantidade!=183 and i.item.quantidadeAtual-i.quantidade!=184 and i.item.quantidadeAtual-i.quantidade!=185 and i.item.quantidadeAtual-i.quantidade!=186 and i.item.quantidadeAtual-i.quantidade!=187 and i.item.quantidadeAtual-i.quantidade!=188	and i.item.quantidadeAtual-i.quantidade!=189 and i.item.quantidadeAtual-i.quantidade!=190 and i.item.quantidadeAtual-i.quantidade!=191 and i.item.quantidadeAtual-i.quantidade!=192 and i.item.quantidadeAtual-i.quantidade!=193 and i.item.quantidadeAtual-i.quantidade!=194 and i.item.quantidadeAtual-i.quantidade!=195 and i.item.quantidadeAtual-i.quantidade!=196 and i.item.quantidadeAtual-i.quantidade!=197 and i.item.quantidadeAtual-i.quantidade!=198 and i.item.quantidadeAtual-i.quantidade!=199 and i.item.quantidadeAtual-i.quantidade!=200
+						    and i.item.quantidadeAtual-i.quantidade!=201 and i.item.quantidadeAtual-i.quantidade!=202 and i.item.quantidadeAtual-i.quantidade!=203 and i.item.quantidadeAtual-i.quantidade!=204	and i.item.quantidadeAtual-i.quantidade!=205 and i.item.quantidadeAtual-i.quantidade!=206 and i.item.quantidadeAtual-i.quantidade!=207 and i.item.quantidadeAtual-i.quantidade!=208	and i.item.quantidadeAtual-i.quantidade!=209 and i.item.quantidadeAtual-i.quantidade!=210 and i.item.quantidadeAtual-i.quantidade!=211	and i.item.quantidadeAtual-i.quantidade!=212 and i.item.quantidadeAtual-i.quantidade!=213 and i.item.quantidadeAtual-i.quantidade!=214 and i.item.quantidadeAtual-i.quantidade!=215	and i.item.quantidadeAtual-i.quantidade!=216 and i.item.quantidadeAtual-i.quantidade!=217 and i.item.quantidadeAtual-i.quantidade!=218 and i.item.quantidadeAtual-i.quantidade!=219	and i.item.quantidadeAtual-i.quantidade!=220 and i.item.quantidadeAtual-i.quantidade!=221 and i.item.quantidadeAtual-i.quantidade!=222 and i.item.quantidadeAtual-i.quantidade!=223	and i.item.quantidadeAtual-i.quantidade!=224 and i.item.quantidadeAtual-i.quantidade!=225 and i.item.quantidadeAtual-i.quantidade!=226 and i.item.quantidadeAtual-i.quantidade!=227	and i.item.quantidadeAtual-i.quantidade!=228 and i.item.quantidadeAtual-i.quantidade!=229 and i.item.quantidadeAtual-i.quantidade!=230 and i.item.quantidadeAtual-i.quantidade!=231	and i.item.quantidadeAtual-i.quantidade!=232 and i.item.quantidadeAtual-i.quantidade!=233 and i.item.quantidadeAtual-i.quantidade!=234 and i.item.quantidadeAtual-i.quantidade!=235 and i.item.quantidadeAtual-i.quantidade!=236 and i.item.quantidadeAtual-i.quantidade!=237 and i.item.quantidadeAtual-i.quantidade!=238	and i.item.quantidadeAtual-i.quantidade!=239 and i.item.quantidadeAtual-i.quantidade!=240 and i.item.quantidadeAtual-i.quantidade!=241 and i.item.quantidadeAtual-i.quantidade!=242 and i.item.quantidadeAtual-i.quantidade!=243 and i.item.quantidadeAtual-i.quantidade!=244 and i.item.quantidadeAtual-i.quantidade!=245 and i.item.quantidadeAtual-i.quantidade!=246 and i.item.quantidadeAtual-i.quantidade!=247 and i.item.quantidadeAtual-i.quantidade!=248 and i.item.quantidadeAtual-i.quantidade!=249 and i.item.quantidadeAtual-i.quantidade!=250
+						    and i.item.quantidadeAtual-i.quantidade!=251 and i.item.quantidadeAtual-i.quantidade!=252 and i.item.quantidadeAtual-i.quantidade!=253 and i.item.quantidadeAtual-i.quantidade!=254	and i.item.quantidadeAtual-i.quantidade!=255 and i.item.quantidadeAtual-i.quantidade!=256 and i.item.quantidadeAtual-i.quantidade!=257 and i.item.quantidadeAtual-i.quantidade!=258	and i.item.quantidadeAtual-i.quantidade!=259 and i.item.quantidadeAtual-i.quantidade!=260 and i.item.quantidadeAtual-i.quantidade!=261	and i.item.quantidadeAtual-i.quantidade!=262 and i.item.quantidadeAtual-i.quantidade!=263 and i.item.quantidadeAtual-i.quantidade!=264 and i.item.quantidadeAtual-i.quantidade!=265	and i.item.quantidadeAtual-i.quantidade!=266 and i.item.quantidadeAtual-i.quantidade!=267 and i.item.quantidadeAtual-i.quantidade!=268 and i.item.quantidadeAtual-i.quantidade!=269	and i.item.quantidadeAtual-i.quantidade!=270 and i.item.quantidadeAtual-i.quantidade!=271 and i.item.quantidadeAtual-i.quantidade!=272 and i.item.quantidadeAtual-i.quantidade!=273	and i.item.quantidadeAtual-i.quantidade!=274 and i.item.quantidadeAtual-i.quantidade!=275 and i.item.quantidadeAtual-i.quantidade!=276 and i.item.quantidadeAtual-i.quantidade!=277	and i.item.quantidadeAtual-i.quantidade!=278 and i.item.quantidadeAtual-i.quantidade!=279 and i.item.quantidadeAtual-i.quantidade!=280 and i.item.quantidadeAtual-i.quantidade!=281	and i.item.quantidadeAtual-i.quantidade!=282 and i.item.quantidadeAtual-i.quantidade!=283 and i.item.quantidadeAtual-i.quantidade!=284 and i.item.quantidadeAtual-i.quantidade!=285 and i.item.quantidadeAtual-i.quantidade!=286 and i.item.quantidadeAtual-i.quantidade!=287 and i.item.quantidadeAtual-i.quantidade!=288	and i.item.quantidadeAtual-i.quantidade!=289 and i.item.quantidadeAtual-i.quantidade!=290 and i.item.quantidadeAtual-i.quantidade!=291 and i.item.quantidadeAtual-i.quantidade!=292 and i.item.quantidadeAtual-i.quantidade!=293 and i.item.quantidadeAtual-i.quantidade!=294 and i.item.quantidadeAtual-i.quantidade!=295 and i.item.quantidadeAtual-i.quantidade!=296 and i.item.quantidadeAtual-i.quantidade!=297 and i.item.quantidadeAtual-i.quantidade!=298 and i.item.quantidadeAtual-i.quantidade!=299 and i.item.quantidadeAtual-i.quantidade!=300
+						    and i.item.quantidadeAtual-i.quantidade!=301 and i.item.quantidadeAtual-i.quantidade!=302 and i.item.quantidadeAtual-i.quantidade!=303 and i.item.quantidadeAtual-i.quantidade!=304	and i.item.quantidadeAtual-i.quantidade!=305 and i.item.quantidadeAtual-i.quantidade!=306 and i.item.quantidadeAtual-i.quantidade!=307 and i.item.quantidadeAtual-i.quantidade!=308	and i.item.quantidadeAtual-i.quantidade!=309 and i.item.quantidadeAtual-i.quantidade!=310 and i.item.quantidadeAtual-i.quantidade!=311	and i.item.quantidadeAtual-i.quantidade!=312 and i.item.quantidadeAtual-i.quantidade!=313 and i.item.quantidadeAtual-i.quantidade!=314 and i.item.quantidadeAtual-i.quantidade!=315	and i.item.quantidadeAtual-i.quantidade!=316 and i.item.quantidadeAtual-i.quantidade!=317 and i.item.quantidadeAtual-i.quantidade!=318 and i.item.quantidadeAtual-i.quantidade!=319	and i.item.quantidadeAtual-i.quantidade!=320 and i.item.quantidadeAtual-i.quantidade!=321 and i.item.quantidadeAtual-i.quantidade!=322 and i.item.quantidadeAtual-i.quantidade!=323	and i.item.quantidadeAtual-i.quantidade!=324 and i.item.quantidadeAtual-i.quantidade!=325 and i.item.quantidadeAtual-i.quantidade!=326 and i.item.quantidadeAtual-i.quantidade!=327	and i.item.quantidadeAtual-i.quantidade!=328 and i.item.quantidadeAtual-i.quantidade!=329 and i.item.quantidadeAtual-i.quantidade!=330 and i.item.quantidadeAtual-i.quantidade!=331	and i.item.quantidadeAtual-i.quantidade!=332 and i.item.quantidadeAtual-i.quantidade!=333 and i.item.quantidadeAtual-i.quantidade!=334 and i.item.quantidadeAtual-i.quantidade!=335 and i.item.quantidadeAtual-i.quantidade!=336 and i.item.quantidadeAtual-i.quantidade!=337 and i.item.quantidadeAtual-i.quantidade!=338	and i.item.quantidadeAtual-i.quantidade!=339 and i.item.quantidadeAtual-i.quantidade!=340 and i.item.quantidadeAtual-i.quantidade!=341 and i.item.quantidadeAtual-i.quantidade!=342 and i.item.quantidadeAtual-i.quantidade!=343 and i.item.quantidadeAtual-i.quantidade!=344 and i.item.quantidadeAtual-i.quantidade!=345 and i.item.quantidadeAtual-i.quantidade!=346 and i.item.quantidadeAtual-i.quantidade!=347 and i.item.quantidadeAtual-i.quantidade!=348 and i.item.quantidadeAtual-i.quantidade!=349 and i.item.quantidadeAtual-i.quantidade!=350
+						    and i.item.quantidadeAtual-i.quantidade!=351 and i.item.quantidadeAtual-i.quantidade!=352 and i.item.quantidadeAtual-i.quantidade!=353 and i.item.quantidadeAtual-i.quantidade!=354	and i.item.quantidadeAtual-i.quantidade!=355 and i.item.quantidadeAtual-i.quantidade!=356 and i.item.quantidadeAtual-i.quantidade!=357 and i.item.quantidadeAtual-i.quantidade!=358	and i.item.quantidadeAtual-i.quantidade!=359 and i.item.quantidadeAtual-i.quantidade!=360 and i.item.quantidadeAtual-i.quantidade!=361	and i.item.quantidadeAtual-i.quantidade!=362 and i.item.quantidadeAtual-i.quantidade!=363 and i.item.quantidadeAtual-i.quantidade!=364 and i.item.quantidadeAtual-i.quantidade!=365	and i.item.quantidadeAtual-i.quantidade!=366 and i.item.quantidadeAtual-i.quantidade!=367 and i.item.quantidadeAtual-i.quantidade!=368 and i.item.quantidadeAtual-i.quantidade!=369	and i.item.quantidadeAtual-i.quantidade!=370 and i.item.quantidadeAtual-i.quantidade!=371 and i.item.quantidadeAtual-i.quantidade!=372 and i.item.quantidadeAtual-i.quantidade!=373	and i.item.quantidadeAtual-i.quantidade!=374 and i.item.quantidadeAtual-i.quantidade!=375 and i.item.quantidadeAtual-i.quantidade!=376 and i.item.quantidadeAtual-i.quantidade!=377	and i.item.quantidadeAtual-i.quantidade!=378 and i.item.quantidadeAtual-i.quantidade!=379 and i.item.quantidadeAtual-i.quantidade!=380 and i.item.quantidadeAtual-i.quantidade!=381	and i.item.quantidadeAtual-i.quantidade!=382 and i.item.quantidadeAtual-i.quantidade!=383 and i.item.quantidadeAtual-i.quantidade!=384 and i.item.quantidadeAtual-i.quantidade!=385 and i.item.quantidadeAtual-i.quantidade!=386 and i.item.quantidadeAtual-i.quantidade!=387 and i.item.quantidadeAtual-i.quantidade!=388	and i.item.quantidadeAtual-i.quantidade!=389 and i.item.quantidadeAtual-i.quantidade!=390 and i.item.quantidadeAtual-i.quantidade!=391 and i.item.quantidadeAtual-i.quantidade!=392 and i.item.quantidadeAtual-i.quantidade!=393 and i.item.quantidadeAtual-i.quantidade!=394 and i.item.quantidadeAtual-i.quantidade!=395 and i.item.quantidadeAtual-i.quantidade!=396 and i.item.quantidadeAtual-i.quantidade!=397 and i.item.quantidadeAtual-i.quantidade!=398 and i.item.quantidadeAtual-i.quantidade!=399 and i.item.quantidadeAtual-i.quantidade!=400
+						    and i.item.quantidadeAtual-i.quantidade!=401 and i.item.quantidadeAtual-i.quantidade!=402 and i.item.quantidadeAtual-i.quantidade!=403 and i.item.quantidadeAtual-i.quantidade!=404	and i.item.quantidadeAtual-i.quantidade!=405 and i.item.quantidadeAtual-i.quantidade!=406 and i.item.quantidadeAtual-i.quantidade!=407 and i.item.quantidadeAtual-i.quantidade!=408	and i.item.quantidadeAtual-i.quantidade!=409 and i.item.quantidadeAtual-i.quantidade!=410 and i.item.quantidadeAtual-i.quantidade!=411	and i.item.quantidadeAtual-i.quantidade!=412 and i.item.quantidadeAtual-i.quantidade!=413 and i.item.quantidadeAtual-i.quantidade!=414 and i.item.quantidadeAtual-i.quantidade!=415	and i.item.quantidadeAtual-i.quantidade!=416 and i.item.quantidadeAtual-i.quantidade!=417 and i.item.quantidadeAtual-i.quantidade!=418 and i.item.quantidadeAtual-i.quantidade!=419	and i.item.quantidadeAtual-i.quantidade!=420 and i.item.quantidadeAtual-i.quantidade!=421 and i.item.quantidadeAtual-i.quantidade!=422 and i.item.quantidadeAtual-i.quantidade!=423	and i.item.quantidadeAtual-i.quantidade!=424 and i.item.quantidadeAtual-i.quantidade!=425 and i.item.quantidadeAtual-i.quantidade!=426 and i.item.quantidadeAtual-i.quantidade!=427	and i.item.quantidadeAtual-i.quantidade!=428 and i.item.quantidadeAtual-i.quantidade!=429 and i.item.quantidadeAtual-i.quantidade!=430 and i.item.quantidadeAtual-i.quantidade!=431	and i.item.quantidadeAtual-i.quantidade!=432 and i.item.quantidadeAtual-i.quantidade!=433 and i.item.quantidadeAtual-i.quantidade!=434 and i.item.quantidadeAtual-i.quantidade!=435 and i.item.quantidadeAtual-i.quantidade!=436 and i.item.quantidadeAtual-i.quantidade!=437 and i.item.quantidadeAtual-i.quantidade!=438	and i.item.quantidadeAtual-i.quantidade!=439 and i.item.quantidadeAtual-i.quantidade!=440 and i.item.quantidadeAtual-i.quantidade!=441 and i.item.quantidadeAtual-i.quantidade!=442 and i.item.quantidadeAtual-i.quantidade!=443 and i.item.quantidadeAtual-i.quantidade!=444 and i.item.quantidadeAtual-i.quantidade!=445 and i.item.quantidadeAtual-i.quantidade!=446 and i.item.quantidadeAtual-i.quantidade!=447 and i.item.quantidadeAtual-i.quantidade!=448 and i.item.quantidadeAtual-i.quantidade!=449 and i.item.quantidadeAtual-i.quantidade!=450
+						    and i.item.quantidadeAtual-i.quantidade!=451 and i.item.quantidadeAtual-i.quantidade!=452 and i.item.quantidadeAtual-i.quantidade!=453 and i.item.quantidadeAtual-i.quantidade!=454	and i.item.quantidadeAtual-i.quantidade!=455 and i.item.quantidadeAtual-i.quantidade!=456 and i.item.quantidadeAtual-i.quantidade!=457 and i.item.quantidadeAtual-i.quantidade!=458	and i.item.quantidadeAtual-i.quantidade!=459 and i.item.quantidadeAtual-i.quantidade!=460 and i.item.quantidadeAtual-i.quantidade!=461	and i.item.quantidadeAtual-i.quantidade!=462 and i.item.quantidadeAtual-i.quantidade!=463 and i.item.quantidadeAtual-i.quantidade!=464 and i.item.quantidadeAtual-i.quantidade!=465	and i.item.quantidadeAtual-i.quantidade!=466 and i.item.quantidadeAtual-i.quantidade!=467 and i.item.quantidadeAtual-i.quantidade!=468 and i.item.quantidadeAtual-i.quantidade!=469	and i.item.quantidadeAtual-i.quantidade!=470 and i.item.quantidadeAtual-i.quantidade!=471 and i.item.quantidadeAtual-i.quantidade!=472 and i.item.quantidadeAtual-i.quantidade!=473	and i.item.quantidadeAtual-i.quantidade!=474 and i.item.quantidadeAtual-i.quantidade!=475 and i.item.quantidadeAtual-i.quantidade!=476 and i.item.quantidadeAtual-i.quantidade!=477	and i.item.quantidadeAtual-i.quantidade!=478 and i.item.quantidadeAtual-i.quantidade!=479 and i.item.quantidadeAtual-i.quantidade!=480 and i.item.quantidadeAtual-i.quantidade!=481	and i.item.quantidadeAtual-i.quantidade!=482 and i.item.quantidadeAtual-i.quantidade!=483 and i.item.quantidadeAtual-i.quantidade!=484 and i.item.quantidadeAtual-i.quantidade!=485 and i.item.quantidadeAtual-i.quantidade!=486 and i.item.quantidadeAtual-i.quantidade!=487 and i.item.quantidadeAtual-i.quantidade!=488	and i.item.quantidadeAtual-i.quantidade!=489 and i.item.quantidadeAtual-i.quantidade!=490 and i.item.quantidadeAtual-i.quantidade!=491 and i.item.quantidadeAtual-i.quantidade!=492 and i.item.quantidadeAtual-i.quantidade!=493 and i.item.quantidadeAtual-i.quantidade!=494 and i.item.quantidadeAtual-i.quantidade!=495 and i.item.quantidadeAtual-i.quantidade!=496 and i.item.quantidadeAtual-i.quantidade!=497 and i.item.quantidadeAtual-i.quantidade!=498 and i.item.quantidadeAtual-i.quantidade!=499 and i.item.quantidadeAtual-i.quantidade!=500}"
+										style="color: red;" />
+								</p:column>
+
+								<p:column style="text-align: center;" width="15">
+									<f:facet name="header">qtd</f:facet>
+									<h:outputLabel value="#{i.quantidade}" />
+								</p:column>
+
+								<p:column width="50">
+									<f:facet name="header">valor unit.</f:facet>
+									<h:outputLabel value="#{i.item.valorVenda}">
+										<f:convertNumber type="currency" currencySymbol="R$"
+											locale="pt_BR" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column width="50" style="text-align: center;">
+									<f:facet name="header">sub total</f:facet>
+									<h:outputText value="#{i.total}">
+										<f:convertNumber type="currency" currencySymbol="R$"
+											locale="pt_BR" />
+									</h:outputText>
+								</p:column>
+
+								<p:column style="text-align: center;" width="15">
+
+									<p:commandLink action="#{vendaBean.removeItemVenda}"
+										ajax="false" style="text-align: center; float: center;"
+										update=":form_efetuar_venda:itens" immediate="true">
+										<p:graphicImage value="/resources/img/remover.png"
+											title="Remover item" />
+										<f:ajax render="@all" />
+										<f:setPropertyActionListener id="parametro"
+											target="#{vendaBean.itemVenda}" value="#{i}" />
+									</p:commandLink>
+
+								</p:column>
+
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column colspan="6" footerText="Valor Total"
+											style="text-align:right; font-size: 14px;" />
+
+										<p:column style="font-size: 14px;">
+											<f:facet name="footer">
+												<h:outputText value="#{vendaBean.valorTotalProdutos}">
+													<f:convertNumber type="currency" currencySymbol="R$"
+														locale="pt_BR" />
+												</h:outputText>
+											</f:facet>
+										</p:column>
+
+										<p:column footerText="" />
+									</p:row>
+								</p:columnGroup>
+
+							</p:dataTable>
+
+						</fieldset>
+
+						<div
+							style="background: #A6C9E2; align-top: center; margin-left: 10px; margin-right: 10px; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText style="color: #394674; font-size: 12px;"
+								styleClass="OutPut" />
+						</div>
+					</div>
+					<br />
+
+					<!-- 						aqui termina a tabela de produtos -->
+
+					<div style="float: left; margin-right: 10px; margin-left: 10px;">
+						<p:panel style="width: 580px; height: 190px;">
+
+							<h:panelGrid id="parcela_div" columns="10">
+
+								<h:outputLabel value="Forma de pagamento" styleClass="OutPut" />
+								<p:selectOneMenu style="width: 150px;" id="forma"
+									value="#{vendaBean.venda.formaPagamento}" styleClass="input"
+									effect="fade">
+									<f:selectItem itemLabel="à vista" itemValue="1" />
+									<f:selectItem itemLabel="cartão(crédito)" itemValue="2" />
+									<f:selectItem itemLabel="cartão(débito)" itemValue="3" />
+									<f:selectItem itemLabel="cheque(à vista)" itemValue="4" />
+									<f:selectItem itemLabel="cheque(pré datado)" itemValue="5" />
+									<f:selectItem itemLabel="depósito bancário" itemValue="6" />
+									<f:ajax render="parcela_div" />
+								</p:selectOneMenu>
+
+								<h:outputLabel value="Parcelas" styleClass="OutPut"
+									rendered="#{vendaBean.venda.formaPagamento == 2}" />
+								<h:graphicImage value="/resources/img/as.png" styleClass="as"
+									rendered="#{vendaBean.venda.formaPagamento == 2}" />
+								<p:spinner id="parcela"
+									value="#{vendaBean.venda.quantidadeParcela}" size="5"
+									required="true"
+									requiredMessage="DEFINA A QUANTIDADE DE PARCELAS" min="0"
+									max="12" validatorMessage="PARCELAS INVÁLIDA" maxlength="2"
+									rendered="#{vendaBean.venda.formaPagamento == 2}">
+									<f:ajax event="blur" />
+									<f:validateLongRange minimum="0" />
+								</p:spinner>
+
+							</h:panelGrid>
+
+							<h:panelGrid columns="1">
+
+								<h:outputLabel value="OBS" styleClass="OutPut"
+									style="mergin-left: 30px;" />
+								<p:selectOneMenu style="width: 190px;" id="tituloobs"
+									value="#{vendaBean.venda.tituloObs}" styleClass="input"
+									effect="fade">
+									<f:selectItem itemValue="" itemLabel=""
+										noSelectionOption="true" />
+									<f:selectItem itemLabel="Doação" itemValue="3" />
+									<f:selectItem itemLabel="Devolução para fornecedor/editora"
+										itemValue="8" />
+									<f:selectItem itemLabel="Roubo" itemValue="4" />
+									<f:selectItem itemLabel="Troca" itemValue="5" />
+									<f:selectItem itemLabel="Venda com desconto" itemValue="6" />
+									<f:selectItem itemLabel="Venda com valor de custo"
+										itemValue="7" />
+								</p:selectOneMenu>
+								<p:inputTextarea id="obs2" value="#{vendaBean.venda.obs}"
+									styleClass="input" maxlength="66" cols="10" rows="6" />
+								<br />
+								<br />
+
+							</h:panelGrid>
+
+						</p:panel>
+					</div>
+
+					<div style="float: right; margin-right: 10px; margin-left: 10px;">
+						<p:panel style="text-align: right; width: 400px; height: 190px;">
+
+							<h:panelGrid columns="6" cellpadding="3" cellspacing="3"
+								style="text-align: right; float: right;">
+
+								<h:outputLabel value="desconto % " styleClass="OutPut"
+									style="font-size: 14px;" />
+								<p:spinner id="desconto" value="#{vendaBean.desconto}" size="5"
+									min="0" max="100" validatorMessage="DESCONTO INVÁLIDO">
+									<f:ajax event="blur" />
+									<f:validateLongRange minimum="0" />
+								</p:spinner>
+
+								<p:commandButton value="Gerar desconto"
+									action="#{vendaBean.gerarDesconto}" ajax="false"
+									icon="ui-icon-check">
+									<f:ajax render="@form" event="click" />
+								</p:commandButton>
+
+							</h:panelGrid>
+							<br />
+							<br />
+							<br />
+							<br />
+
+
+							<p:separator width="450" />
+
+							<br />
+							<p:fieldset
+								style="background: #A6C9E2; border-color: #8B0000; border: 1px solid #8B0000; height: 20px;"
+								styleClass="shadow2">
+								<h:outputLabel value="Valor à pagar: "
+									style="font-size: 18px; font-weight: bold; color: #8B0000; line-height: 20px;"
+									styleClass="acende" />
+								<h:outputLabel value="#{vendaBean.valorTotalComDesconto}"
+									style="font-size: 18px; font-weight: bold; color: #8B0000;">
+									<f:convertNumber type="currency" currencySymbol="R$"
+										locale="pt_BR" />
+								</h:outputLabel>
+							</p:fieldset>
+							<br />
+
+							<p:separator width="450" />
+							<br />
+							<br />
+
+							<h:outputLabel
+								value="#{loginBean.usuario.perfil.perfil}: #{loginBean.usuario.nome}"
+								style="float: right; text-align: center; font-weight: bold;"
+								styleClass="OutPut" />
+
+						</p:panel>
+
+						<br /> <br />
+					</div>
+
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{vendaBean.addVenda}"
+						value="Finalizar Venda" ajax="false" icon="ui-icon-check"
+						update=":form_efetuar_venda:grid">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton action="#{vendaBean.cancelarVenda}"
+						value="Cancelar Venda" ajax="false" icon="ui-icon-close"
+						immediate="true" style="color: red;"
+						rendered="#{vendaBean.venda.cliente.id!=null}">
+						<f:ajax render="@form" />
+					</p:commandButton>
+
+					<p:commandButton action="#{vendaBean.cancelarVenda2}"
+						value="Cancelar Venda" ajax="false" icon="ui-icon-close"
+						immediate="true" style="color: red;"
+						rendered="#{vendaBean.venda.cliente.id==null}">
+						<f:ajax render="@form" />
+					</p:commandButton>
+
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+
+		<!-- 			Aqui começa o dialog de clientes -->
+
+		<p:dialog header="Clientes" widgetVar="dlgCliente" resizable="false"
+			modal="true" showEffect="fold">
+			<h:form id="form_dialog_cliente">
+
+				<p:dataTable value="#{usuarioBean.clientes2}" var="c"
+					id="tb_clientes" paginator="true" rows="20"
+					paginatorPosition="bottom" emptyMessage="Não encontrado">
+
+					<p:column headerText="Código" filterBy="#{c.id}"
+						filterMatchMode="exact" style="text-align: center;">
+						<h:commandLink value="#{c.id}" onclick="dlgCliente.hide()"
+							id="link_codigo" rendered="#{c.id!=1}">
+							<f:setPropertyActionListener target="#{vendaBean.venda.cliente}"
+								value="#{c}" />
+						</h:commandLink>
+
+						<h:commandLink value="#{c.id}" onclick="dlgCliente.hide()"
+							id="link_codigo_id" rendered="#{c.id==1}" style="color: red;">
+							<f:setPropertyActionListener target="#{vendaBean.venda.cliente}"
+								value="#{c}" />
+						</h:commandLink>
+					</p:column>
+
+					<p:column headerText="Nome" filterBy="#{c.nome}"
+						filterMatchMode="contains">
+						<h:commandLink value="#{c.nome}" onclick="dlgCliente.hide()"
+							id="link_codigo2" rendered="#{c.id!=1}">
+							<f:setPropertyActionListener target="#{vendaBean.venda.cliente}"
+								value="#{c}" />
+						</h:commandLink>
+
+						<h:commandLink value="#{c.nome}" onclick="dlgCliente.hide()"
+							id="link_codigo_nome2" rendered="#{c.id==1}" style="color: red;">
+							<f:setPropertyActionListener target="#{vendaBean.venda.cliente}"
+								value="#{c}" />
+						</h:commandLink>
+					</p:column>
+
+				</p:dataTable>
+
+
+			</h:form>
+		</p:dialog>
+
+		<!-- 			Aqui começa o dialog para os produtos disponíveis no estoque -->
+		<p:dialog header="" widgetVar="dlgEstoque" modal="true" width="auto"
+			resizable="false">
+			<h:form id="form_itens">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px; width: auto"
+					align="center">
+					<h:outputText value="ESTOQUE"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #A6C9E2; border-top: 0; width: 1000px;">
+
+					<p:dataTable id="dt" value="#{itemBean.estoque}" var="item"
+						emptyMessage="Não encontrado" paginator="true" rows="15"
+						paginatorPosition="bottom"
+						rowStyleClass="#{item.produto.quantidadeMinima >= item.quantidadeAtual ? 'even-row2' : 'old-row'}"
+						rowIndexVar="rowIx" style="width: 1000px;">
+
+						<p:column width="100" id="isbn" headerText="isbn/código"
+							filterBy="#{item.produto.isbn}" filterMatchMode="exact"
+							filterMaxLength="13">
+							<h:outputText value="#{item.produto.isbn}" />
+						</p:column>
+
+						<p:column headerText="Produto" width="270"
+							filterBy="#{item.produto.nome}" filterMatchMode="contains">
+							<h:outputText value="#{item.produto.tipo.nome}: "
+								rendered="#{item.produto.tipo.id eq 1}" />
+							<h:outputText value="#{item.produto.nome}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="38" />
+							</h:outputText>
+							<h:outputText value="..."
+								rendered="#{item.produto.nome.length()>=39}" />
+						</p:column>
+						
+						<p:column headerText="Valor" style="text-align: center;">
+							<h:outputText value="#{item.valorVenda}">
+								<f:convertNumber pattern="#,##0.00" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Lote" width="50" id="lote" style="text-align: center;" filterStyle="max-width: 40px;"
+						filterBy="#{item.notaFiscal.lote}-#{item.notaFiscal.dataEntrada.weekYear}" filterMatchMode="contains">
+							<h:outputText value="#{item.notaFiscal.lote}"
+								rendered="#{item.notaFiscal.lote!=null}" />-<h:outputText
+								value="#{item.notaFiscal.dataEntrada.time}"
+								rendered="#{item.notaFiscal.lote!=null}">
+								<f:convertDateTime pattern="yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Autor" width="200"
+							filterBy="#{item.produto.autor}" filterMatchMode="contains">
+							<h:outputText value="#{item.produto.autor}"
+								rendered="#{item.produto.autor!=null}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="30" />
+							</h:outputText>
+							<h:outputText value="..."
+								rendered="#{item.produto.autor.length()>=31}" />
+							<h:outputText value="NENHUM"
+								rendered="#{item.produto.autor==null}" />
+						</p:column>
+
+						<p:column headerText="Categoria" width="100"
+							filterBy="#{item.produto.categoria.nome}"
+							filterMatchMode="contains">
+							<h:outputText value="#{item.produto.categoria.nome}"
+								rendered="#{item.produto.categoria.nome!=null}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="15" />
+							</h:outputText>
+							<h:outputText value="..."
+								rendered="#{item.produto.categoria.nome.length()>=16}" />
+							<h:outputText value="NENHUM"
+								rendered="#{item.produto.categoria.nome==null}" />
+						</p:column>
+
+						<p:column headerText="E" style="color: #1874CD" width="10">
+							<h:outputText value="#{item.quantidadeEntrada}" />
+						</p:column>
+
+						<p:column headerText="S" style="color: #8B0000" width="10">
+							<h:outputText value="#{item.quantidadeSaida}" />
+						</p:column>
+
+						<p:column headerText="A" style="color: blue;" width="10">
+							<h:outputText value="#{item.quantidadeAtual}"
+								rendered="#{item.quantidadeAtual > item.produto.quantidadeMinima}" />
+							<h:outputText value="(#{item.quantidadeAtual2})"
+								style="color: #CD0000;"
+								rendered="#{item.produto.quantidadeMinima >= item.quantidadeAtual}" />
+						</p:column>
+						
+					</p:dataTable>	
+				</fieldset>
+
+			</h:form>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario null -->
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+
+	</ui:define>
+</ui:composition>
+</html>

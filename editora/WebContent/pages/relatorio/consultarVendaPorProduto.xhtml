@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Relatório > Venda Por Produto"
+				styleClass="title" style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>3}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_pesquisa_produto"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<fieldset style="border: 1px solid #A6C9E2; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="CONSULTAR VENDA"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:focus context="produto" for="produto"
+						rendered="#{itemBean.box4Search == 1}" />
+
+					<h:panelGrid id="grid_pesquisa" columns="15" cellspacing="15">
+					
+					<h:outputText value="Produto" styleClass="OutPut" />	
+						<p:selectOneMenu style="width: 400px;" id="produto"
+							value="#{itemVendaBean.item.produto}" converter="genericConverter" filterMatchMode="contains" filter="true"
+							required="true" requiredMessage="INFORME O PRODUTO" styleClass="input">
+							<f:selectItem itemValue="" itemLabel="" />
+							<f:selectItems value="#{produtoBean.tipoOutros}" var="p"
+								itemLabel="#{p.nome}" itemValue="#{p}" />	
+							<f:selectItems value="#{produtoBean.tiposId1}" var="p"
+								itemLabel="LIVRO: #{p.nome}" itemValue="#{p}" />
+						</p:selectOneMenu>
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							rendered="#{empty itemBean.itens1 and itemBean.box4Search == 1}"
+							action="#{itemVendaBean.getListaVendaByProduto}" ajax="false"
+							icon="ui-icon-search" />
+
+						<p:commandButton value="Cancelar operação" id="cancelar"
+							rendered="#{not empty itemBean.itens1}" immediate="true"
+							action="consultarVendaPorProduto.xhtml?faces-redirect=true"
+							ajax="false" style="color: red;" icon="ui-icon-close" />
+
+						<!-- gera o relatório -->
+						<p:commandButton value="Gerar Relatório" icon="ui-icon-print"
+							ajax="false"
+							rendered="#{not empty itemBean.itens1 and itemBean.box4Search == 1}">
+							<!-- 							<p:graphicImage value="/resources/img/pdf.png" /> -->
+							<p:dataExporter type="pdf" target="dtable"
+								fileName="Relatório-Produto-Estoque"
+								preProcessor="#{reportBean.preProcessPDF}" />
+						</p:commandButton>
+
+					</h:panelGrid>
+
+					<fieldset
+						style="border: 1px solid #6A6A6A; border-top: 0; margin-left: 20px; margin-right: 20px;">
+
+						<div
+							style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="RESULTADO"
+								style="color: white; font-size: 12px;" styleClass="OutPut"
+								rendered="#{empty itemVendaBean.itensVendas1}" />
+								
+							<h:outputText value="RESULTADO: "
+								style="color: white; font-size: 12px;" styleClass="OutPut"
+								rendered="#{not empty itemVendaBean.itensVendas1}" />
+								
+							<h:outputText value="LIVRO "
+								style="color: white; font-size: 12px;" styleClass="OutPut"
+								rendered="#{not empty itemVendaBean.itensVendas1 and itemVendaBean.item.produto.tipo.id==1}" />	
+								
+							<h:outputText value="#{itemVendaBean.item.produto.nome}"
+								style="color: white; font-size: 12px;" styleClass="OutPut"
+								rendered="#{not empty itemVendaBean.itensVendas1}" />		
+						</div>
+
+						<!-- 			grid com a lista de vendas			 		 -->
+						<p:dataTable id="dtable" var="v" value="#{itemVendaBean.itensVendas1}"
+							scrollable="true" scrollHeight="400"
+							emptyMessage="Nenhum produto encontrado"
+							rendered="#{not empty itemVendaBean.itensVendas1 and itemVendaBean.itemVenda.id==null}"
+							rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+							rowIndexVar="rowIx">
+
+							<p:column width="100" id="isbn" headerText="isbn/código" filterStyle="max-width: 90px;"
+								filterBy="#{v.item.produto.isbn}" filterMatchMode="exact"
+								filterMaxLength="13">
+								<h:outputText value="#{v.item.produto.isbn}" />
+							</p:column>
+
+							<p:column headerText="Produto" width="320"
+								filterBy="#{v.item.produto.nome}" filterMatchMode="contains">
+								<h:outputText value="#{v.item.produto.tipo.nome}: "
+									rendered="#{v.item.produto.tipo.id eq 1}" />
+								<h:outputText value="#{v.item.produto.nome}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="41" />
+								</h:outputText>
+								<h:outputText value="..."
+									rendered="#{v.item.produto.nome.length()>=42}" />
+							</p:column>
+
+							<p:column headerText="Lote" width="50" id="lote"
+								style="text-align: center;" filterStyle="max-width: 40px;"
+								filterBy="#{v.item.notaFiscal.lote}-#{v.item.notaFiscal.dataEntrada.weekYear}"
+								filterMatchMode="contains">
+								<h:outputText value="#{v.item.notaFiscal.lote}"
+									rendered="#{v.item.notaFiscal.lote!=null}" />-<h:outputText
+									value="#{v.item.notaFiscal.dataEntrada.time}"
+									rendered="#{v.item.notaFiscal.lote!=null}">
+									<f:convertDateTime pattern="yyyy" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="qtd Vendida" style="text-align: center;">
+								<h:outputText value="#{v.quantidade}" />
+							</p:column>
+
+							<p:column headerText="Data Venda" style="text-align: center;">
+								<h:outputText value="#{v.venda.dataVenda.time}">
+									<f:convertDateTime locale="pt_BR" pattern="dd/MM/yyyy"/>
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Cliente" width="250"
+								filterBy="#{v.venda.cliente.nome}" filterMatchMode="contains">
+								<h:outputText value="CLIENTE NAO IDENTIFICAO" rendered="#{v.venda.cliente.id==1}" style="color: #8B0000;" />
+								<h:outputText value="#{v.venda.cliente.nome}" rendered="#{v.venda.cliente.id!=1}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="33" />
+								</h:outputText>
+								<h:outputText value="..."
+									rendered="#{item.produto.nome.length()>=34}" />
+							</p:column>
+
+						</p:dataTable>
+
+					</fieldset>
+					<br />
+
+					<h:form rendered="#{itemBean.item.id!=null}">
+
+						<!-- 			aqui renderização dos dados da venda -->
+						<br />
+						<br />
+
+						<!-- 			Lista dos produtos da venda -->
+						<br />
+						<br />
+						<div
+							style="background: #A6C9E2; align-top: center; margin-left: 10px; margin-right: 70px; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="PRODUTOS"
+								style="color: #394674; font-size: 12px;" styleClass="OutPut" />
+						</div>
+
+						<br /><br />
+
+						<div style="background: #C4D2EB; height: 28px;" align="center">
+
+							<p:commandButton action="consultarEstoquePorProduto.xhtml"
+								style="color: none;" value="Voltar" ajax="false"
+								update=":form_pesquisa_produto:dtable"
+								icon="ui-icon-arrowthick-1-w" immediate="true"
+								rendered="#{vendaBean.venda.id!=null}" />
+							&nbsp;&nbsp;
+						</div>
+					</h:form>
+
+				</fieldset>
+
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+</html>

@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="header">
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Mensagem > Enviar Mensagem" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_enviar_sms"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="ENVIAR MENSAGEM"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<p:focus context="msg" for="msg"
+					rendered="#{mensagemBean.mensagem.destinatario.id != null}" />
+
+				<fieldset
+					style="border-color: #F8F8FF; border-bottom: white; border-top: white;">
+
+					<br />
+					<h:outputLabel value="Destinatário: " styleClass="OutPut" />
+					<h:outputLabel id="destinatario"
+						value="#{mensagemBean.mensagem.destinatario.nome}"
+						styleClass="OutPut" />
+					<br />
+					<br />
+
+					<h:panelGrid id="grid" columns="4">
+						<br />
+						<br />
+
+						<h:outputLabel value="Mensagem" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputTextarea id="msg"
+							value="#{mensagemBean.mensagem.descricao}" required="true"
+							requiredMessage="INFORME A DESCRIÇÃO DA MENSAGEM"
+							styleClass="input" validatorMessage="MENSAGE INVÁLIDA" rows="7"
+							cols="20">
+							<f:ajax event="blur" render="msgs" />
+							<f:validateLength minimum="5" maximum="250" />
+						</p:inputTextarea>
+
+
+					</h:panelGrid>
+					<br />
+					<br />
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{mensagemBean.enviarMensagem}"
+						value="Enviar" ajax="false" icon="ui-icon-check" update="@form">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton
+						action="/pages/mensagem/enviarMensagem.xhtml?faces-redirect=true"
+						value="Cancelar" icon="ui-icon-close" immediate="true" />
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" id="msgs" />
+				</div>
+
+				<p:ajaxStatus>
+					<f:facet name="start">
+						<h:graphicImage value="/resources/img/aguarde.gif" width="150" />
+					</f:facet>
+
+					<f:facet name="complete">
+						<h:outputText value="" />
+					</f:facet>
+				</p:ajaxStatus>
+			</h:form>
+
+			<p:dialog
+				header="Clique no nome da pessoa para escolher destinatário"
+				widgetVar="dlgMsg" resizable="false" modal="true" visible="true"
+				closable="false"
+				rendered="#{mensagemBean.mensagem.destinatario==null}"
+				showEffect="fold" hideEffect="fold">
+				<h:form>
+					<p:dataTable value="#{usuarioBean.ativados}" var="usuario"
+						id="tb_usuarios" paginator="true" rows="15"
+						paginatorPosition="bottom" emptyMessage="Não encontrado">
+
+						<p:column headerText="Nome" filterBy="#{usuario.nome}"
+							filterMatchMode="contains">
+							<h:commandLink value="#{usuario.nome}" onclick="dlgMsg.hide()"
+								id="link_nome">
+								<f:setPropertyActionListener
+									target="#{mensagemBean.mensagem.destinatario}"
+									value="#{usuario}" />
+							</h:commandLink>
+						</p:column>
+
+					</p:dataTable>
+
+					<div align="left">
+						<p:messages autoUpdate="true" id="msgs" />
+					</div>
+					<br />
+
+					<p:commandLink action="#{loginBean.redirect}">
+						<p:graphicImage value="/resources/img/inicio.png"
+							style="cursor: pointer; margin-top: 5px;" styleClass="acende" />
+					</p:commandLink>
+				</h:form>
+
+			</p:dialog>
+
+			<p:dialog header="Clique para escolher destinatário"
+				widgetVar="dlgMsg" resizable="false" modal="true" visible="true"
+				closable="false" rendered="#{loginBean.usuario.perfil.id==4}"
+				showEffect="fold" hideEffect="fold">
+				<h:form>
+					<div align="center">
+
+						<br />
+						<p:graphicImage value="/resources/img/noacsses.png" />
+						<br /> <br /> <br /> <br /> <a
+							href="javascript:history.back(-1)">Voltar</a><br />
+
+
+					</div>
+				</h:form>
+
+			</p:dialog>
+		</div>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

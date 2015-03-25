@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Pesquisar > Produtos" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_listar_produto"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="LISTAR PRODUTOS"
+						style="color: white; font-size: 12px;" styleClass="OutPut"
+						rendered="#{fornecedorBean.fornecedor.id==null}" />
+				</div>
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<p:focus context="isbn" for="isbn" />
+					<p:focus context="autocompletePesquisar"
+						for="autocompletePesquisar" />
+					<p:focus context="autor" for="autor" />
+
+					<h:panelGrid id="grid_pesquisa" columns="5" cellspacing="15">
+
+						<p:selectOneRadio value="#{produtoBean.box4Search}"
+							styleClass="OutPut" style="width: 80px;">
+							<f:selectItem itemLabel="ISBN/Código" itemValue="2" />
+							<f:selectItem itemLabel="Nome" itemValue="1" />
+							<f:selectItem itemLabel="Autor" itemValue="4" />
+							<f:ajax render="form_listar_produto" />
+						</p:selectOneRadio>
+
+						<p:inputText value="#{produtoBean.produto.isbn}"
+							rendered="#{produtoBean.box4Search == 2}" size="60" id="isbn"
+							maxlength="13"
+							validatorMessage="Informe corretamente o ISBN/Código">
+							<f:validateLength maximum="13" minimum="1" />
+							<f:validateLongRange minimum="1" />
+						</p:inputText>
+
+						<p:inputText value="#{produtoBean.produto.id}"
+							rendered="#{produtoBean.box4Search == 3}" size="60" id="codigo"
+							maxlength="6" />
+
+						<p:autoComplete value="#{produtoBean.search}"
+							completeMethod="#{produtoBean.autocomplete}" var="p"
+							itemValue="#{p}" itemLabel="#{p}"
+							rendered="#{produtoBean.box4Search == 1}" minQueryLength="3"
+							maxResults="5" queryDelay="30" id="autocompletePesquisar"
+							size="60" />
+
+						<p:autoComplete value="#{produtoBean.search}"
+							completeMethod="#{produtoBean.autocompleteautor}" var="p"
+							itemValue="#{p}" itemLabel="#{p}"
+							rendered="#{produtoBean.box4Search == 4}" minQueryLength="3"
+							maxResults="1" queryDelay="30" id="autor" size="60" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							action="#{produtoBean.getListaProdutos}" ajax="false"
+							icon="ui-icon-search"
+							rendered="#{produtoBean.box4Search == 1 or produtoBean.box4Search == 4}">
+							<f:ajax render="@form" />
+						</p:commandButton>
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar2"
+							action="#{produtoBean.getProdutoByIsbn}" ajax="false"
+							icon="ui-icon-search" rendered="#{produtoBean.box4Search == 2}">
+							<f:ajax render="@form" />
+						</p:commandButton>
+
+					</h:panelGrid>
+					<br />
+
+					<p:dataGrid id="dt" value="#{produtoBean.produtos}" var="p"
+						columns="2" rows="6" paginator="true" paginatorPosition="bottom"
+						emptyMessage="Não encontrado">
+
+						<p:panel header="#{p.tipo.nome}" style="text-align:center">
+							<h:panelGrid columns="1" style="width:100%;">
+
+								<h:outputText value="ISBN: #{p.isbn}"
+									rendered="#{p.isbn!=null and p.tipo.id==1}" />
+
+								<h:outputText value="Código: #{p.isbn}"
+									rendered="#{p.isbn!=null and p.tipo.id!=1}" />
+
+								<h:outputText value="Obra: #{p.nome}"
+									rendered="#{p.isbn!=null and p.tipo.id==1}" />
+
+								<h:outputText value="Descrição: #{p.nome}"
+									rendered="#{p.isbn!=null and p.tipo.id!=1}" />
+
+								<h:outputText value="Editora: #{p.editora}"
+									rendered="#{p.editora!=null}" />
+
+								<h:outputText value="Autor: #{p.autor}"
+									rendered="#{p.autor!=null}" />
+
+								<h:outputText value="Categoria: #{p.categoria.nome}"
+									rendered="#{p.categoria!=null}" />
+
+								<h:outputText value="Status" />
+								<h:outputText value="Ativado" rendered="#{p.ativado==true}"
+									style="color: blue;" />
+								<h:outputText value="Desativado" rendered="#{p.ativado==false}"
+									style="color: red;" />
+
+								<p:commandLink update=":form_listar_produto"
+									action="#{produtoBean.alterStatus}" title="Reativar produto"
+									rendered="#{p.ativado==false and loginBean.usuario.perfil.id==1 or p.ativado==false and loginBean.usuario.perfil.id==2}">
+									<h:outputText styleClass="ui-icon ui-icon-circle-check"
+										title="Reativar produto" style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{p}"
+										target="#{produtoBean.produto}" />
+								</p:commandLink>
+
+								<p:commandLink update=":form_listar_produto"
+									action="#{produtoBean.alterStatus}" title="Desativar produto"
+									rendered="#{p.ativado==true and loginBean.usuario.perfil.id==1 or p.ativado==true and loginBean.usuario.perfil.id==2}">
+									<h:outputText styleClass="ui-icon ui-icon-circle-close"
+										title="Desativar produto" style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{p}"
+										target="#{produtoBean.produto}" />
+								</p:commandLink>
+
+							</h:panelGrid>
+
+						</p:panel>
+
+
+					</p:dataGrid>
+
+				</fieldset>
+				<br />
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<!-- 			Aqui começa o dialog para detalhar o produto -->
+
+		<p:dialog widgetVar="dlgD" resizable="false" modal="true"
+			showEffect="fold">
+			<h:form id="form_dialog">
+
+				<h:panelGrid id="display">
+
+					<h:outputLabel value="ISBN: #{produtoBean.produto.isbn}"
+						styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel value="Descrição: #{produtoBean.produto.nome}"
+						styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel
+						value="Categoria: #{produtoBean.produto.categoria.nome}"
+						styleClass="OutPut" />
+					<br />
+
+					<h:outputLabel
+						value="Estoque Mínimo: #{produtoBean.produto.quantidadeMinima}"
+						styleClass="OutPut" />
+					<br />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+		<!-- 			restrição de acesso -->
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

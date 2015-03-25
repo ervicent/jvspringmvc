@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Pesquisar > Fornecedor" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<!-- 		Acesso não permitido -->
+		<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br />
+				<br />
+				<br />
+				<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+			</div>
+		</h:form>
+
+		<div class="Centralizar" style="background: white;">
+
+			<h:form id="form_consultar_fornecedor"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0;">
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+						align="center">
+						<h:outputText value="CONSULTAR FORNECEDOR"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<p:focus context="autocompletePesquisar"
+						for="autocompletePesquisar" />
+					<p:focus context="maskcnpj" for="maskcnpj" />
+					<p:focus context="maskcpf" for="maskcpf" />
+
+					<h:panelGrid id="grid_pesquisa" columns="5" cellspacing="15">
+
+						<p:selectOneRadio value="#{fornecedorBean.box4Search}"
+							styleClass="OutPut" style="width: 80px;">
+							<f:selectItem itemLabel="CNPJ" itemValue="2" />
+							<f:selectItem itemLabel="CPF" itemValue="3" />
+							<f:selectItem itemLabel="Nome" itemValue="1" />
+							<f:ajax render="form_consultar_fornecedor" />
+						</p:selectOneRadio>
+
+						<p:inputText value="#{fornecedorBean.search}" size="60"
+							rendered="#{fornecedorBean.box4Search != 1 and fornecedorBean.box4Search != 2 and fornecedorBean.box4Search != 3}"
+							disabled="true" />
+
+						<p:autoComplete value="#{fornecedorBean.search}"
+							completeMethod="#{fornecedorBean.autocomplete}" var="f"
+							itemValue="#{f}" itemLabel="#{f}"
+							rendered="#{fornecedorBean.box4Search == 1}" minQueryLength="3"
+							maxResults="5" queryDelay="30" id="autocompletePesquisar"
+							size="60" />
+
+						<p:inputMask mask="99.999.999/9999-99"
+							value="#{fornecedorBean.search}"
+							rendered="#{fornecedorBean.box4Search == 2}" size="60"
+							id="maskcnpj" />
+
+						<p:inputMask mask="999.999.999-99"
+							value="#{fornecedorBean.search}"
+							rendered="#{fornecedorBean.box4Search == 3}" size="60"
+							id="maskcpf" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							action="#{fornecedorBean.getListaFornecedorByName}" ajax="false"
+							icon="ui-icon-search" />
+
+					</h:panelGrid>
+					<br />
+
+					<p:dataGrid id="dg" var="fornecedor"
+						value="#{fornecedorBean.listaFornecedores}" columns="3" rows="6"
+						paginator="true" paginatorPosition="bottom"
+						style="text-align: center; float: center;"
+						emptyMessage="Não encontrado">
+
+						<p:panel header="#{fornecedor.nome}" id="pnl"
+							footer="CNPJ / CPF: #{fornecedor.cnpj}"
+							style="text-align:center; width: 100%;">
+							<h:panelGrid columns="1" style="width:100%">
+
+								<h:outputText value="e-mail: #{fornecedor.email}" />
+
+								<h:outputText value="e-mail 2: #{fornecedor.email2}"
+									rendered="#{not empty fornecedor.email2}" />
+
+								<h:outputText value="e-mail 3: #{fornecedor.email3}"
+									rendered="#{not empty fornecedor.email3}" />
+
+								<h:outputText value="Telefone 1: #{fornecedor.telefone1}" />
+
+								<h:outputText value="Telefone 2: #{fornecedor.telefone2}"
+									rendered="#{not empty fornecedor.telefone2}" />
+
+								<p:commandLink update=":form_dlg:display"
+									oncomplete="dlgEnd.show()">
+									<h:outputText styleClass="ui-icon ui-icon-circle-check"
+										style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{fornecedor}"
+										target="#{fornecedorBean.fornecedor}" />
+								</p:commandLink>
+							</h:panelGrid>
+						</p:panel>
+
+					</p:dataGrid>
+
+				</fieldset>
+
+				<p:messages id="msg" />
+
+			</h:form>
+
+			<p:dialog header="Informações do Fornecedor" modal="true"
+				resizable="false" showEffect="fade" hideEffect="fade"
+				widgetVar="dlgEnd">
+				<h:form id="form_dlg">
+
+					<h:panelGrid id="display" columns="2" cellspacing="10">
+
+						<p:panel header="Endereço" style="float: left">
+
+							<h:outputLabel value="Estado: " for="estado" styleClass="OutPut" />
+							<h:outputText id="estado"
+								value="#{fornecedorBean.fornecedor.endereco.unidade}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Município: " for="muni" styleClass="OutPut" />
+							<h:outputText id="muni"
+								value="#{fornecedorBean.fornecedor.endereco.municipio}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Logradouro: " for="logra"
+								styleClass="OutPut" />
+							<h:outputText id="tipologra"
+								value="#{fornecedorBean.fornecedor.endereco.tipoLogradouro} "
+								styleClass="OutPut" />
+							<h:outputText id="logra"
+								value="#{fornecedorBean.fornecedor.endereco.logradouro}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Número: " for="nu" styleClass="OutPut" />
+							<h:outputText id="nu"
+								value="#{fornecedorBean.fornecedor.endereco.numero}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Bairro: " for="bairro" styleClass="OutPut" />
+							<h:outputText id="bairro"
+								value="#{fornecedorBean.fornecedor.endereco.bairro}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="CEP: " for="cep" styleClass="OutPut" />
+							<h:outputText id="cep"
+								value="#{fornecedorBean.fornecedor.endereco.cep}"
+								styleClass="OutPut" />
+
+						</p:panel>
+
+						<p:panel header="Dados Bancários" style="float: right">
+							<br />
+
+							<h:outputLabel value="Banco: " styleClass="OutPut" />
+							<h:outputText value="NENHUM" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==0}" />
+							<h:outputText value="BB" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==1}" />
+							<h:outputText value="BRADESCO" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==2}" />
+							<h:outputText value="CAIXA" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==3}" />
+							<h:outputText value="HSBC" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==6}" />
+							<h:outputText value="ITAÚ" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==4}" />
+							<h:outputText value="SANTANDER" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==5}" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Agencia: " for="ag" styleClass="OutPut" />
+							<h:outputText value="NENHUM" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.agencia==null}" />
+							<h:outputText id="ag"
+								value="#{fornecedorBean.fornecedor.agencia}" styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="C/C: " for="cc" styleClass="OutPut" />
+							<h:outputText value="NENHUM" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.conta==null}" />
+							<h:outputText id="cc" value="#{fornecedorBean.fornecedor.conta}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Op: " for="op" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==3}" />
+							<h:outputText id="op"
+								value="#{fornecedorBean.fornecedor.operacao}"
+								styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.banco==3}" />
+							<br />
+							<br />
+
+							<h:outputLabel value="Titular: " for="titu" styleClass="OutPut" />
+							<h:outputText value="NENHUM" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.titularConta==null}" />
+							<h:outputText id="titu"
+								value="#{fornecedorBean.fornecedor.titularConta}"
+								styleClass="OutPut" />
+							<br />
+							<br />
+
+						</p:panel>
+
+						<p:panel header="Pis" style="float: left"
+							rendered="#{fornecedorBean.fornecedor.pis!=null}">
+							<br />
+
+							<h:outputLabel value="Pis: " for="pis" styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.pis!=null}" />
+							<h:outputText id="pis" value="#{fornecedorBean.fornecedor.pis}"
+								styleClass="OutPut"
+								rendered="#{fornecedorBean.fornecedor.pis!=null}" />
+							<br />
+							<br />
+
+						</p:panel>
+
+					</h:panelGrid>
+					<br />
+
+				</h:form>
+			</p:dialog>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+		</div>
+
+	</ui:define>
+
+</ui:composition>
+</html>

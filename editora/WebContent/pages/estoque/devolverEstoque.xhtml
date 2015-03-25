@@ -1,0 +1,271 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Venda > Devolução/Troca" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="opcion">
+		<div id="ps">
+
+			<div id="atencao"
+				style="background: #EFF3FA; height: 55px; width: 100%; float: left;">
+				<h:outputText value="Atenção!" styleClass="OutPut"
+					style="color: red" />
+				<br />
+				<h:outputText value="A quantidade informada afetará o estoque atual"
+					styleClass="OutPut" />
+				<br />
+				<h:outputLabel value="E - Entrada, " style="color: #1874CD" styleClass="OutPut" />	
+				<h:outputLabel value="A - Quantidade Atual" style="color: blue" styleClass="OutPut" />
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id>=3}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_itens"
+				rendered="#{loginBean.usuario.perfil.id!=3 and loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 10px;"
+					align="center">
+					<h:outputText value="PRODUTOS"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset style="border: 1px solid #A6C9E2; border-top: 0;">
+
+					<p:dataTable id="dt" value="#{itemBean.itens}" var="item"
+						emptyMessage="Não encontrado" paginator="true" rows="15"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx" paginatorPosition="bottom">
+
+						<p:column width="100" headerText="isbn/código"
+							filterBy="#{item.produto.isbn}" filterMatchMode="exact"
+							filterMaxLength="13">
+							<h:outputText value="#{item.produto.isbn}"
+								rendered="#{item.quantidadeAtual!=0}" />
+
+							<h:outputText value="#{item.produto.isbn}"
+								style="color: #CD0000;" rendered="#{item.quantidadeAtual==0}" />
+						</p:column>
+
+						<p:column headerText="Produto" width="280"
+							filterBy="#{item.produto.nome}" filterMatchMode="contains">
+							<h:outputText value="#{item.produto.tipo.nome}: "
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual!=0}" />
+							<h:outputText value="#{item.produto.nome}"
+								rendered="#{item.quantidadeAtual!=0}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="43" />
+							</h:outputText>
+							<h:outputText value="..."
+								rendered="#{item.produto.nome.length()>=44 and item.produto.tipo.id eq 1 and item.quantidadeAtual!=0}" />
+
+							<h:outputText value="#{item.produto.tipo.nome}: "
+								style="color: #CD0000;"
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual==0}" />
+							<h:outputText value="#{item.produto.nome}"
+								style="color: #CD0000;" rendered="#{item.quantidadeAtual==0}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="43" />
+							</h:outputText>
+							<h:outputText value="..." style="color: #CD0000"
+								rendered="#{item.produto.nome.length()>=44 and item.produto.tipo.id eq 1 and item.quantidadeAtual==0}" />
+						</p:column>
+						
+						<p:column headerText="Valor" style="text-align: center;" width="50">
+							<h:outputText value="#{item.valorVenda}">
+								<f:convertNumber pattern="#,##0.00" />
+							</h:outputText>
+						</p:column>
+												
+						<p:column headerText="Lote" width="50" style="text-align: center;" filterStyle="max-width: 40px;"
+								filterBy="#{item.notaFiscal.lote}-#{item.notaFiscal.dataEntrada.weekYear}"
+								filterMatchMode="contains">
+							<h:outputText value="#{item.notaFiscal.lote} - "
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual!=0}" />
+								<h:outputText
+								value="#{item.notaFiscal.dataEntrada.time}" 
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual!=0}">
+								<f:convertDateTime pattern="yyyy" />
+							</h:outputText>
+
+							<h:outputText value="#{item.notaFiscal.lote} - " style="color: #CD0000;"
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual==0}" />
+								<h:outputText
+								value="#{item.notaFiscal.dataEntrada.time}" 
+								rendered="#{item.produto.tipo.id eq 1 and item.quantidadeAtual==0}"
+								style="color: #CD0000;">
+								<f:convertDateTime pattern="yyyy" />
+							</h:outputText>
+						</p:column>
+
+						<p:column headerText="Autor" width="200"
+							filterBy="#{item.produto.autor}" filterMatchMode="contains">
+							<h:outputText value="#{item.produto.autor}"
+								rendered="#{item.produto.autor!=null}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="39" />
+							</h:outputText>
+							<h:outputText value="..."
+								rendered="#{item.produto.autor.length()>=40}" />
+							<h:outputText value="NENHUM"
+								rendered="#{item.produto.autor==null}" />
+						</p:column>
+
+						<p:column headerText="E" style="color: #1874CD" width="20">
+							<h:outputText value="#{item.quantidadeEntrada}"
+								rendered="#{item.quantidadeAtual!=0}" />
+
+							<h:outputText value="#{item.quantidadeEntrada}"
+								style="color: #CD0000;" rendered="#{item.quantidadeAtual==0}" />
+						</p:column>
+
+						<p:column headerText="A" style="color: blue;" width="20">
+							<h:outputText value="#{item.quantidadeAtual}"
+								rendered="#{item.quantidadeAtual!=0}" />
+							<h:outputText value="(#{item.quantidadeAtual2})"
+								style="color: #CD0000;" rendered="#{item.quantidadeAtual==0}" />
+						</p:column>
+
+						<p:column width="10">
+							<p:commandLink update=":form_dlg:display"
+								oncomplete="dlgDevolucao.show()"
+								title="Devolver produto ao estoque">
+								<h:outputText styleClass="ui-icon ui-icon-circle-check"
+									title="Devolver produto ao estoque" style="margin:0 auto;" />
+								<f:setPropertyActionListener value="#{item}"
+									target="#{itemBean.item}" />
+							</p:commandLink>
+						</p:column>
+
+					</p:dataTable>
+
+				</fieldset>
+				<br />
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<p:dialog header="Informe a quantidade de produto devolvido"
+			modal="true" resizable="false" showEffect="fade" hideEffect="fade"
+			widgetVar="dlgDevolucao" width="350">
+			<h:form id="form_dlg">
+
+				<h:panelGrid id="display" columns="3">
+
+					<h:outputLabel value="ISBN/Código: " for="cod" styleClass="OutPut" />
+					<h:outputText id="cod" value="#{itemBean.item.produto.isbn}"
+						styleClass="OutPut" />
+					<br />
+					<br />
+
+					<h:outputLabel value="Produto: " for="nome" styleClass="OutPut" />
+					<h:outputText id="nome" value="#{itemBean.item.produto.nome}"
+						styleClass="OutPut" />
+
+				</h:panelGrid>
+				<br />
+				<br />
+
+				<h:panelGrid columns="3" cellspacing="5">
+
+					<h:outputLabel value="Devolver" styleClass="OutPut"
+						style="color: #8B0000;" />
+					<p:inputText id="qtd"
+						requiredMessage="INFORME A QUANTIDADE DE DEVOLUÇÃO" size="7"
+						required="true" value="#{itemBean.retorno}"
+						validatorMessage="RETORNO INVÁLIDO">
+						<f:ajax event="change" />
+						<f:validateLongRange minimum="1" />
+					</p:inputText>
+					<h:outputLabel value="Item(ns)" styleClass="OutPut"
+						style="color: #8B0000;" />
+
+				</h:panelGrid>
+
+				<br />
+				<br />
+
+				<div align="center">
+					<p:commandButton id="ok" value="OK" action="#{itemBean.updateItem}"
+						icon="ui-icon-check" style="float: center; text-align: center;"
+						ajax="false" title="Devolver" update=":form_itens">
+						<f:ajax render="@all" />
+					</p:commandButton>
+					<br />
+					<br />
+
+					<p:message id="error_qtd" for="qtd" />
+				</div>
+
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

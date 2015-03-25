@@ -1,0 +1,706 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Fornecedor > Cadastrar Fornecedor"
+				styleClass="title" rendered="#{fornecedorBean.fornecedor.id==null}"
+				style="line-height: 20px;" />
+			<h:outputText value="Fornecedor > Editar Fornecedor"
+				styleClass="title" rendered="#{fornecedorBean.fornecedor.id!=null}"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+	</ui:define>
+
+	<ui:define name="opcion">
+		<div id="cnpj/cpf">
+
+			<div id="cnpj"
+				style="background: #EFF3FA; height: 55px; width: 50%; float: left;">
+				<br />
+				<p:commandLink
+					action="/pages/fornecedor/cadastrarJFornecedor.xhtml?faces-redirect=true">
+					<h:outputText value="PESSOA JURÍDICA" styleClass="OutPut" />
+					<br />
+					<h:outputText value="(CNPJ)" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+			<div id="cpf"
+				style="background: #FFFFE4; height: 55px; width: 50%; float: right;">
+				<br />
+				<p:commandLink
+					action="/pages/fornecedor/cadastrarFFornecedor.xhtml?faces-redirect=true">
+					<h:outputText value="PESSOA FÍSICA" styleClass="OutPut" />
+					<br />
+					<h:outputText value="(CPF)" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_cadastrar_fornecedor"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<p:focus context="grid" for="cpf" />
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 10px;"
+					align="center">
+					<h:outputText value="CADASTRAR FORNECEDOR"
+						style="color: white; font-size: 12px;" styleClass="OutPut"
+						rendered="#{fornecedorBean.fornecedor.id==null}" />
+					<h:outputText value="EDITAR FORNECEDOR"
+						style="color: white; font-size: 12px;" styleClass="OutPut"
+						rendered="#{fornecedorBean.fornecedor.id!=null}" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-bottom: 0; border-top: 0;">
+
+					<h:panelGrid id="botton" columns="5" style="float: right;">
+
+						<h:graphicImage value="/resources/img/edita_fornecedor.png"
+							onclick="dlgEditaFornecedor.show();"
+							style="float: right; cursor: pointer;"
+							title="Altera os dados do fornecedor cadastrado no sistema"
+							styleClass="acende" />
+
+						<h:commandLink
+							action="/pages/notafiscal/cadastrarNotaFiscal.xhtml?faces-redirect=true"
+							immediate="true">
+							<h:graphicImage value="/resources/img/notafiscal2.png"
+								style="float: right; cursor: pointer;"
+								title="Opção para cadastrar nota fiscal" styleClass="acende" />
+						</h:commandLink>
+
+						<h:commandLink
+							action="/pages/produto/cadastrarProduto.xhtml?faces-redirect=true"
+							immediate="true">
+							<h:graphicImage value="/resources/img/produto.png"
+								style="float: right; cursor: pointer;"
+								title="Opção para cadastrar produto" styleClass="acende" />
+						</h:commandLink>
+
+					</h:panelGrid>
+
+					<h:panelGrid id="grid" columns="5">
+
+						<h:outputLabel value="CPF" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputMask id="cpf" value="#{fornecedorBean.fornecedor.cnpj}"
+							mask="999.999.999-99" styleClass="input" required="true"
+							requiredMessage="INFORME O CPF"
+							rendered="#{fornecedorBean.fornecedor.cnpj==null}">
+							<f:ajax event="blur" render="error_cpf" />
+						</p:inputMask>
+						<p:message id="error_cpf" for="cpf"
+							rendered="#{fornecedorBean.fornecedor.cnpj==null}" />
+
+						<p:inputMask id="cpf2" value="#{fornecedorBean.fornecedor.cnpj}"
+							mask="999.999.999-99" styleClass="input" disabled="true"
+							rendered="#{fornecedorBean.fornecedor.cnpj!=null}"
+							required="true" requiredMessage="INFORME O CPF">
+							<f:ajax event="blur" render="error_cpf2" />
+						</p:inputMask>
+						<p:message id="error_cpf2" for="cpf2"
+							rendered="#{fornecedorBean.fornecedor.cnpj!=null}" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Nome Completo" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputText id="forn_nome"
+							value="#{fornecedorBean.fornecedor.nome}" required="true"
+							requiredMessage="INFORME O NOME DO FORNECEDOR"
+							rendered="#{fornecedorBean.fornecedor.nome==null}"
+							styleClass="input">
+							<f:ajax event="blur" render="error_nome" />
+						</p:inputText>
+						<p:message id="error_nome" for="forn_nome"
+							rendered="#{fornecedorBean.fornecedor.nome==null}" />
+
+						<p:inputText id="forn_nome2"
+							value="#{fornecedorBean.fornecedor.nome}" disabled="true"
+							rendered="#{fornecedorBean.fornecedor.nome!=null}"
+							styleClass="input">
+							<f:ajax event="blur" render="error_nome2" />
+						</p:inputText>
+						<p:message id="error_nome2" for="forn_nome2"
+							rendered="#{fornecedorBean.fornecedor.nome!=null}" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Pis" styleClass="OutPut"
+							onclick="dlgObsPis.show();" style="cursor: pointer;" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputText id="forn_pis"
+							value="#{fornecedorBean.fornecedor.pis}" required="true"
+							requiredMessage="INFORME O PIS" styleClass="input"
+							validatorMessage="PIS INVÁLIDO" maxlength="11">
+							<f:ajax event="blur" render="error_pis" />
+							<f:validateLength maximum="11" minimum="11" />
+						</p:inputText>
+						<p:message id="error_pis" for="forn_pis" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Telefone 1" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputMask mask="(99)9999-9999" id="forn_fone1"
+							value="#{fornecedorBean.fornecedor.telefone1}" styleClass="input"
+							required="true" requiredMessage="INFORME O TELEFONE">
+							<f:ajax event="blur" render="error_fone1" />
+						</p:inputMask>
+						<p:message id="error_fone1" for="forn_fone1" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Telefone 2" styleClass="OutPut" />
+						<h:outputLabel value="" />
+						<p:inputMask mask="(99)9999-9999" id="forn_fone2"
+							value="#{fornecedorBean.fornecedor.telefone2}" styleClass="input">
+							<f:ajax event="blur" render="error_fone2" />
+						</p:inputMask>
+						<p:message id="error_fone2" for="forn_fone2" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Email" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:inputText id="forn_email"
+							value="#{fornecedorBean.fornecedor.email}" styleClass="input"
+							required="true" requiredMessage="INFORME O EMAIL"
+							validatorMessage="EMAIL INVÁLIDO">
+							<f:ajax event="blur" render="error_email" />
+						</p:inputText>
+						<p:message id="error_email" for="forn_email" />
+						<br />
+						<br />
+
+					</h:panelGrid>
+
+					<!-- 					Aqui começa os dados bancários -->
+					<p:fieldset legend="Dados Bancários"
+						style="width: 70%; margin-left: 15px; float: left; height: 160px;">
+
+						<div style="float: left">
+							<p:selectOneRadio value="#{fornecedorBean.fornecedor.banco}"
+								style="width: 215px; margin-left: 8px;">
+								<f:selectItem itemLabel="" itemValue="1" id="bb" />
+								<f:selectItem itemLabel="" itemValue="2" id="bradesco" />
+								<f:selectItem itemLabel="" itemValue="3" id="caixa" />
+								<f:selectItem itemLabel="" itemValue="6" id="hsbc" />
+								<f:selectItem itemLabel="" itemValue="4" id="itau" />
+								<f:selectItem itemLabel="" itemValue="5" id="st" />
+								<f:ajax render="grid_dados_bancarios" />
+							</p:selectOneRadio>
+
+							<h:panelGrid columns="6" cellspacing="5">
+								<h:graphicImage value="/resources/img/bb.png"
+									title="Banco do Brasil" />
+
+								<h:graphicImage value="/resources/img/bradesco.png"
+									title="Bradesco" />
+
+								<h:graphicImage value="/resources/img/caixa.png" title="Caixa" />
+
+								<h:graphicImage value="/resources/img/hsbc.png" title="HSBC" />
+
+								<h:graphicImage value="/resources/img/itau.png" title="Itaú" />
+
+								<h:graphicImage value="/resources/img/santander.png"
+									title="Santander" />
+
+							</h:panelGrid>
+						</div>
+
+						<div style="float: left">
+
+							<p:selectOneRadio value="#{fornecedorBean.fornecedor.tipoConta}"
+								styleClass="OutPut" style="margin-left: 60px;" required="true"
+								requiredMessage="INFORME O TIPO DA CONTA"
+								rendered="#{fornecedorBean.fornecedor.banco == null}">
+								<f:selectItem itemLabel="Conta Corrente"
+									itemValue="Conta Corrente" />
+								<f:selectItem itemLabel="Poupança" itemValue="Poupança" />
+							</p:selectOneRadio>
+
+							<h:panelGrid id="grid_dados_bancarios" columns="3"
+								style="float: left">
+
+								<h:outputLabel value="Agencia" styleClass="OutPut"
+									rendered="#{fornecedorBean.fornecedor.banco == 1 or 
+						fornecedorBean.fornecedor.banco == 2 or fornecedorBean.fornecedor.banco == 3 or fornecedorBean.fornecedor.banco == 4 or fornecedorBean.fornecedor.banco == 5 
+						or fornecedorBean.fornecedor.banco == 6}" />
+								<h:graphicImage value="/resources/img/as.png" styleClass="as"
+									rendered="#{fornecedorBean.fornecedor.banco == 1 or 
+						fornecedorBean.fornecedor.banco == 2 or fornecedorBean.fornecedor.banco == 3 or fornecedorBean.fornecedor.banco == 4 or fornecedorBean.fornecedor.banco == 5 
+						or fornecedorBean.fornecedor.banco == 6}" />
+								<p:inputMask id="forn_agencia_bb"
+									value="#{fornecedorBean.fornecedor.agencia}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 1}"
+									mask="9999-*" />
+								<p:inputMask id="forn_agencia_bradesco"
+									value="#{fornecedorBean.fornecedor.agencia}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 2}" mask="9999" />
+								<p:inputMask id="forn_agencia_caixa"
+									value="#{fornecedorBean.fornecedor.agencia}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 3}" mask="9999" />
+								<p:inputMask id="forn_agencia_itau"
+									value="#{fornecedorBean.fornecedor.agencia}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 4}" mask="9999" />
+								<p:inputMask id="forn_agencia_st"
+									value="#{fornecedorBean.fornecedor.agencia}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 5}" mask="9999" />
+								<p:inputMask id="forn_agencia_hsbc"
+									value="#{fornecedorBean.fornecedor.agencia}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 6}"
+									mask="9999-9" />
+
+								<h:outputLabel value="Nº Conta" styleClass="OutPut"
+									rendered="#{fornecedorBean.fornecedor.banco == 1 or 
+						fornecedorBean.fornecedor.banco == 2 or fornecedorBean.fornecedor.banco == 3 or fornecedorBean.fornecedor.banco == 4 or fornecedorBean.fornecedor.banco == 5 
+						or fornecedorBean.fornecedor.banco == 6}" />
+								<h:graphicImage value="/resources/img/as.png" styleClass="as"
+									rendered="#{fornecedorBean.fornecedor.banco == 1 or 
+						fornecedorBean.fornecedor.banco == 2 or fornecedorBean.fornecedor.banco == 3 or fornecedorBean.fornecedor.banco == 4 or fornecedorBean.fornecedor.banco == 5 
+						or fornecedorBean.fornecedor.banco == 6}" />
+								<p:inputMask id="forn_conta_bb"
+									value="#{fornecedorBean.fornecedor.conta}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 1}" />
+								<p:inputMask id="forn_conta_bradesco"
+									value="#{fornecedorBean.fornecedor.conta}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 2}"
+									mask="999999-9" />
+								<p:inputMask id="forn_conta_caixa"
+									value="#{fornecedorBean.fornecedor.conta}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 3}"
+									mask="99999999-9" />
+								<p:inputMask id="forn_conta_itau"
+									value="#{fornecedorBean.fornecedor.conta}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 4}"
+									mask="99999-9" />
+								<p:inputMask id="forn_conta_st"
+									value="#{fornecedorBean.fornecedor.conta}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 5}"
+									maxlength="9" />
+								<p:inputMask id="forn_conta_hsbc"
+									value="#{fornecedorBean.fornecedor.conta}" styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 6}"
+									mask="9999999-9" />
+
+								<h:outputLabel value="Op" styleClass="OutPut"
+									rendered="#{fornecedorBean.fornecedor.banco == 3}" />
+								<h:graphicImage value="" styleClass="as"
+									rendered="#{fornecedorBean.fornecedor.banco == 3}" />
+								<p:inputMask id="forn_op_caixa"
+									value="#{fornecedorBean.fornecedor.operacao}"
+									styleClass="input" mask="999"
+									rendered="#{fornecedorBean.fornecedor.banco == 3}" />
+
+								<h:outputLabel value="Títular" styleClass="OutPut"
+									rendered="#{fornecedorBean.fornecedor.banco == 1 or 
+						fornecedorBean.fornecedor.banco == 2 or fornecedorBean.fornecedor.banco == 3 or fornecedorBean.fornecedor.banco == 4 or fornecedorBean.fornecedor.banco == 5 
+						or fornecedorBean.fornecedor.banco == 6}" />
+								<h:graphicImage value="/resources/img/as.png" styleClass="as"
+									rendered="#{fornecedorBean.fornecedor.banco == 1 or 
+						fornecedorBean.fornecedor.banco == 2 or fornecedorBean.fornecedor.banco == 3 or fornecedorBean.fornecedor.banco == 4 or fornecedorBean.fornecedor.banco == 5 
+						or fornecedorBean.fornecedor.banco == 6}" />
+								<p:inputText id="forn_titular"
+									value="#{fornecedorBean.fornecedor.titularConta}"
+									styleClass="input"
+									rendered="#{fornecedorBean.fornecedor.banco == 1 or 
+						fornecedorBean.fornecedor.banco == 2 or fornecedorBean.fornecedor.banco == 3 or fornecedorBean.fornecedor.banco == 4 or fornecedorBean.fornecedor.banco == 5 
+						or fornecedorBean.fornecedor.banco == 6}" />
+
+							</h:panelGrid>
+						</div>
+					</p:fieldset>
+
+					<p:fieldset legend="Endereço"
+						style="width: 70%; margin-right: 15px; margin-left: 15px; height: 135px;"
+						rendered="#{fornecedorBean.fornecedor.id==null}">
+
+						<h:panelGrid id="grid2" columns="8">
+
+							<h:outputLabel value="Estado" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:selectOneMenu style="width: 50px;" id="unif_sigla"
+								value="#{fornecedorBean.endereco.unidade}" equired="true"
+								requiredMessage="INFORME A SIGLA DO ESTADO" styleClass="input">
+								<f:selectItem itemLabel="RR" itemValue="RR" />
+								<f:selectItem itemLabel="AM" itemValue="AM" />
+								<f:selectItem itemLabel="AC" itemValue="AC" />
+								<f:selectItem itemLabel="AL" itemValue="AL" />
+								<f:selectItem itemLabel="AP" itemValue="AP" />
+								<f:selectItem itemLabel="BA" itemValue="BA" />
+								<f:selectItem itemLabel="CE" itemValue="CE" />
+								<f:selectItem itemLabel="DF" itemValue="DF" />
+								<f:selectItem itemLabel="ES" itemValue="ES" />
+								<f:selectItem itemLabel="GO" itemValue="GO" />
+								<f:selectItem itemLabel="MA" itemValue="MA" />
+								<f:selectItem itemLabel="MG" itemValue="MG" />
+								<f:selectItem itemLabel="MS" itemValue="MS" />
+								<f:selectItem itemLabel="MT" itemValue="MT" />
+								<f:selectItem itemLabel="PA" itemValue="PA" />
+								<f:selectItem itemLabel="PB" itemValue="PB" />
+								<f:selectItem itemLabel="PE" itemValue="PE" />
+								<f:selectItem itemLabel="PI" itemValue="PI" />
+								<f:selectItem itemLabel="PR" itemValue="PR" />
+								<f:selectItem itemLabel="RO" itemValue="RO" />
+								<f:selectItem itemLabel="RJ" itemValue="RJ" />
+								<f:selectItem itemLabel="RN" itemValue="RN" />
+								<f:selectItem itemLabel="RS" itemValue="RS" />
+								<f:selectItem itemLabel="SE" itemValue="SE" />
+								<f:selectItem itemLabel="SC" itemValue="SC" />
+								<f:selectItem itemLabel="SP" itemValue="SP" />
+								<f:selectItem itemLabel="TO" itemValue="TO" />
+								<f:ajax event="blur" render="error_nome_unif" />
+							</p:selectOneMenu>
+							<p:message id="error_nome_unif" for="unif_sigla" display="icon" />
+
+							<h:outputLabel value="Município" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_municipio"
+								value="#{fornecedorBean.endereco.municipio}" styleClass="input"
+								size="30" completeMethod="#{enderecoBean.autocompletemunicipio}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="m"
+								itemLabel="#{m}" itemValue="#{m}" required="true"
+								requiredMessage="INFORME O MUNICIPIO">
+								<f:ajax event="blur" render="error_municipio" />
+							</p:autoComplete>
+							<p:message id="error_municipio" for="end_municipio"
+								display="icon" />
+
+							<h:outputLabel value="Tipo Logradouro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:selectOneMenu id="end_tipo_logra"
+								value="#{fornecedorBean.endereco.tipoLogradouro}"
+								styleClass="input" required="true"
+								requiredMessage="INFORME O TIPO DE LOGRADOURO"
+								style="width: 50px;">
+								<f:selectItem itemLabel="" itemValue="" />
+								<f:selectItem itemLabel="Av" itemValue="Av" />
+								<f:selectItem itemLabel="Br" itemValue="Br" />
+								<f:selectItem itemLabel="Rua" itemValue="Rua" />
+								<f:ajax event="blur" render="error_tipo" />
+							</p:selectOneMenu>
+							<p:message id="error_tipo" for="end_tipo_logra" display="icon" />
+
+							<h:outputLabel value="Logradouro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_logra"
+								value="#{fornecedorBean.endereco.logradouro}" styleClass="input"
+								size="30"
+								completeMethod="#{enderecoBean.autocompletelogradouro}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="l"
+								itemLabel="#{l}" itemValue="#{l}" required="true"
+								requiredMessage="INFORME O LOGRADOURO">
+								<f:ajax event="blur" render="error_logradouro" />
+							</p:autoComplete>
+							<p:message id="error_logradouro" for="end_logra" display="icon" />
+
+							<h:outputLabel value="Número" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:inputText id="end_numero"
+								value="#{fornecedorBean.endereco.numero}" style="width: 40px;"
+								required="true" requiredMessage="INFORME O NÚMERO">
+								<f:ajax event="blur" render="error_numero" />
+							</p:inputText>
+							<p:message id="error_numero" for="end_numero" display="icon" />
+
+							<h:outputLabel value="Bairro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_bairro"
+								value="#{fornecedorBean.endereco.bairro}" styleClass="input"
+								completeMethod="#{enderecoBean.autocompletebairro}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="b"
+								itemLabel="#{b}" itemValue="#{b}" size="30" required="true"
+								requiredMessage="INFORME O BAIRRO">
+								<f:ajax event="blur" render="error_bairro" />
+							</p:autoComplete>
+							<p:message id="error_bairro" for="end_bairro" display="icon" />
+
+							<h:outputLabel value="CEP" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:inputMask mask="99.999-999" id="end_cep"
+								value="#{fornecedorBean.endereco.cep}" styleClass="input"
+								style="width: 100px;" required="true"
+								requiredMessage="INFORME O CEP">
+								<f:ajax event="blur" render="error_cep" />
+							</p:inputMask>
+							<p:message id="error_cep" for="end_cep" display="icon" />
+
+						</h:panelGrid>
+
+					</p:fieldset>
+
+					<!-- 					fieldset de endereço apenas para editar fornecedor -->
+
+					<p:fieldset legend="Endereço"
+						style="width: 70%; margin-right: 15px; margin-left: 15px; height: 135px;"
+						rendered="#{fornecedorBean.fornecedor.id!=null}">
+
+						<h:panelGrid id="grid3" columns="8">
+
+							<h:outputLabel value="Estado" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:selectOneMenu style="width: 50px;" id="unif_sigla2"
+								value="#{fornecedorBean.fornecedor.endereco.unidade}"
+								equired="true" requiredMessage="INFORME A SIGLA DO ESTADO"
+								styleClass="input">
+								<f:selectItem itemLabel="RR" itemValue="RR" />
+								<f:selectItem itemLabel="AM" itemValue="AM" />
+								<f:selectItem itemLabel="AC" itemValue="AC" />
+								<f:selectItem itemLabel="AL" itemValue="AL" />
+								<f:selectItem itemLabel="AP" itemValue="AP" />
+								<f:selectItem itemLabel="BA" itemValue="BA" />
+								<f:selectItem itemLabel="CE" itemValue="CE" />
+								<f:selectItem itemLabel="DF" itemValue="DF" />
+								<f:selectItem itemLabel="ES" itemValue="ES" />
+								<f:selectItem itemLabel="GO" itemValue="GO" />
+								<f:selectItem itemLabel="MA" itemValue="MA" />
+								<f:selectItem itemLabel="MG" itemValue="MG" />
+								<f:selectItem itemLabel="MS" itemValue="MS" />
+								<f:selectItem itemLabel="MT" itemValue="MT" />
+								<f:selectItem itemLabel="PA" itemValue="PA" />
+								<f:selectItem itemLabel="PB" itemValue="PB" />
+								<f:selectItem itemLabel="PE" itemValue="PE" />
+								<f:selectItem itemLabel="PI" itemValue="PI" />
+								<f:selectItem itemLabel="PR" itemValue="PR" />
+								<f:selectItem itemLabel="RO" itemValue="RO" />
+								<f:selectItem itemLabel="RJ" itemValue="RJ" />
+								<f:selectItem itemLabel="RN" itemValue="RN" />
+								<f:selectItem itemLabel="RS" itemValue="RS" />
+								<f:selectItem itemLabel="SE" itemValue="SE" />
+								<f:selectItem itemLabel="SC" itemValue="SC" />
+								<f:selectItem itemLabel="SP" itemValue="SP" />
+								<f:selectItem itemLabel="TO" itemValue="TO" />
+								<f:ajax event="blur" render="error_nome_unif2" />
+							</p:selectOneMenu>
+							<p:message id="error_nome_unif2" for="unif_sigla2" display="icon" />
+
+							<h:outputLabel value="Município" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_municipio2"
+								value="#{fornecedorBean.fornecedor.endereco.municipio}"
+								styleClass="input" size="30"
+								completeMethod="#{enderecoBean.autocompletemunicipio}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="m"
+								itemLabel="#{m}" itemValue="#{m}" required="true"
+								requiredMessage="INFORME O MUNICIPIO">
+								<f:ajax event="blur" render="error_municipio2" />
+							</p:autoComplete>
+							<p:message id="error_municipio2" for="end_municipio2"
+								display="icon" />
+
+							<h:outputLabel value="Tipo Logradouro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:selectOneMenu id="end_tipo_logra2"
+								value="#{fornecedorBean.fornecedor.endereco.tipoLogradouro}"
+								styleClass="input" required="true"
+								requiredMessage="INFORME O TIPO DE LOGRADOURO"
+								style="width: 50px;">
+								<f:selectItem itemLabel="" itemValue="" />
+								<f:selectItem itemLabel="Av" itemValue="Av" />
+								<f:selectItem itemLabel="Br" itemValue="Br" />
+								<f:selectItem itemLabel="Rua" itemValue="Rua" />
+								<f:ajax event="blur" render="error_tipo2" />
+							</p:selectOneMenu>
+							<p:message id="error_tipo2" for="end_tipo_logra2" display="icon" />
+
+							<h:outputLabel value="Logradouro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_logra2"
+								value="#{fornecedorBean.fornecedor.endereco.logradouro}"
+								styleClass="input" size="30"
+								completeMethod="#{enderecoBean.autocompletelogradouro}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="l"
+								itemLabel="#{l}" itemValue="#{l}" required="true"
+								requiredMessage="INFORME O LOGRADOURO">
+								<f:ajax event="blur" render="error_logradouro2" />
+							</p:autoComplete>
+							<p:message id="error_logradouro2" for="end_logra2" display="icon" />
+
+							<h:outputLabel value="Número" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:inputText id="end_numero2"
+								value="#{fornecedorBean.fornecedor.endereco.numero}"
+								style="width: 40px;" required="true"
+								requiredMessage="INFORME O NÚMERO">
+								<f:ajax event="blur" render="error_numero2" />
+							</p:inputText>
+							<p:message id="error_numero2" for="end_numero2" display="icon" />
+
+							<h:outputLabel value="Bairro" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:autoComplete id="end_bairro2"
+								value="#{fornecedorBean.fornecedor.endereco.bairro}"
+								styleClass="input"
+								completeMethod="#{enderecoBean.autocompletebairro}"
+								minQueryLength="3" maxResults="1" queryDelay="30" var="b"
+								itemLabel="#{b}" itemValue="#{b}" size="30" required="true"
+								requiredMessage="INFORME O BAIRRO">
+								<f:ajax event="blur" render="error_bairro2" />
+							</p:autoComplete>
+							<p:message id="error_bairro2" for="end_bairro2" display="icon" />
+
+							<h:outputLabel value="CEP" styleClass="OutPut" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<p:inputMask mask="99.999-999" id="end_cep2"
+								value="#{fornecedorBean.fornecedor.endereco.cep}"
+								styleClass="input" style="width: 100px;" required="true"
+								requiredMessage="INFORME O CEP">
+								<f:ajax event="blur" render="error_cep2" />
+							</p:inputMask>
+							<p:message id="error_cep2" for="end_cep2" display="icon" />
+
+						</h:panelGrid>
+
+					</p:fieldset>
+
+					<br />
+					<br />
+
+				</fieldset>
+
+				<!-- 			botões -->
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{fornecedorBean.addFornecedor}"
+						value="Cadastrar" ajax="false" icon="ui-icon-check" update="@form"
+						rendered="#{fornecedorBean.fornecedor.id==null}">
+						<f:ajax render="@form" />
+					</p:commandButton>
+
+					<p:commandButton action="#{fornecedorBean.alterFornecedor}"
+						value="Editar" ajax="false" icon="ui-icon-pencil" update="@form"
+						rendered="#{fornecedorBean.fornecedor.id!=null}">
+						<f:ajax render="@form" />
+					</p:commandButton>
+					&nbsp;
+
+					<p:commandButton
+						action="cadastrarFFornecedor.xhtml?faces-redirect=true"
+						value="Cancelar" ajax="false" icon="ui-icon-close"
+						immediate="true" />
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<!-- 			Aqui começa o dialog para Editar Fornecedor -->
+
+		<p:dialog header="Editar Fornecedor" widgetVar="dlgEditaFornecedor"
+			resizable="false" modal="true" showEffect="fold">
+			<h:form id="form_dialog_edita">
+
+				<p:dataTable value="#{fornecedorBean.cpfs}" var="f"
+					id="tb_fornecedores" emptyMessage="Não encontrado" paginator="true"
+					rows="10" paginatorPosition="bottom">
+
+					<p:column headerText="Fornecedor" filterBy="#{f.nome}"
+						filterMatchMode="contains">
+						<h:commandLink value="#{f.nome}"
+							onclick="dlgEditaFornecedor.hide()" style="text-align: center;"
+							id="link_codigo">
+							<f:setPropertyActionListener
+								target="#{fornecedorBean.fornecedor}" value="#{f}" />
+						</h:commandLink>
+					</p:column>
+
+					<p:column headerText="CPF" filterBy="#{f.cnpj}"
+						filterMatchMode="contains" style="text-align: center;">
+						<h:commandLink value="#{f.cnpj}"
+							onclick="dlgEditaFornecedor.hide()" style="text-align: center;"
+							id="link_codigo2">
+							<f:setPropertyActionListener
+								target="#{fornecedorBean.fornecedor}" value="#{f}" />
+						</h:commandLink>
+					</p:column>
+
+				</p:dataTable>
+
+
+			</h:form>
+		</p:dialog>
+
+		<p:dialog header="Dicas" widgetVar="dlgObsPis" resizable="false"
+			modal="true" showEffect="fold">
+
+			<div align="left"
+				style="font-weight: bold; color: #394674; width: 300px; height: 150px; letter-spacing: 2px; line-height: 15px;">
+				Obs:<br /> <br /> Não digite caracters inválidos. <br /> Digite
+				somente os números do PIS.
+			</div>
+
+		</p:dialog>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

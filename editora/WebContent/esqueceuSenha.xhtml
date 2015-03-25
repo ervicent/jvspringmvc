@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Editora UFRR</title>
+	<h:outputStylesheet name="leo.css" library="css" />
+	<link rel="shortcut icon" href="resources/img/favicon.ico" />
+</h:head>
+
+<h:body styleClass="shadow">
+
+	<h:form id="login">
+
+		<div style="background: white;" align="center">
+
+			<div
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: left;">
+				<h:outputText value="UFRR - DTI - "
+					style="margin-left: 10px; font-size: 15px; font-weight: bold; color: white;" />
+				<h:outputText value="Sistema de Vendas Editora"
+					style="color: white; font-size: 13px;" />
+			</div>
+
+			<div id="rodape2"></div>
+
+			<div style="background: #C4D2EB; height: 60px; width: 95%">
+				<a href="http://cecomp.ufrr.br/" target="_blank"> <p:graphicImage
+						value="/resources/img/DTI100px.png"
+						style="float: left; text-align: left; width: 90px;" />
+				</a> <a href="http://www.ufrr.br" target="_blank"> <p:graphicImage
+						value="/resources/img/brasao.png"
+						style="float: right; text-align: right; width: 66px;" />
+				</a>
+			</div>
+
+			<div style="background: #EFF3FA; height: 60px; width: 95%"
+				align="center">
+				<br />
+				<h:outputLabel value="Atenção!"
+					style="color: red; font-weight: bold;" />
+				<br />
+				<h:outputLabel value="Copie o código enviado para seu email" />
+			</div>
+
+
+			<br />
+			<br />
+
+
+			<div align="center" style="width: 95%; background: white;">
+
+				<h:outputLabel value="Esqueceu a senha? " />
+				<h:commandLink value="Clique aqui para recuperá-la."
+					action="/pages/usuario/recuperarSenha.xhtml?faces-redirect=true"
+					styleClass="OutPut" style="float: center; text-align: center;" />
+				<br />
+				<br />
+
+				<fieldset
+					style="border-color: #C8D5EC; width: 485px; background: #C8D5EC; border: solid thick #C8D5EC; text-align: center border-top-width:  0px; border-top-right-radius: 8px; border-top-left-radius: 8px;">
+					<h:outputLabel value="Entrar no Sistema"
+						style="color: #394674; font-weight: bold; font-size: 14px;" />
+					<br />
+				</fieldset>
+
+				<fieldset
+					style="border-color: #C8D5EC; width: 500px; background: #FAFAFA; border: solid thick #C8D5EC; border-top-width: 0px; border-radius: 1em;">
+					<br />
+
+					<p:focus context="grid" />
+
+					<h:panelGrid id="grid" columns="2" cellpadding="10"
+						cellspacing="10">
+
+						<h:outputLabel value="Código: " />
+						<p:password value="#{loginBean.usuario.senha}" size="60">
+							<f:ajax event="change" />
+						</p:password>
+
+					</h:panelGrid>
+					<br />
+
+					<p:commandButton value="Entrar"
+						action="#{loginBean.esqueceuSenha2}" ajax="false">
+						<p:ajax render="@all" />
+					</p:commandButton>
+
+					<br />
+					<br />
+
+				</fieldset>
+				<br />
+				<br />
+
+				<h:outputLabel value="Servidor,"
+					style="font-weight: bold; float: center;" />
+				<br />
+				<h:outputLabel value="caso ainda não possua cadastro no sistema,"
+					style="float: center;" />
+				<br />
+				<h:outputLabel value="clique no link abaixo." style="float: center;" />
+				<br />
+				<br />
+
+				<h:commandLink action="solicitacao.xhtml?faces-redirect=true">
+					<p:graphicImage value="/resources/img/adduser.png" />
+					<br />
+					<h:outputText value="Cadastre-se" styleClass="OutPut" />
+				</h:commandLink>
+			</div>
+
+			<h:graphicImage value="/resources/img/logoeditora.png"
+				style="float: left; opacity:0.65; -moz-opacity: 0.65; filter: alpha(opacity=65);" />
+
+			<div style="width: 95%; display: block;" align="center" />
+			<div id="rodape"
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: center;">
+				&copy; Copyright 2013 &nbsp;&nbsp; UFRR - DTI - CSI</div>
+
+		</div>
+
+	</h:form>
+
+</h:body>
+</html>

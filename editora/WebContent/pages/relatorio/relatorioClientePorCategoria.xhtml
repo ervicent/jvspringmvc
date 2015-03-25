@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Relatorio > Cliente Por Categoria" styleClass="title"
+				rendered="#{produtoBean.produto.id==null}"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+	
+	<ui:define name="opcion">
+		<div id="atention">
+
+			<div id="atencao"
+				style="background: #EFF3FA; height: 55px; width: 100%; float: left;">
+				<br />
+				<h:outputText value="Atenção!" styleClass="OutPut"
+					style="color: red" />
+				<br />
+				<h:outputText
+					value="Para emissão correta do relatório o nome da categoria deve ser informado em maiúsculo e completo, "
+					styleClass="OutPut" /><br />
+				<h:outputText
+					value="caso contrário o será exibido em branco."
+					styleClass="OutPut" />
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+		<div
+			style="background: #394674; align-top: center; height: 20px; line-height: 15px;"
+			align="center">
+			<h:outputText value="RELATÓRIO DE CLIENTES POR PRODUTO"
+				style="color: white; font-size: 12px;" styleClass="OutPut" />
+		</div>
+
+		<form action="relatorioClientePorCategoria" method="post" id="form" target="_blank">
+		<h:form>
+		
+		<fieldset style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0;">
+		<br /><br />
+					<h:panelGrid columns="4">
+						<h:outputLabel styleClass="OutPut" value="Categoria: "
+							style="margin-left: 10px;" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<input type="text" name="param_categoria" id="cate" class="input" />
+					</h:panelGrid>
+
+					<br /><br />
+		
+		<br /><br /><br /><br /><br />
+		</fieldset>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" globalOnly="true" />
+				</div>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+<!-- 			<input type="submit" value="Gerar Relatório" style="cursor: pointer;" title="Gera Relatório em PDF" /> -->
+
+				<p:commandButton type="submit" value="Gerar relatório" ajax="false" icon="ui-icon-print"/>
+		</div>
+		
+		</h:form>	
+		</form>
+
+	</ui:define>
+	
+</ui:composition>
+
+</html>

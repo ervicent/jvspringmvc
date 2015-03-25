@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Pesquisar > Nota Fiscal" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="opcion">
+		<div id="nf/item">
+
+			<div id="nfs"
+				style="background: #FFFFE4; height: 55px; width: 50%; float: left; text-align: center;">
+				<br />
+				<p:commandLink
+					action="/pages/notafiscal/consultarNotaFiscal.xhtml?faces-redirect=true">
+					<h:outputText value="CONSULTAR" styleClass="OutPut" />
+					<br />
+					<h:outputText value="NOTA FISCAL" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+			<div id="itens"
+				style="background: #EFF3FA; height: 55px; width: 50%; float: right; text-align: center;">
+				<br />
+				<p:commandLink
+					action="/pages/notafiscal/consultarItem.xhtml?faces-redirect=true">
+					<h:outputText value="CONSULTAR" styleClass="OutPut" />
+					<br />
+					<h:outputText value="ITEM E ALTERAR VALOR DE VENDA" styleClass="OutPut" />
+				</p:commandLink>
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<!-- 		Acesso não permitido -->
+			<h:form rendered="#{loginBean.usuario.perfil.id>3}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</h:form>
+
+			<h:form id="form_pesquisa_nota"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 10px;"
+					align="center">
+					<h:outputText value="CONSULTAR NOTA FISCAL"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0px;">
+
+					<h:panelGrid id="botton" columns="3" style="float: right;">
+
+					</h:panelGrid>
+
+					<p:focus context="numero" for="numero"
+						rendered="#{notaFiscalBean.notaFiscal.id==null}" />
+					<p:focus context="autocompletePesquisar"
+						for="autocompletePesquisar"
+						rendered="#{notaFiscalBean.notaFiscal.id==null}" />
+					<p:focus context="lote" for="lote"
+						rendered="#{notaFiscalBean.notaFiscal.id==null}" />
+
+					<h:panelGrid id="grid_pesquisa" columns="5" cellspacing="15"
+						rendered="#{notaFiscalBean.notaFiscal.id==null}">
+
+						<p:selectOneRadio value="#{notaFiscalBean.box4Search}"
+							rendered="#{notaFiscalBean.notaFiscal.id==null}"
+							styleClass="OutPut" style="width: 250px;">
+							<f:selectItem itemLabel="Fornecedor" itemValue="2" />
+							<f:selectItem itemLabel="Nota Fiscal" itemValue="1" />
+							<f:selectItem itemLabel="Lote" itemValue="3" />
+							<f:ajax render="form_pesquisa_nota" />
+						</p:selectOneRadio>
+
+						<p:inputText value="#{notaFiscalBean.notaFiscal.numero}"
+							rendered="#{notaFiscalBean.box4Search == 1}" size="45"
+							id="numero" validatorMessage="Somente numeros"
+							converterMessage="Informe apenas numeros" />
+
+						<p:inputText value="#{notaFiscalBean.notaFiscal.lote}"
+							rendered="#{notaFiscalBean.box4Search == 3}" size="45" id="lote"
+							validatorMessage="Somente numeros"
+							converterMessage="Informe apenas numeros" />
+
+						<p:autoComplete value="#{notaFiscalBean.search}"
+							completeMethod="#{fornecedorBean.autocompleteFornecedor}" var="f"
+							itemValue="#{f}" itemLabel="#{f}"
+							rendered="#{notaFiscalBean.box4Search == 2}" minQueryLength="3"
+							maxResults="5" queryDelay="60" id="autocompletePesquisar"
+							size="45" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							rendered="#{notaFiscalBean.box4Search == 2}"
+							action="#{notaFiscalBean.getListaNotaFiscalByNumero}"
+							ajax="false" icon="ui-icon-search" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar2"
+							rendered="#{notaFiscalBean.box4Search == 1}"
+							action="#{notaFiscalBean.getNotaFiscalByNumero}" ajax="false"
+							icon="ui-icon-search" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar3"
+							rendered="#{notaFiscalBean.box4Search == 3}"
+							action="#{notaFiscalBean.getNotaFiscalByLote}" ajax="false"
+							icon="ui-icon-search" />
+
+					</h:panelGrid>
+					<br />
+
+					<!-- 			grid com a lista de notas			 		 -->
+					<p:dataGrid id="dg" var="n" value="#{notaFiscalBean.notasFiscais}"
+						columns="3" rows="9" paginator="true" paginatorPosition="bottom"
+						emptyMessage="" rendered="#{notaFiscalBean.notaFiscal.id==null}">
+
+						<p:panel header="Fornecedor: #{n.fornecedor.nome}"
+							style="text-align:center" id="pnl">
+							<h:panelGrid columns="1" style="width:100%">
+
+								<h:outputText value="Número da nota: #{n.numero}" />
+
+								<h:outputText value="Data de entrada" />
+								<h:outputText value="#{n.dataEntrada.time}">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+
+								<h:outputText value="Lote: #{n.lote}" />
+								<h:outputText value="#{n.dataEntrada.time}">
+									<f:convertDateTime pattern="yyyy" />
+								</h:outputText>
+
+								<h:outputText value="Status" />
+								<h:outputText value="Ativado" style="color: blue;"
+									rendered="#{n.status==true}" />
+								<h:outputText value="Desativado" style="color: red;"
+									rendered="#{n.status==false}" />
+
+								<p:commandLink update=":form_pesquisa_nota"
+									title="Detalhar dados">
+									<h:outputText styleClass="ui-icon ui-icon-circle-check"
+										title="Detalhar" style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{n}"
+										target="#{notaFiscalBean.notaFiscal}" />
+								</p:commandLink>
+
+							</h:panelGrid>
+						</p:panel>
+
+					</p:dataGrid>
+
+					<h:form rendered="#{notaFiscalBean.notaFiscal.id!=null}">
+
+						<!-- 			aqui renderização dos dados da nota -->
+						<br />
+						<br />
+						<p:panel header="Dados da Nota Fiscal"
+							style="width: 92%; margin-left: 10px;"
+							rendered="#{notaFiscalBean.notaFiscal.id!=null}">
+
+							<h:panelGrid id="grid" columns="3">
+
+								<h:outputLabel value="Fornecedor: " styleClass="OutPut" />
+								<h:outputLabel
+									value="#{notaFiscalBean.notaFiscal.fornecedor.nome}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputLabel value="Número: " styleClass="OutPut" />
+								<h:outputLabel value="#{notaFiscalBean.notaFiscal.numero}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputLabel value="Data de emissão: " styleClass="OutPut" />
+								<h:outputLabel value="#{notaFiscalBean.notaFiscal.dataEmissao}"
+									styleClass="OutPut">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+								<br />
+								<br />
+
+								<h:outputLabel value="Data de entrada: " styleClass="OutPut" />
+								<h:outputLabel
+									value="#{notaFiscalBean.notaFiscal.dataEntrada.time}"
+									styleClass="OutPut">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputLabel>
+								<br />
+								<br />
+
+								<h:outputLabel value="Valor: " styleClass="OutPut" />
+								<h:outputLabel value="#{notaFiscalBean.notaFiscal.valor}"
+									styleClass="OutPut">
+									<f:convertNumber type="currency" currencySymbol="R$"
+										locale="pt_BR" />
+								</h:outputLabel>
+								<br />
+								<br />
+
+								<h:outputLabel value="Status: " styleClass="OutPut" />
+								<h:outputLabel value="Ativado" styleClass="OutPut"
+									style="color: blue;"
+									rendered="#{notaFiscalBean.notaFiscal.status==true}" />
+								<h:outputLabel value="Desativado" styleClass="OutPut"
+									style="color: red;"
+									rendered="#{notaFiscalBean.notaFiscal.status==false}" />
+								<br />
+								<br />
+
+							</h:panelGrid>
+
+						</p:panel>
+
+						<!-- 			Lista dos produtos da nota -->
+						<br />
+						<br />
+						<div
+							style="background: #A6C9E2; align-top: center; margin-left: 10px; margin-right: 70px; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="PRODUTOS"
+								style="color: #394674; font-size: 12px;" styleClass="OutPut" />
+						</div>
+
+						<fieldset
+							style="border-color: #A6C9E2; margin-left: 10px; margin-right: 70px; border: 1px solid #A6C9E2; border-top: 0;">
+
+							<p:dataTable value="#{notaFiscalBean.notaFiscal.itens}"
+								var="item" styleClass="dados2" rowClasses="impar, par"
+								id="itens"
+								rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+								rowIndexVar="rowIx" emptyMessage="adicione o(s) produto()">
+
+								<p:column width="50">
+									<f:facet name="header">isbn/código</f:facet>
+									<h:outputLabel value="#{item.produto.isbn}"
+										rendered="#{item.produto.isbn!=null}" />
+									<h:outputLabel value="#{item.produto.id}"
+										rendered="#{item.produto.isbn==null}" />
+								</p:column>
+
+								<p:column>
+									<f:facet name="header">produto</f:facet>
+									<h:outputLabel value="#{item.produto.tipo.nome}: "
+										rendered="#{item.produto.tipo.id eq 1}" />
+									<h:outputLabel value="#{item.produto.nome}" />
+								</p:column>
+
+								<p:column style="text-align: center;" width="15">
+									<f:facet name="header">qtd</f:facet>
+									<h:outputLabel value="#{item.quantidadeEntrada}" />
+								</p:column>
+
+								<p:column width="50">
+									<f:facet name="header">vl. custo</f:facet>
+									<h:outputLabel value="#{item.valorCusto}">
+										<f:convertNumber type="currency" currencySymbol="R$"
+											locale="pt_BR" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column width="50">
+									<f:facet name="header">vl. venda</f:facet>
+									<h:outputLabel value="#{item.valorVenda}">
+										<f:convertNumber type="currency" currencySymbol="R$"
+											locale="pt_BR" />
+									</h:outputLabel>
+								</p:column>
+
+								<p:column width="50" style="text-align: center;">
+									<f:facet name="header">total</f:facet>
+									<h:outputText value="#{item.total}">
+										<f:convertNumber type="currency" currencySymbol="R$"
+											locale="pt_BR" />
+									</h:outputText>
+								</p:column>
+
+								<p:columnGroup type="footer">
+									<p:row>
+										<p:column colspan="5" footerText="Valor Total"
+											style="text-align:right" />
+
+										<p:column>
+											<f:facet name="footer">
+												<h:outputText value="#{notaFiscalBean.valorTotalProdutos}">
+													<f:convertNumber type="currency" currencySymbol="R$"
+														locale="pt_BR" />
+												</h:outputText>
+											</f:facet>
+										</p:column>
+
+									</p:row>
+								</p:columnGroup>
+
+							</p:dataTable>
+
+						</fieldset>
+						<br />
+						<br />
+
+						<div style="background: #C4D2EB; height: 28px;" align="center">
+							<p:commandButton action="#{notaFiscalBean.alterStatus}"
+								value="Desativar" ajax="false" icon="ui-icon-close"
+								title="Desativar nota fiscal" update=":form_pesquisa_nota:grid"
+								rendered="#{notaFiscalBean.notaFiscal.id!=null and notaFiscalBean.notaFiscal.status==true and loginBean.usuario.perfil.id==1
+								or notaFiscalBean.notaFiscal.id!=null and notaFiscalBean.notaFiscal.status==true and loginBean.usuario.perfil.id==2}"
+								style="color: red;">
+								<f:ajax render="@form" />
+							</p:commandButton>
+
+							<p:commandButton action="#{notaFiscalBean.alterStatus}"
+								value="Ativar" ajax="false" icon="ui-icon-check"
+								update=":form_pesquisa_nota:grid"
+								rendered="#{notaFiscalBean.notaFiscal.id!=null and notaFiscalBean.notaFiscal.status==false and loginBean.usuario.perfil.id==1
+								or notaFiscalBean.notaFiscal.id!=null and notaFiscalBean.notaFiscal.status==false and loginBean.usuario.perfil.id==2}">
+								<f:ajax render="@form" />
+							</p:commandButton>
+							&nbsp;
+
+							<p:commandButton
+								action="consultarNotaFiscal.xhtml?faces-redirect=true"
+								style="color: none;" value="Voltar" ajax="false"
+								update=":form_pesquisa_nota:grid" icon="ui-icon-arrowthick-1-w"
+								immediate="true"
+								rendered="#{notaFiscalBean.notaFiscal.id!=null}" />
+						</div>
+					</h:form>
+
+				</fieldset>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+
+</ui:composition>
+</html>

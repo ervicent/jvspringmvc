@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Mensagem > Mensagens Arquivadas"
+				styleClass="title" style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_mensagens"
+				rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 10px;"
+					align="center">
+					<h:outputText value="MENSAGENS ARQUIVADAS"
+						style="color: white; line-height: 20px;" styleClass="OutPut" />
+				</div>
+
+				<p:focus context="dt:nome" for="dt:nome" />
+				<fieldset style="border: 1px solid #A6C9E2; border-top: 0;">
+
+					<p:dataTable id="dt" value="#{mensagemBean.arquivadas}" var="m"
+						emptyMessage="Não encontrado"
+						rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+						rowIndexVar="rowIx" scrollable="true" scrollHeight="400">
+
+						<p:column filterBy="#{m.usuario.nome}" id="nome"
+							filterMatchMode="contains" headerText="Enviada Por" width="300">
+							<h:outputText value="#{m.usuario.nome}" style="color: #394674;">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="40" />
+							</h:outputText>
+						</p:column>
+
+						<p:column style="text-align: center;" width="80">
+							<f:facet name="header">Dia</f:facet>
+							<h:outputLabel value="#{m.dataEnvio.time}"
+								style="color: #8B0000;">
+								<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column resizable="true">
+							<f:facet name="header">Mensagem</f:facet>
+							<h:outputLabel value="#{m.descricao}">
+								<f:converter converterId="stringLimiterConverter" />
+								<f:attribute name="limit" value="80" />
+							</h:outputLabel>
+						</p:column>
+
+						<p:column width="40">
+
+							<f:facet name="header" style="text-align: center;">
+								<h:outputLabel value="Detalhar" />
+							</f:facet>
+
+							<p:commandButton oncomplete="dlgD.show();"
+								style="text-align: center; float: center;" icon="ui-icon-check"
+								update=":form_dialog_msg:display">
+								<f:setPropertyActionListener id="parametro"
+									target="#{mensagemBean.mensagem}" value="#{m}" />
+							</p:commandButton>
+
+						</p:column>
+
+					</p:dataTable>
+
+				</fieldset>
+
+			</h:form>
+
+		</div>
+
+		<!-- 			Aqui começa o dialog para detalhar a mensagem -->
+
+		<p:dialog widgetVar="dlgD" resizable="false" modal="true"
+			showEffect="fold">
+			<h:form id="form_dialog_msg">
+
+				<h:panelGrid id="display" style="text-align: center;">
+
+					<h:outputLabel value="Enviado Por" styleClass="OutPut" />
+					<br />
+					<h:outputLabel value="#{mensagemBean.mensagem.usuario.nome}"
+						styleClass="OutPut" style="color: blue;" />
+					<br />
+					<br />
+
+					<h:outputLabel value="Mensagem" styleClass="OutPut" />
+					<br />
+					<h:outputLabel value="#{mensagemBean.mensagem.descricao}"
+						styleClass="OutPut" style="color: blue;" />
+					<br />
+
+				</h:panelGrid>
+
+			</h:form>
+
+		</p:dialog>
+
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

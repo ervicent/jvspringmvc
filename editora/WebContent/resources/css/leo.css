@@ -1,0 +1,391 @@
+@charset "UTF-8";
+
+* {
+	margin: 0px;
+	padding: 0px;
+}
+
+a:LINK,a:VISITED {
+	text-decoration: none;
+}
+
+a:HOVER {
+	color: #4682B4;
+	text-decoration: underline;
+}
+
+a:ACTIVE {
+	text-decoration: none;
+}
+
+.shadow {
+	box-shadow: 10px 10px 45px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 1px 2px 20px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+.shadow2 {
+	box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
+	-moz-box-shadow: 1px 2px 20px rgba(0, 0, 0, 0.5);
+	-webkit-box-shadow: 1px 2px 1px rgba(0, 0, 0, 0.5);
+}
+
+.editora {
+	background-image: url("../resources/img/logoeditora.png");
+}
+
+body {
+	font-size: 10px;
+	line-height: 1.25em;
+	font-family: Verdana, sans-serif;
+	color: #333;
+	margin: 0;
+	padding: 0;
+	width: 1100px;
+	height: auto;
+	float: center;
+	text-align: center;
+	margin: 0 auto;
+	background-image: url("../resources/img/background1.png");
+}
+
+.formulario {
+	padding: 0px;
+	font-family: Verdana, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	font-variant: small-caps;
+	color: white;
+	border: 1px solid #6A6A6A;
+	border-bottom: 0;
+	margin-right: 400px;
+}
+
+.form {
+	padding: 0px;
+	font-family: Verdana, sans-serif;
+	font-style: normal;
+	font-weight: bold;
+	margin-right: 400px;
+}
+
+#cancelar {
+	color: red;
+}
+
+#usuarioLogado {
+	float: center;
+	text-align: center;
+	color: #1874CD;
+	font-size: 13px;
+	font-weight: bolder;
+}
+
+form fieldset legend {
+	font-weight: bold;
+	padding: 0px 5px;
+	border: blue;
+}
+
+#links {
+	width: 135px;
+	float: center;
+	border: 0;
+}
+
+/* miolo */
+#conteudo,section {
+	width: 1100px;
+}
+
+/** cabeçalho **/
+#cabecalho {
+	text-align: center;
+	color: white;
+	font-size: 15px;
+	font-weight: bold;
+	padding: 10 10px;
+}
+
+/** rodape **/
+#rodape {
+	clear: both;
+	border-top: 4px solid #D99C44;
+	position: relative;
+	line-height: 2em;
+	color: #FFF;
+	text-align: center;
+	background: #404E82;
+	margin-top: auto;
+}
+
+#rodape3 {
+	clear: both;
+	border-top: 4px solid #D99C44;
+	position: relative;
+	line-height: 2em;
+	color: #FFF;
+	text-align: center;
+	background: #404E82;
+	margin-top: 100px;
+}
+
+/** rodape **/
+#rodape2 {
+	clear: both;
+	border-top: 4px solid #D99C44;
+	position: relative;
+	line-height: 2em;
+	color: #FFF;
+	text-align: center;
+	background: #404E82;
+	width: 95%;
+}
+
+/** rodape **/
+#rodape4 {
+	clear: both;
+	border-top: 4px solid #D99C44;
+	position: relative;
+	line-height: 2em;
+	color: #FFF;
+	text-align: center;
+	background: #404E82;
+	width: 100%;
+}
+
+button {
+	font-size: 10px;
+	size: 12px;
+}
+
+form {
+	margin-bottom: 10px;
+	position: relative;
+	text-align: left;
+}
+
+form .campos {
+	display: block;
+	position: relative;
+	overflow: hidden;
+}
+
+/* validacao */
+.erros {
+	margin: 0 0 10px 0;
+	padding: 0 8px;
+	clear: both;
+	width: 100px;
+	height: 200px;
+}
+
+.erros li {
+	display: inline;
+	list-style-position: inside;
+	list-style-type: none;
+	color: #C22;
+	background: #FFDFDF;
+	border: 2px solid #DF7D7D;
+	float: left;
+	padding: 6px;
+	margin: 3px;
+}
+
+#img {
+	width: 80px;
+	height: 80px;
+}
+
+#pfieldset {
+	float: left;
+	text-align: left;
+	font-family: sans-serif;
+	text-align: justify;
+	font-size: 16px;
+}
+
+/* botão */
+.buton {
+	cursor: pointer;
+	margin-left: 100px;
+}
+
+.box {
+	padding: 20px;
+	width: 340px;
+	voice-family: "\"}\"";
+	voice-family: inherit;
+	width: 300px;
+}
+
+#titulo {
+	color: #1E90FF;
+	font-weight: bold;
+}
+
+/* Cor do outPutText Formulario */
+.OutPutForm {
+	font-weight: bold;
+	color: #394674;
+	margin-right: 400px;
+}
+
+/* Cor do outPutText */
+.OutPut {
+	font-weight: bold;
+	color: #394674
+}
+
+/* asterisco */
+.as {
+	font-weight: bold;
+	color: red;
+}
+
+.title {
+	font-size: 15px;
+	font-weight: bold;
+	margin-left: 20px;
+	color: #00369E;
+	top: 10px 10px;
+	line-height: 20px;
+}
+
+.input {
+	width: 180px;
+}
+
+/* Div */
+div#titulo {
+	background: #EFF3FA;
+	height: 26px;
+	width: 95%;
+	text-align: left;
+	line-height: 150px;
+}
+
+/* efeito a hover */
+img.acende {
+	color: #aacac7;
+}
+
+img.acende:hover {
+	opacity: 200.0;
+	color: #aacac7;
+	-webkit-transition-duration: .10s;
+	-moz-transition: all 0.5s;
+	-webkit-transition: all 0.5s;
+	-o-transition: all 0.5s;
+	border-radius: 5%; /* Borde redondeado */
+	box-shadow: 0px 0px 15px #000; /* Sombra */
+}
+
+.ui-datatable .ui-datatable-data .even-row td {
+	background-color: #F0F9FF;
+}
+
+.ui-datatable .ui-datatable-data .even-row2 td {
+	background-image: url("../resources/img/degrade.png");
+	background-repeat: no-repeat;
+}
+
+.ui-datatable .ui-datatable-data .odd-row td {
+	background-color: #DDDDDD;
+}
+
+/* Tabela zebrada Leonardo Holanda */
+.ui-datatable .ui-datatable-data .even-row td {
+	background-color: #EFF3FA;
+}
+
+.ui-datatable .ui-datatable-data .odd-row td {
+	background-color: #FAFAFA;
+}
+
+/* tabela zebrada Caelum */
+table.dados {
+	height: auto;
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+table.dados2 {
+	height: auto;
+	margin-bottom: 10px;
+	width: 100%;
+}
+
+table.dados tr th {
+	background-color: #394674;
+	color: #fff;
+	color: 1em;
+	padding: 10px;
+	font-size: 10px;
+}
+
+table.dados2 tr th {
+	background-color: #A6C9E2;
+	color: #394674;
+	color: 1em;
+	padding: 10px;
+}
+
+table.dados2 tfoot tr td {
+	background-color: #A6C9E2;
+	color: #394674;
+	color: 1em;
+	padding: 6px;
+	font-weight: bold;
+}
+
+table.dados tr td {
+	padding: 5px 10px;
+}
+
+.campos tbody tr td {
+	padding-top: 10px;
+	text-align: left;
+}
+
+.dados {
+	width: 100%;
+}
+
+.par {
+	background-color: #F0F9FF;
+}
+
+.impar {
+	background: none repeat scroll 0 0 #DDDDDD;
+}
+
+/* tirar as linhas da tabela */
+/* table tbody .ui-widget-content {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 0 solid #FFFFFF;
+    color: #333333;
+} */
+
+/* Para mensagens em growl */
+#growl3123 {
+	margin-left: 30px;
+	margin-top: 60px;
+	padding: 100 100px;
+	width: 300px;
+}
+
+.ui-growl {
+	position: fixed;
+	top: 50%;
+	right: 50%;
+	width: 301px;
+}
+
+[title] {
+	color: blue;
+}
+
+.highlight {
+	background: red !important;
+}

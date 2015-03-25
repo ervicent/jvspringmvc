@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Relatório > Prestação de Conta"
+				styleClass="title" style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_itens" rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="PRODUTOS VENDIDOS"
+						rendered="#{empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM JANEIRO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==1 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM FEVEREIRO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==2 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM MARÇO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==3 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM ABRIL DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==4 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM MAIO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==5 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM JUNHO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==6 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM JULHO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==7 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM AGOSTO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==8 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM SETEMBRO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==9 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM OUTUBRO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==10 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM NOVEMBRO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==11 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+					<h:outputText
+						value="PRODUTOS VENDIDOS EM DEZEMBRO DE #{itemVendaBean.ano}"
+						rendered="#{itemVendaBean.mes==12 and not empty itemVendaBean.itensVendas1}"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset style="border: 1px solid #A6C9E2; border-top: 0;">
+
+					<h:panelGrid columns="8" cellspacing="10">
+
+						<h:outputText value="Fornecedor" styleClass="OutPut" />
+						<p:selectOneMenu id="fornecedor"
+							value="#{itemVendaBean.notaFiscal.fornecedor}"
+							converter="genericConverter" style="width: 210px;"
+							required="true" requiredMessage="INFORME O FORNECEDOR"
+							styleClass="input" effect="fade" filter="true"
+							filterMatchMode="contains">
+							<f:selectItem itemLabel="" itemValue="" noSelectionOption="true" />
+							<f:selectItems value="#{fornecedorBean.fornecedores}" var="f"
+								itemLabel="#{f.nome}" itemValue="#{f}" />
+							<f:ajax event="blur" render="mgsg" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value="Mês" styleClass="OutPut" />
+						<p:selectOneMenu id="mes" value="#{itemVendaBean.mes}"
+							required="true" requiredMessage="INFORME O MÊS"
+							styleClass="input" style="width: 150px;">
+							<f:selectItem itemLabel="JANEIRO" itemValue="1" />
+							<f:selectItem itemLabel="FEVEREIRO" itemValue="2" />
+							<f:selectItem itemLabel="MARÇO" itemValue="3" />
+							<f:selectItem itemLabel="ABRIL" itemValue="4" />
+							<f:selectItem itemLabel="MAIO" itemValue="5" />
+							<f:selectItem itemLabel="JUNHO" itemValue="6" />
+							<f:selectItem itemLabel="JULHO" itemValue="7" />
+							<f:selectItem itemLabel="AGOSTO" itemValue="8" />
+							<f:selectItem itemLabel="SETEMBRO" itemValue="9" />
+							<f:selectItem itemLabel="OUTUBRO" itemValue="10" />
+							<f:selectItem itemLabel="NOVEMBRO" itemValue="11" />
+							<f:selectItem itemLabel="DEZEMBRO" itemValue="12" />
+							<f:ajax event="blur" render="mgsg" />
+						</p:selectOneMenu>
+
+						<h:outputLabel value=" Ano " styleClass="OutPut" />
+						<p:selectOneMenu id="ano" value="#{itemVendaBean.ano}"
+							required="true" requiredMessage="INFORME O ANO"
+							styleClass="input" validatorMessage="Ano inválido"
+							style="width: 75px;">
+							<f:selectItem itemLabel="2013" itemValue="2013" />
+							<f:selectItem itemLabel="2014" itemValue="2014" />
+							<f:selectItem itemLabel="2015" itemValue="2015" />
+							<f:selectItem itemLabel="2016" itemValue="2016" />
+							<f:selectItem itemLabel="2017" itemValue="2017" />
+							<f:selectItem itemLabel="2018" itemValue="2018" />
+							<f:selectItem itemLabel="2019" itemValue="2019" />
+							<f:selectItem itemLabel="2020" itemValue="2020" />
+							<f:selectItem itemLabel="2021" itemValue="2021" />
+							<f:selectItem itemLabel="2022" itemValue="2022" />
+							<f:selectItem itemLabel="2023" itemValue="2023" />
+							<f:ajax event="blur" render="mgsg" />
+						</p:selectOneMenu>
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar"
+							rendered="#{empty itemVendaBean.itensVendas1}"
+							action="#{itemVendaBean.getPrestacaoByDate}" ajax="false"
+							icon="ui-icon-search" />
+
+						<p:commandButton value="Pesquisar" id="botaoPesquisar2"
+							rendered="#{not empty itemVendaBean.itensVendas1}"
+							disabled="true" action="#{itemVendaBean.getPrestacaoByDate}"
+							ajax="false" icon="ui-icon-search" />
+
+						<p:commandButton value="Cancelar" id="cancelar"
+							rendered="#{not empty itemVendaBean.itensVendas1}"
+							action="prestarContaFornecedor.xhtml?faces-redirect=true"
+							icon="ui-icon-close" style="color: red;" />
+
+
+					</h:panelGrid>
+
+					<h:outputLabel value="" styleClass="OutPut" />
+
+					<br />
+
+					<fieldset
+						style="border: 1px solid #6A6A6A; border-top: 0; margin-left: 20px; margin-right: 20px;">
+
+						<div
+							style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+							align="center">
+							<h:outputText value="RESULTADO"
+								style="color: white; font-size: 12px;" styleClass="OutPut" />
+							<h:outputText value=" - FORNECEDOR: "
+								rendered="#{not empty itemVendaBean.itensVendas1}"
+								style="color: white; font-size: 12px;" styleClass="OutPut" />
+							<h:outputText value="#{itemVendaBean.notaFiscal.fornecedor.nome}"
+								rendered="#{not empty itemVendaBean.itensVendas1}"
+								style="color: white; font-size: 12px;" styleClass="OutPut" />
+						</div>
+
+						<p:dataTable id="dt" value="#{itemVendaBean.itensVendas1}" var="i"
+							scrollHeight="400" scrollable="true"
+							emptyMessage="Informe os dados acima"
+							rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+							rowIndexVar="rowIx">
+
+							<p:column width="100" headerText="isbn/código">
+								<h:outputText value="#{i.item.produto.isbn}" />
+							</p:column>
+
+							<p:column headerText="Produto" width="300">
+								<h:outputText value="#{i.item.produto.tipo.nome}: "
+									rendered="#{i.item.produto.tipo.id eq 1}" />
+								<h:outputText value="#{i.item.produto.nome}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="40" />
+								</h:outputText>
+								<h:outputText value="..."
+									rendered="#{i.item.produto.nome.length()>=41}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Cliente</f:facet>
+								<h:outputLabel value="#{i.venda.cliente.nome}">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="27" />
+								</h:outputLabel>
+								<h:outputText value="..."
+									rendered="#{i.venda.cliente.nome.length()>=28}" />
+							</p:column>
+
+							<p:column width="50">
+								<f:facet name="header">valor unit.</f:facet>
+								<h:outputLabel value="#{i.item.valorCusto}">
+									<f:convertNumber type="currency" currencySymbol="R$"
+										locale="pt_BR" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column headerText="qtd" width="20" style="text-align: center;">
+								<h:outputText value="#{i.quantidade}" />
+							</p:column>
+
+							<p:column width="50" style="text-align: center;">
+								<f:facet name="header">sub total</f:facet>
+								<h:outputText value="#{i.totalProdutoVenda}">
+									<f:convertNumber type="currency" currencySymbol="R$"
+										locale="pt_BR" />
+								</h:outputText>
+							</p:column>
+
+							<p:column headerText="Nota fiscal" width="50"
+								style="text-align: center;">
+								<h:outputText value="#{i.item.notaFiscal.numero}" />
+							</p:column>
+
+							<p:column width="53" style="text-align: center;">
+								<f:facet name="header">data venda</f:facet>
+								<h:outputText value="#{i.venda.dataVenda.time}">
+									<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
+								</h:outputText>
+							</p:column>
+
+							<p:columnGroup type="footer">
+								<p:row>
+									<p:column colspan="1" style="text-align: right;">
+										<f:facet name="footer">
+											<h:outputText value="TOTAL:   " style="font-size: 14px;" />
+											<h:outputText value="#{itemVendaBean.totalValor}"
+												style="font-size: 14px; color: #8B0000;"
+												rendered="#{not empty itemVendaBean.itensVendas1}">
+												<f:convertNumber type="currency" currencySymbol="R$"
+													locale="pt_BR" />
+											</h:outputText>
+
+											<h:outputText value="0,00"
+												style="font-size: 14px; color: #8B0000;"
+												rendered="#{empty itemVendaBean.itensVendas1}" />
+										</f:facet>
+									</p:column>
+
+									<!-- 									<p:column colspan="2" /> -->
+
+								</p:row>
+							</p:columnGroup>
+
+						</p:dataTable>
+
+					</fieldset>
+					<br />
+
+				</fieldset>
+				<br />
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages id="mgsg" autoUpdate="true" />
+				</div>
+
+			</h:form>
+
+		</div>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+	</ui:define>
+</ui:composition>
+</html>

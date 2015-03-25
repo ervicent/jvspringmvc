@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Editora UFRR</title>
+	<h:outputStylesheet name="leo.css" library="css" />
+	<h:outputScript name="locale.js" library="js" />
+	<link rel="shortcut icon" href="/editora/resources/img/favicon.ico" />
+</h:head>
+
+<h:body styleClass="shadow" style="text-align: center;">
+
+	<div style="background: white;" align="center">
+
+		<!-- 			sessao expirada			 -->
+		<p:dialog visible="true" resizable="false" closable="false"
+			modal="true" width="800" height="500" header="Novo Login">
+
+			<h:form id="form_home" style="text-align: center;">
+				<div align="center">
+					<br />
+					<br />
+
+					<fieldset
+						style="border-color: #C8D5EC; width: 485px; background: #C8D5EC; border: solid thick #C8D5EC; text-align: center border-top-width:   0px; border-top-right-radius: 8px; border-top-left-radius: 8px;">
+						<h:outputLabel value="Sessao Expirada"
+							style="color: #394674; font-weight: bold; font-size: 14px;" />
+						<br />
+					</fieldset>
+
+					<fieldset
+						style="border-color: #C8D5EC; width: 500px; background: #FAFAFA; border: solid thick #C8D5EC; border-top-width: 0px; border-radius: 1em;">
+						<br />
+
+						<p:focus context="grid" />
+
+						<h:panelGrid id="grid" columns="1" cellpadding="5"
+							cellspacing="20">
+
+							<h:outputLabel value="POR QUESTÃO DE SEGURANÇA"
+								style="font-size: 16px;
+								color: red;" />
+
+							<h:outputLabel value="SUA SESSÃO FOI EXPIRADA!"
+								style="font-size: 16px;
+								color: red;" />
+
+							<h:outputLabel value="PARA ACESSAR NOVAMENTE EFETUE O LOGIN"
+								style="font-size: 16px;
+								color: red;" />
+
+						</h:panelGrid>
+						<br />
+						<br />
+						<br />
+
+
+					</fieldset>
+					<br />
+
+					<!-- 						Versão de teste						 -->
+					<br /> <a href="http://172.22.10.248:8080/editora"> <h:outputText
+							value="Efetuar Login" style="color: blue; font-size: 14px;" /></a> <br />
+
+					<!-- 						Produção -->
+					<!-- 						<br /> <a href="http://172.22.10.249:8080/editora"> -->
+					<!-- 						<h:outputText value="Efetuar Login" style="color: blue; font-size: 14px;" /></a> -->
+					<!-- 						<br /> -->
+
+					<br /> <br />
+					<p:graphicImage value="/resources/img/sessao_expirada.png" />
+					<br /> <br />
+
+				</div>
+			</h:form>
+
+		</p:dialog>
+
+	</div>
+
+</h:body>
+</html>

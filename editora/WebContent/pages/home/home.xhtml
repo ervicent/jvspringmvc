@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_home.xhtml">
+	<ui:define name="head">
+		<meta http-equiv="refresh"
+			content="180; url=/editora/pages/home/home.xhtml?faces-redirect=true" />
+
+		<div id="titulo" style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Página Principal" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;"></div>
+		</div>
+
+	</ui:define>
+
+	<ui:define name="body">
+
+		<p:growl life="8000" id="growl" />
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form id="form_home" rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div style="float: right;">
+
+					<!-- 				exibição de aniversariantes -->
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px; width: 302px; margin-top: 45px;"
+						align="center">
+						<h:outputText value="ANIVERSARIANTE DO DIA"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<fieldset
+						style="border-color: #F8F8FF; width: 300px; border: 1px solid #6A6A6A; border-top: 0;">
+						<h:outputLabel style="color: blue; font-size: 12px;"
+							styleClass="OutPut" value="Não há aniversatiante(s) hoje"
+							rendered="#{empty usuarioBean.aniversariantes}" />
+
+						<p:dataTable value="#{usuarioBean.aniversariantes}" var="c"
+							rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+							rowIndexVar="rowIx" id="niver"
+							rendered="#{not empty usuarioBean.aniversariantes}">
+
+							<p:column>
+								<h:outputLabel value="#{c.nome}" style="color: #394674;"
+									styleClass="OutPut">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="35" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column>
+								<p:commandLink update=":form_dlg:display"
+									oncomplete="dlgAniv.show();">
+									<h:outputText styleClass="ui-icon ui-icon-star"
+										title="Detalhar" style="margin:0 auto;" />
+									<f:setPropertyActionListener value="#{c}"
+										target="#{usuarioBean.usuario}" />
+								</p:commandLink>
+							</p:column>
+
+						</p:dataTable>
+
+					</fieldset>
+				</div>
+
+				<div style="float: left;">
+					<h:panelGrid columns="6" cellspacing="5" cellpadding="5"
+						style="margin-right: 10%;">
+
+						<!-- 				visualizar todas as mensagens recebidas -->
+						<p:commandLink
+							action="/pages/mensagem/listarMensagemArquivada.xhtml?faces-redirect=true">
+							<p:graphicImage value="/resources/img/messages2.png"
+								title="Mensagens arquivadas" width="35px;" />
+						</p:commandLink>
+
+						<!-- 				troca de mensagem -->
+						<p:commandLink
+							action="/pages/mensagem/enviarMensagem.xhtml?faces-redirect=true">
+							<p:graphicImage value="/resources/img/messages.png"
+								title="Enviar mensagem" width="35px;" />
+						</p:commandLink>
+
+						<!-- 				Envio de email -->
+						<p:commandLink
+							action="/pages/email/enviarEmail.xhtml?faces-redirect=true"
+							rendered="#{loginBean.usuario.perfil.id!=4}">
+							<p:graphicImage value="/resources/img/email.png"
+								title="Enviar email" width="30px;"
+								rendered="#{loginBean.usuario.perfil.id!=4}" />
+						</p:commandLink>
+					</h:panelGrid>
+
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px; width: 702px;"
+						align="center">
+						<h:outputText value="CAIXA DE MENSAGENS"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<fieldset
+						style="border-color: #F8F8FF; width: 700px; border: 1px solid #6A6A6A; border-top: 0;">
+						<h:outputLabel style="color: red; font-size: 12px;"
+							styleClass="OutPut" value="Não há mensagem"
+							rendered="#{empty mensagemBean.recebidas}" />
+
+						<h:dataTable value="#{mensagemBean.recebidas}" var="m"
+							styleClass="dados" rowClasses="impar, par" rows="6" id="msgs"
+							rendered="#{not empty mensagemBean.recebidas}">
+
+							<f:facet name="header">
+
+							</f:facet>
+
+							<p:column>
+								<f:facet name="header">Enviada Por</f:facet>
+								<h:outputLabel value="#{m.usuario.nome}" style="color: #394674;" />
+							</p:column>
+
+							<p:column style="text-align: center;">
+								<f:facet name="header">Dia</f:facet>
+								<h:outputLabel value="#{m.dataEnvio.time}"
+									style="color: #8B0000;">
+									<f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Mensagem</f:facet>
+								<h:outputLabel value="#{m.descricao}" />
+							</p:column>
+
+							<p:column>
+
+								<f:facet name="header">
+									<h:outputLabel style="text-align: center; float: center;" />
+								</f:facet>
+
+								<p:commandButton value="Arquivar!"
+									action="#{mensagemBean.arquivarMensagem}" ajax="false"
+									style="text-align: center; float: center;"
+									update=":form_home:msgs">
+									<f:ajax render="@all" />
+									<f:setPropertyActionListener id="parametro"
+										target="#{mensagemBean.mensagem}" value="#{m}" />
+								</p:commandButton>
+
+							</p:column>
+
+						</h:dataTable>
+
+					</fieldset>
+					<br />
+					<br />
+					<br />
+
+
+					<!-- 				exibição de estoque -->
+					<div
+						style="background: #394674; align-top: center; height: 20px; line-height: 20px; width: 702px;"
+						align="center">
+						<h:outputText value="ESTOQUE CRÍTICO"
+							style="color: white; font-size: 12px;" styleClass="OutPut" />
+					</div>
+
+					<fieldset
+						style="border-color: #F8F8FF; width: 700px; border: 1px solid #6A6A6A; border-top: 0;">
+
+						<h:outputLabel style="color: red; font-size: 12px;"
+							styleClass="OutPut" value="Não há produto com estoque crítico"
+							rendered="#{empty itemBean.estoqueCritico}" />
+
+						<h:dataTable value="#{itemBean.estoqueCritico}" var="item"
+							styleClass="dados" rowClasses="impar, par" id="estoque" rows="10"
+							rendered="#{not empty itemBean.estoqueCritico}">
+
+							<f:facet name="header">
+
+							</f:facet>
+
+							<p:column>
+								<f:facet name="header">ISBN/Código</f:facet>
+								<h:outputLabel value="#{item.produto.isbn}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Lote</f:facet>
+								<h:outputLabel value="#{item.notaFiscal.lote}" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Produto</f:facet>
+								<h:outputLabel value="LIVRO: " style="color: #394674;"
+									rendered="#{item.produto.tipo.id==1}" />
+								<h:outputLabel value="#{item.produto.nome}"
+									style="color: #394674;">
+									<f:converter converterId="stringLimiterConverter" />
+									<f:attribute name="limit" value="40" />
+								</h:outputLabel>
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">Estoque min.</f:facet>
+								<h:outputLabel value="#{item.produto.quantidadeMinima}"
+									style="color: blue;" />
+							</p:column>
+
+							<p:column>
+								<f:facet name="header">qtd Atual</f:facet>
+								<h:outputLabel value="(#{item.quantidadeAtual})"
+									style="color: red;" />
+							</p:column>
+
+						</h:dataTable>
+
+					</fieldset>
+
+					<div align="left" style="float: left; text-align: left;">
+						<h:graphicImage value="/resources/img/logoeditora.png"
+							style="float: left; opacity:0.65; -moz-opacity: 0.65; filter: alpha(opacity=65); margin-top: 75px;" />
+					</div>
+
+					<ui:define name="footer" />
+
+				</div>
+
+			</h:form>
+
+			<div align="center">
+				<p:dialog
+					rendered="#{!empty usuarioBean.solicitacoes and loginBean.usuario.perfil.id==1 or !empty usuarioBean.solicitacoes and loginBean.usuario.perfil.id==2}"
+					visible="true" resizable="false" modal="true"
+					header="Solicitações de acesso"
+					footer="Atenção: você recebeu nova(s) solicitação(ões) de acesso ao sistema"
+					style="background: #C4D2EB;">
+					<h:form>
+
+						<p:dataTable id="list" value="#{usuarioBean.solicitacoes}" var="u"
+							emptyMessage="Nenhuma solicitação no momento"
+							rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+							rowIndexVar="rowIx">
+
+							<p:column headerText="ID">
+								<h:outputText value="#{u.id}" />
+							</p:column>
+
+							<p:column headerText="Nome">
+								<h:outputText value="#{u.nome}" />
+							</p:column>
+
+							<p:column headerText="Solicitação enviada dia"
+								style="text-align: center;">
+								<h:outputText value="#{u.data.time}">
+									<f:convertDateTime pattern="dd/MM/yy" />
+								</h:outputText>
+							</p:column>
+
+						</p:dataTable>
+
+						<br />
+						<div align="center">
+							<p:commandButton
+								action="/pages/usuario/autorizarAcesso.xhtml?faces-redirect=true"
+								value="Detalhar" icon="ui-icon-check"
+								title="Mostra página de solicitações" ajax="false">
+								<!-- 						<h:outputLabel value="Detalhar" style="color: blue; cursor: pointer; font-size: 12px;" /> -->
+							</p:commandButton>
+						</div>
+					</h:form>
+				</p:dialog>
+
+				<p:dialog header="Cliente Aniversariante" modal="true"
+					resizable="false" showEffect="fade" hideEffect="fade"
+					widgetVar="dlgAniv">
+					<h:form id="form_dlg">
+
+						<h:panelGrid id="display" columns="2" cellspacing="10">
+
+							<p:panel header="#{usuarioBean.usuario.nome}" style="float: left">
+
+								<br />
+								<h:outputText value="Código: #{usuarioBean.usuario.id}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputText value="Email: #{usuarioBean.usuario.login}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputLabel value="Telefone 1: " for="fone1"
+									styleClass="OutPut" />
+								<h:outputText id="fone1"
+									value="#{usuarioBean.usuario.telefone1}" styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputLabel value="Telefone 2: " for="fone2"
+									styleClass="OutPut" />
+								<h:outputText id="fone2-1" value="Nenhum"
+									rendered="#{usuarioBean.usuario.telefone2==null}"
+									styleClass="OutPut" />
+								<h:outputText id="fone2"
+									value="#{usuarioBean.usuario.telefone2}"
+									rendered="#{usuarioBean.usuario.telefone2!=null}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputText value="Data de Nascimento: " styleClass="OutPut" />
+								<h:outputText value="#{usuarioBean.usuario.nascimento}"
+									styleClass="OutPut">
+									<f:convertDateTime pattern="dd/MM/yyyy" />
+								</h:outputText>
+								<br />
+							</p:panel>
+
+							<p:panel header="Endereço" style="float: left; height: 159px;">
+
+								<br />
+								<h:outputText
+									value="#{usuarioBean.usuario.endereco.tipoLogradouro} "
+									styleClass="OutPut" />
+								<h:outputText
+									value="#{usuarioBean.usuario.endereco.logradouro}, "
+									styleClass="OutPut" />
+								<h:outputText value="Nº #{usuarioBean.usuario.endereco.numero}."
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputText
+									value="Bairro: #{usuarioBean.usuario.endereco.bairro}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputText value="CEP: #{usuarioBean.usuario.endereco.cep}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+								<h:outputText value="#{usuarioBean.usuario.endereco.municipio}"
+									styleClass="OutPut" />
+								<br />
+								<br />
+
+							</p:panel>
+
+						</h:panelGrid>
+					</h:form>
+				</p:dialog>
+			</div>
+
+			<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+				resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+			<!-- 			restrição de acesso para ususario status == false -->
+			<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+				visible="true" resizable="false" closable="false" modal="true">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br /> <br /> <br /> <br /> <a
+						href="javascript:history.back(-1)">Voltar</a><br />
+
+				</div>
+			</p:dialog>
+
+		</div>
+	</ui:define>
+</ui:composition>
+</html>

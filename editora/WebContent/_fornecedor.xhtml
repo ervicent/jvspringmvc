@@ -1,0 +1,520 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Editora UFRR</title>
+	<h:outputStylesheet name="leo.css" library="css" />
+	<h:outputScript name="locale.js" library="js" />
+	<link rel="shortcut icon" href="/editora/resources/img/favicon.ico" />
+
+	<style>
+.ui-growl {
+	top: 18%;
+	left: 20%;
+	width: 300px;
+	height: 250px;
+	font-size: 14px;
+	text-align: left;
+	font-family: sans-serif;
+	font-style: italic;
+	font-weight: 100;
+}
+</style>
+
+</h:head>
+
+<h:body styleClass="shadow">
+
+	<div style="background: white;" align="center">
+
+
+		<div
+			style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: left;">
+			<h:form>
+				<h:outputText value="UFRR - DTI - "
+					style="margin-left: 10px; font-size: 15px; font-weight: bold; color: white;" />
+				<h:outputText value="Sistema de Vendas Editora"
+					style="color: white; font-size: 13px;" />
+
+				<div style="float: right">
+					<p:commandLink onclick="confirmation.show()" value="SAIR"
+						styleClass="cabecalho" immediate="true"
+						style="text-align: left; color: white; font-size: 13px; margin-right: 10px; font-weight: bold; cursor: pointer;" />
+				</div>
+			</h:form>
+
+		</div>
+
+		<div id="rodape2"></div>
+
+		<div style="background: #C4D2EB; height: 60px; width: 95%"
+			align="right" id="menu">
+
+			<h:outputText value="#{loginBean.usuario.nome}"
+				style="float: left; font-size: 13px; font-weight: bold; margin-left: 10px; padding-top: 10px " />
+
+			<p:commandLink action="#{loginBean.redirect}">
+				<p:graphicImage value="/resources/img/inicio.png"
+					style="cursor: pointer; margin-top: 5px;" styleClass="acende" />
+			</p:commandLink>
+			&nbsp;
+			<p:graphicImage value="/resources/img/cadastrar.png"
+				onclick="dlgCad.show();" style="cursor: pointer;"
+				styleClass="acende" />
+			&nbsp;
+
+			<p:commandLink
+				action="/pages/venda/efetuarVendaAdmin.xhtml?faces-redirect=true"
+				rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id==2}">
+				<p:graphicImage value="/resources/img/venda.png"
+					style="cursor: pointer;" styleClass="acende" />
+			</p:commandLink>
+			<p:commandLink
+				action="/pages/venda/efetuarVenda.xhtml?faces-redirect=true"
+				rendered="#{loginBean.usuario.perfil.id>=3}">
+				<p:graphicImage value="/resources/img/venda.png"
+					style="cursor: pointer;" styleClass="acende" />
+			</p:commandLink>
+			&nbsp;
+
+			<p:commandLink
+				action="/pages/caixa/consultarCaixa.xhtml?faces-redirect=true">
+				<p:graphicImage value="/resources/img/caixabt.png"
+					style="cursor: pointer; margin-right: 10px; " styleClass="acende" />
+			</p:commandLink>
+			<br />
+
+			<p:commandLink
+				action="/pages/estoque/listarEstoque.xhtml?faces-redirect=true">
+				<p:graphicImage value="/resources/img/estoque.png"
+					style="cursor: pointer;" styleClass="acende" />
+			</p:commandLink>
+			&nbsp;
+
+			<p:graphicImage value="/resources/img/relatorio.png"
+				onclick="dlgRelatorio.show();" style="cursor: pointer;"
+				styleClass="acende" />
+			&nbsp;
+
+			<p:graphicImage value="/resources/img/pesquisar.png"
+				onclick="dlgPesquisa.show();" style="cursor: pointer;"
+				styleClass="acende" />
+			&nbsp;
+			<p:graphicImage value="/resources/img/usuario.png"
+				onclick="dlgUsuario.show();"
+				style="cursor: pointer; margin-right: 10px;" styleClass="acende" />
+
+			<h:outputText value="UNIVERSIDADE FEDERAL DE RORAIMA"
+				style="float: left; font-size: 13px; margin-left: 10px;" />
+
+
+		</div>
+
+		<ui:insert name="head">
+
+		</ui:insert>
+
+		<div style="width: 95%;">
+			<ui:insert name="opcion">
+
+			</ui:insert>
+		</div>
+		<br />
+		<br />
+		<br />
+
+		<div style="width: 95%; background: white;">
+
+			<ui:insert name="body" />
+
+			<h:graphicImage value="/resources/img/logoeditora.png"
+				style="float: left; opacity:0.65; -moz-opacity: 0.65; filter: alpha(opacity=65); width: 150px; " />
+			<div style="display: block;" align="center" />
+			<div id="rodape"
+				style="background: #394674; height: 20px; line-height: 20px; text-align: center;">
+				&copy; Copyright 2013 &nbsp; UFRR - Diretoria de Tecnologia da
+				Informação &nbsp; | &nbsp; Layout UFRN - SIG &nbsp;| &nbsp; Editora
+				UFRR (95)3621-3111 &nbsp; editora@ufrr.br</div>
+			<div style="display: block;" align="center" />
+
+		</div>
+
+		<p:dialog modal="true" width="430" widgetVar="dlgCad"
+			resizable="false" showEffect="fold">
+			<h:form>
+
+				<div align="center">
+					<p:panel header="Módulo Cadastro">
+
+						<h:panelGrid columns="4" cellpadding="5" cellspacing="5">
+
+							<p:commandLink
+								action="/pages/fornecedor/cadastrarJFornecedor.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/ifornecedor.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/produto/cadastrarProduto.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/iproduto.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/notafiscal/cadastrarNotaFiscal.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/inotafiscal.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/cliente/cadastrarCliente.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/icliente.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+						</h:panelGrid>
+
+
+					</p:panel>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" width="auto" widgetVar="dlgPesquisa"
+			resizable="false" showEffect="fold">
+			<h:form id="form_pesquisa">
+
+				<div align="center">
+					<p:panel header="Módulo Consulta">
+
+						<h:panelGrid columns="5" cellpadding="5" cellspacing="5">
+
+							<p:commandLink
+								action="/pages/fornecedor/consultarFornecedor.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/ifornecedor.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/produto/listarProduto.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/iproduto.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/notafiscal/consultarNotaFiscal.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/inotafiscal.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/cliente/consultarCliente.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/icliente.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/venda/consultarVenda.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/ivenda.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+						</h:panelGrid>
+
+					</p:panel>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<p:dialog modal="true" width="auto" widgetVar="dlgUsuario"
+			resizable="false" showEffect="fold">
+			<h:form id="form_usuario">
+
+				<div align="center">
+					<p:panel header="Módulo Usuário">
+
+						<h:panelGrid columns="3" cellpadding="5" cellspacing="5">
+
+							<p:commandLink
+								action="/pages/usuario/senhaCadastro.xhtml?faces-redirect=true">
+								<p:graphicImage value="/resources/img/iupdatedados.png"
+									styleClass="acende" title="Atualiza dados do usuário" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/usuario/autorizarAcesso.xhtml?faces-redirect=true"
+								rendered="#{loginBean.usuario.perfil.id==1}">
+								<p:graphicImage value="/resources/img/ipermissao.png"
+									styleClass="acende"
+									title="Autorização de solicitação de acesso" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/usuario/autorizarAcesso.xhtml?faces-redirect=true"
+								rendered="#{loginBean.usuario.perfil.id==2}">
+								<p:graphicImage value="/resources/img/ipermissao.png"
+									styleClass="acende"
+									title="Autorização de solicitação de acesso" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/usuario/modificarPerfil.xhtml?faces-redirect=true"
+								rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id==2}">
+								<p:graphicImage value="/resources/img/iupdateperfil.png"
+									styleClass="acende" title="Atualização de perfil" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/usuario/desativarAcesso.xhtml?faces-redirect=true"
+								rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id==2}">
+								<p:graphicImage value="/resources/img/idesativa.png"
+									styleClass="acende" title="Desativar usuário"
+									style="float: center; text-align: center;" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/usuario/reativarAcesso.xhtml?faces-redirect=true"
+								rendered="#{loginBean.usuario.perfil.id==1 or loginBean.usuario.perfil.id==2}">
+								<p:graphicImage value="/resources/img/ireativa.png"
+									styleClass="acende" title="Reativar usuário"
+									style="float: center; text-align: center;" />
+							</p:commandLink>
+
+							<p:commandLink
+								action="/pages/usuario/listarUsuario.xhtml?faces-redirect=true"
+								rendered="#{loginBean.usuario.perfil.id!=4}">
+								<p:graphicImage value="/resources/img/iusuarios.png"
+									styleClass="acende" />
+							</p:commandLink>
+
+						</h:panelGrid>
+
+					</p:panel>
+				</div>
+			</h:form>
+		</p:dialog>
+
+		<!-- 	aqui começa o dialog de relatorio -->
+		<p:dialog modal="true" width="auto" widgetVar="dlgRelatorio"
+			resizable="false" showEffect="fold" header="Módulo Relatório"
+			style="text-align: center; float: center;">
+
+			<h:form id="form_relatorio">
+
+				<div align="center">
+
+					<h:panelGrid columns="2" cellspacing="30">
+
+						<p:panel header="Cliente" style="height: 115px;">
+							<h:panelGrid columns="1">
+
+								<p:commandLink
+									action="/pages/relatorio/consultarClientePorCategoria.xhtml?faces-redirect=true"
+									ajax="false">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Cliente por preferencia de categoria"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink action="#{reportBean.relatorioClientes}"
+									ajax="false">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Todos os clientes"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+							</h:panelGrid>
+
+						</p:panel>
+
+						<p:panel header="Outros" style="height: 115px;">
+
+							<h:panelGrid columns="1">
+
+								<p:commandLink
+									action="/pages/relatorio/prestacaoDeConta.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Prestação de conta com fornecedor"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink action="#{reportBean.relatorioProdutos}"
+									ajax="false">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Produtos registrados no sistema"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink action="#{reportBean.relatorioFornecedores}"
+									ajax="false">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Fornecedores registrados no sistema"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+							</h:panelGrid>
+
+						</p:panel>
+
+						<p:panel header="Venda">
+							<h:panelGrid columns="1">
+
+								<p:commandLink
+									action="/pages/relatorio/consultarVendaPorCliente.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Vendas por cliente"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink
+									action="/pages/relatorio/consultarVendaPorFornecedor.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Vendas por fornecedor"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink
+									action="/pages/relatorio/consultarVendaPorVendedor.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Vendas por vendedor"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink
+									action="/pages/relatorio/consultarVendaPorPeriodo.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Vendas por período"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+								
+								<p:commandLink
+									action="/pages/relatorio/consultarVendaPorProduto.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Vendas por produto"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink
+									action="/pages/relatorio/consultarVendaPorLote.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Vendas por nota fiscal/lote"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+							</h:panelGrid>
+
+						</p:panel>
+
+						<p:panel header="Estoque" style="height: 192px;">
+							<h:panelGrid columns="1">
+
+								<p:commandLink
+									action="/pages/relatorio/consultarEstoquePorProduto.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Estoque por produto"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink
+									action="/pages/relatorio/consultarEstoquePorAutor.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Produto por autor"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink
+									action="/pages/relatorio/consultarEstoquePorCategoria.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Produto por categoria"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+								<p:commandLink
+									action="/pages/relatorio/consultarEstoquePorEditora.xhtml?faces-redirect=true">
+									<h:panelGrid columns="2">
+										<h:graphicImage value="/resources/img/seta1.png" />
+										<h:outputLabel value="Produto por editora"
+											style="cursor: pointer; font-family: Verdana;"
+											styleClass="OutPut" />
+									</h:panelGrid>
+								</p:commandLink>
+
+							</h:panelGrid>
+
+						</p:panel>
+
+					</h:panelGrid>
+
+				</div>
+			</h:form>
+		</p:dialog>
+		<!-- 	aqui termina o dialog de relatorio -->
+
+		<p:confirmDialog id="confirmDialog" message="Deseja sair do sistema"
+			severity="alert" widgetVar="confirmation">
+			<h:form id="form_bt">
+
+				<div align="center">
+
+					<p:commandButton id="confirm" value="Sim"
+						onclick="confirmation.hide()" action="#{loginBean.sair}" />
+
+					<p:commandButton id="decline" value="Não"
+						onclick="confirmation.hide()" type="button" />
+
+				</div>
+
+			</h:form>
+
+		</p:confirmDialog>
+
+	</div>
+</h:body>
+</html>

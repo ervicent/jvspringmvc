@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_template.xhtml">
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Caixa > Controle do Caixa" styleClass="title"
+				style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="body">
+
+		<div class="Centralizar" style="background: white;" align="center">
+
+			<h:form rendered="#{loginBean.usuario.perfil.id==4}">
+				<div align="center">
+
+					<br />
+					<p:graphicImage value="/resources/img/noacsses.png" />
+					<br />
+					<br />
+					<br />
+					<br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+
+				</div>
+			</h:form>
+
+			<h:form id="form_caixa" rendered="#{loginBean.usuario.perfil.id!=4}">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">						
+					<h:outputText value="FLUXO DE CAIXA"
+						style="color: white; font-size: 12px; float: center;" styleClass="OutPut" />
+
+					<p:selectOneRadio value="#{vendaBean.box4Search}"
+						styleClass="OutPut" required="true" rendered="#{vendaBean.box4Search!=5}"
+						requiredMessage="INFORME A OPERAÇÃO">
+						<f:selectItem itemLabel="Filtrar" itemValue="5" />
+						<f:ajax render="form_caixa" />
+					</p:selectOneRadio>
+				</div>
+
+				<fieldset style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0;">
+
+					<h:panelGrid columns="7" cellpadding="5" cellspacing="5">
+
+						<h:outputLabel value="Período " styleClass="OutPut" />
+
+						<p:calendar id="inicial" effect="slideDown" showButtonPanel="true"
+							navigator="true" rendered="#{vendaBean.box4Search==5}"
+							value="#{vendaBean.dataInicial.time}" required="true"
+							validatorMessage="Data inválida"
+							requiredMessage="INFORME A DATA INICIAL" pattern="dd/MM/yy"
+							locale="pt_BR">
+						</p:calendar>
+
+						<p:calendar id="inicial2" effect="slideDown"
+							showButtonPanel="true" navigator="true"
+							rendered="#{vendaBean.box4Search!=5}"
+							value="#{vendaBean.dataInicial.time}" required="true"
+							validatorMessage="Data inválida" disabled="true"
+							requiredMessage="INFORME A DATA INICIAL" pattern="dd/MM/yy"
+							locale="pt_BR">
+						</p:calendar>
+
+						<h:outputLabel value=" à " styleClass="OutPut" />
+						<p:calendar id="final" effect="slideDown" showButtonPanel="true"
+							navigator="true" rendered="#{vendaBean.box4Search==5}"
+							value="#{vendaBean.dataFinal.time}" required="true"
+							validatorMessage="Data inválida"
+							requiredMessage="INFORME A DATA FINAL" pattern="dd/MM/yy"
+							locale="pt_BR">
+						</p:calendar>
+
+						<p:calendar id="final2" effect="slideDown" showButtonPanel="true"
+							navigator="true" rendered="#{vendaBean.box4Search!=5}"
+							value="#{vendaBean.dataFinal.time}" required="true"
+							validatorMessage="Data inválida" disabled="true"
+							requiredMessage="INFORME A DATA FINAL" pattern="dd/MM/yy"
+							locale="pt_BR">
+						</p:calendar>
+
+						<p:commandButton value="OK" id="botaoPesquisar"
+							action="#{vendaBean.getCaixaByDate}" ajax="false"
+							icon="ui-icon-check" rendered="#{vendaBean.box4Search==5}">
+							<f:ajax render="@form" />
+						</p:commandButton>
+						
+						<p:commandButton value="Cancelar Filtro" id="cancelar"
+							action="/pages/caixa/consultarCaixa.xhtml" ajax="false" style="color: red;"
+							icon="ui-icon-close" rendered="#{vendaBean.box4Search==5}">
+							<f:ajax render="@form" />
+						</p:commandButton>
+						
+					</h:panelGrid>
+
+					<br />
+
+					<!-- 				entrada -->
+
+					<div style="float: left;">
+						<p:panel style="width: 500px;">
+
+							<div
+								style="background: #A6C9E2; align-top: center; height: 20px; line-height: 20px;"
+								align="center">
+								<h:outputText value="ENTRADA DE CAPITAL"
+									style="color: #394674; font-size: 12px;" styleClass="OutPut" />
+							</div>
+
+							<fieldset
+								style="border-color: #A6C9E2; border: 1px solid #A6C9E2; border-top: 0; height: 335px;">
+
+								<p:dataTable value="#{vendaBean.caixaEntrada}" var="v"
+									styleClass="dados2" rowClasses="impar, par" id="entradas"
+									rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+									rowIndexVar="rowIx" paginator="true" rows="13"
+									paginatorPosition="top" emptyMessage="Nenhuma entrada">
+
+									<p:column style="text-align: center;" width="10">
+										<f:facet name="header">Forma de pagto.</f:facet>
+										<h:outputLabel value="à vista"
+											rendered="#{v.formaPagamento==1}" />
+										<h:outputLabel value="crédito"
+											rendered="#{v.formaPagamento==2}" />
+										<h:outputLabel value="débito"
+											rendered="#{v.formaPagamento==3}" />
+										<h:outputLabel value="cheque(à vista)"
+											rendered="#{v.formaPagamento==4}" />
+										<h:outputLabel value="cheque(pré datado)"
+											rendered="#{v.formaPagamento==5}" />
+										<h:outputLabel value="depósito bancário"
+											rendered="#{v.formaPagamento==6}" />
+									</p:column>
+
+									<p:column width="30">
+										<f:facet name="header">Valor</f:facet>
+										<h:outputLabel value="#{v.valorTotalDesconto}"
+											style="color: blue;" rendered="#{v.tituloObs!=8}">
+											<f:convertNumber type="currency" currencySymbol="R$"
+												locale="pt_BR" />
+										</h:outputLabel>
+										
+										<h:outputLabel value="#{v.valorTotalDesconto}"
+											style="color: #8B0000;" rendered="#{v.tituloObs==8}">
+											<f:convertNumber type="currency" currencySymbol="R$"
+												locale="pt_BR" />
+										</h:outputLabel>
+									</p:column>
+									
+									<p:column width="90">
+										<f:facet name="header">Observação</f:facet>
+										<h:outputLabel value="Nenhuma" rendered="#{v.tituloObs==0}"
+											style="color: blue;" />
+											
+										<h:outputLabel value="Doação" rendered="#{v.tituloObs==3}"
+											style="color: blue;" />
+											
+										<h:outputLabel value="Roubo" rendered="#{v.tituloObs==4}"
+											style="color: blue;" />	
+										
+										<h:outputLabel value="Troca" rendered="#{v.tituloObs==5}"
+											style="color: blue;" />
+											
+										<h:outputLabel value="Venda com desconto" rendered="#{v.tituloObs==6}"
+											style="color: blue;" />	
+										
+										<h:outputLabel value="Venda com valor de custo" rendered="#{v.tituloObs==7}"
+											style="color: blue;" />
+												
+										<h:outputLabel value="Devolvido p/ fornecedor" rendered="#{v.tituloObs==8}"
+											style="color: #8B0000;" />	
+										
+									</p:column>
+										
+								</p:dataTable>
+
+							</fieldset>
+
+							<div
+								style="background: #A6C9E2; align-top: center; height: 20px; line-height: 20px;"
+								align="center">
+								<h:outputText value="#{vendaBean.valorTotalEntrada}"
+									style="color: #394674; font-size: 14px;" styleClass="OutPut">
+									<f:convertNumber type="currency" currencySymbol="R$"
+										locale="pt_BR" />
+								</h:outputText>
+							</div>
+
+						</p:panel>
+					</div>
+
+					<!-- 					Saida -->
+					<div style="float: right;">
+						<p:panel style="width: 500px;">
+							<div
+								style="background: #8B0000; align-top: center; height: 20px; line-height: 20px;"
+								align="center">
+								<h:outputText value="SAÍDA DE CAPITAL"
+									style="color: white; font-size: 12px;" styleClass="OutPut" />
+							</div>
+
+							<fieldset
+								style="border-color: #8B0000; border: 1px solid #8B0000; border-top: 0; height: 335px;">
+
+								<p:dataTable value="#{vendaBean.caixaSaida}" var="v"
+									styleClass="dados2" rowClasses="impar, par" id="saidas"
+									rowStyleClass="#{empty rowIx or rowIx mod 2 ne 0 ? 'even-row' : 'odd-row'}"
+									rowIndexVar="rowIx" paginator="true" rows="13"
+									paginatorPosition="top" emptyMessage="Nenhuma saída">
+
+									<p:column>
+										<f:facet name="header">Obs</f:facet>
+										<h:outputLabel value="#{v.obs}">
+											<f:converter converterId="stringLimiterConverter" />
+											<f:attribute name="limit" value="65" />
+										</h:outputLabel>
+									</p:column>
+
+									<p:column style="width: 25%">
+										<f:facet name="header">Valor</f:facet>
+										<h:outputLabel value="#{v.valorTotalDesconto}"
+											style="color: #8B0000;">
+											<f:convertNumber type="currency" currencySymbol="R$"
+												locale="pt_BR" />
+										</h:outputLabel>
+									</p:column>
+
+								</p:dataTable>
+
+							</fieldset>
+
+							<div
+								style="background: #8B0000; align-top: center; height: 20px; line-height: 20px;"
+								align="center">
+								<h:outputText value="#{vendaBean.valorTotalSaida}"
+									style="color: white; font-size: 14px;" styleClass="OutPut">
+									<f:convertNumber type="currency" currencySymbol="R$"
+										locale="pt_BR" />
+								</h:outputText>
+							</div>
+
+
+						</p:panel>
+
+						<br />
+						<br />
+					</div>
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 30px; line-height: 25px;"
+					align="center">				
+					<h:outputText value="R$ " rendered="#{vendaBean.result != true}"
+						style="color: red; font-size: 14px;" styleClass="OutPut" />
+					<h:outputText value="#{vendaBean.lucro}"
+						rendered="#{vendaBean.result != true}"
+						style="color: red; font-size: 14px;" styleClass="OutPut">
+						<f:convertNumber pattern="#,##0.00" />
+					</h:outputText>
+
+					<h:outputText value="R$ " rendered="#{vendaBean.result == true}"
+						style="color: #394674; font-size: 14px;" styleClass="OutPut" />
+					<h:outputText value="#{vendaBean.lucro}"
+						rendered="#{vendaBean.result == true}"
+						style="color: #394674; font-size: 14px;" styleClass="OutPut">
+						<f:convertNumber pattern="#,##0.00" />
+					</h:outputText>
+				</div>
+
+			</h:form>
+		</div>
+
+		<div align="left" style="width: 350px; margin-right: 600px;">
+			<p:messages id="mgsg" autoUpdate="true" />
+		</div>
+
+		<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+			resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+
+		<!-- 			restrição de acesso para ususario status == false -->
+		<p:dialog rendered="#{loginBean.usuario.esqueciSenha!=false}"
+			visible="true" resizable="false" closable="false" modal="true">
+			<div align="center">
+
+				<br />
+				<p:graphicImage value="/resources/img/noacsses.png" />
+				<br /> <br /> <br /> <br /> <a
+					href="javascript:history.back(-1)">Voltar</a><br />
+
+			</div>
+		</p:dialog>
+	</ui:define>
+</ui:composition>
+</html>

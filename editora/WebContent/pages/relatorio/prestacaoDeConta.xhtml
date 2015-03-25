@@ -1,0 +1,113 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition template="/_fornecedor.xhtml">
+
+	<ui:define name="head">
+
+		<div style="background: #EFF3FA; height: 24px; width: 95%"
+			align="left">
+			<h:outputText value="Relatorio > Prestação de Conta"
+				styleClass="title" style="line-height: 20px;" />
+			<div style="background: #C4D2EB; height: 2px;" />
+		</div>
+	</ui:define>
+
+	<ui:define name="opcion">
+		<div id="atention">
+
+			<div id="atencao"
+				style="background: #EFF3FA; height: 55px; width: 100%; float: left;">
+				<br />
+				<h:outputText value="Atenção!" styleClass="OutPut"
+					style="color: red" />
+				<br />
+				<h:outputText
+					value="Para emissão correta do relatório o nome do fornecedor deve ser informado em maiúsculo e completo, "
+					styleClass="OutPut" />
+				<br />
+				<h:outputText
+					value="e a forma da data deve ser no padrão dia/mês/ano. Caso contrário o relatório não será exibido conforme esperado."
+					styleClass="OutPut" />
+			</div>
+
+		</div>
+		<br />
+
+	</ui:define>
+
+	<ui:define name="body">
+		<div
+			style="background: #394674; align-top: center; height: 20px; line-height: 15px;"
+			align="center">
+			<h:outputText value="PRESTAÇÃO DE CONTA"
+				style="color: white; font-size: 12px;" styleClass="OutPut" />
+		</div>
+
+			<form action="relatorioPrestacaoDeConta" method="post" id="form"
+				target="_blank">
+				<h:form>
+
+					<fieldset
+						style="border: 1px solid #6A6A6A; border-top: 0; border-bottom: 0;">
+						<br />
+						<br />
+						<h:panelGrid columns="3">
+							<h:outputLabel styleClass="OutPut" value="Fornecedor: "
+								style="margin-left: 10px;" />
+							<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+							<input type="text" name="param_fornecedor"  class="input" />
+<!-- 							<p:inputText id="param_fornecedor" required="true" value="" /> -->
+						</h:panelGrid>
+						<br />
+						<br />
+						
+						<h:outputLabel styleClass="OutPut" value="dia/mês/ano (01/02/2013)"
+							style="margin-left: 10%; color: red;" />
+						
+						<h:outputLabel styleClass="OutPut" value="dia/mês/ano (31/04/2013)"
+							style="margin-left: 8%; color: red;" />
+							<br />		
+
+						<h:outputLabel styleClass="OutPut" value="Período "
+							style="margin-left: 10px;" />
+						<h:outputLabel styleClass="OutPut" value="De: "
+							style="margin-left: 10px;" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+<!-- 						<h:inputText name="data_ini" id="inicio" /> -->
+							<input type="text" name="data_ini" id="inicio" class="input" />
+
+						<h:outputLabel styleClass="OutPut" value="à: "
+							style="margin-left: 10px;" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<input type="text" name="data_fim" id="fim" class="input" /> <br />
+						<br /> <br />
+						<br />
+						<br />
+						<br />
+						<br />
+					</fieldset>
+
+					<div align="left" style="width: 350px; margin-right: 500px;">
+						<p:messages autoUpdate="true" globalOnly="true" />
+					</div>
+
+					<div style="background: #C4D2EB; height: 28px;" align="center">
+						<!-- 			<input type="submit" value="Gerar Relatório" style="cursor: pointer;" title="Gera Relatório em PDF" /> -->
+
+						<p:commandButton type="submit" value="Gerar relatório"
+							ajax="false" icon="ui-icon-print" />
+					</div>
+
+				</h:form>
+			</form>
+
+	</ui:define>
+
+</ui:composition>
+
+</html>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="LATIN1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+
+<h:head>
+	<title>Editora UFRR</title>
+	<h:outputStylesheet name="leo.css" library="css" />
+	<link rel="shortcut icon" href="/editora/resources/img/favicon.ico" />
+</h:head>
+
+<h:body styleClass="shadow">
+	<h:form id="form">
+
+		<div style="background: white;" align="center">
+
+			<div
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: left;">
+				<h:form>
+					<h:outputText value="UFRR - DTI - "
+						style="margin-left: 10px; font-size: 15px; font-weight: bold; color: white;" />
+					<h:outputText value="Sistema de Vendas Editora"
+						style="color: white; font-size: 13px;" />
+
+				</h:form>
+
+			</div>
+
+			<div id="rodape2" />
+
+			<div style="background: #C4D2EB; height: 60px; width: 95%">
+				<a href="http://cecomp.ufrr.br/" target="_blank"> <p:graphicImage
+						value="/resources/img/DTI100px.png"
+						style="float: left; text-align: left; width: 90px;" />
+				</a> <a href="http://www.ufrr.br" target="_blank"> <p:graphicImage
+						value="/resources/img/brasao.png"
+						style="float: right; text-align: right; width: 66px;" />
+				</a>
+			</div>
+
+			<div style="background: #EFF3FA; height: 60px; width: 95%"
+				align="center">
+
+				<br />
+				<h:outputLabel value="Atenção!"
+					style="color: red; font-weight: bold;" />
+				<br />
+				<h:outputLabel
+					value="Ao informar sua senha o sistema diferencia letras maiúsculas de minúsculas" />
+			</div>
+
+			<div class="Centralizar" style="width: 95%; text-align: left;">
+
+				<div
+					style="background: #394674; align-top: center; height: 20px; line-height: 20px;"
+					align="center">
+					<h:outputText value="MODIFICAR SENHA DE ACESSO"
+						style="color: white; font-size: 12px;" styleClass="OutPut" />
+				</div>
+
+				<fieldset
+					style="border: 1px solid #6A6A6A; border-bottom: 0; border-top: 0;">
+					<br />
+					<br />
+					<br />
+					<br />
+
+					<p:focus context="grid" for="senha" />
+
+
+					<!-- 					Aqui começa as informações do login -->
+
+
+					<h:panelGrid id="grid2" columns="12" cellpadding="5"
+						cellspacing="5">
+						<br />
+						<br />
+
+						<h:outputLabel value="Senha" for="senha" styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:password id="senha" value="#{loginBean.usuario.senha}"
+							feedback="true" promptLabel="Digite sua nova senha"
+							weakLabel="senha fácil" goodLabel="senha média"
+							strongLabel="senha segura" required="true"
+							requiredMessage="INFORME SUA SENHA">
+							<f:ajax event="blur" render="error_senha" />
+						</p:password>
+						<p:message id="error_senha" for="senha" display="icon" />
+						<br />
+						<br />
+
+						<h:outputLabel value="Repita a Senha" for="senha"
+							styleClass="OutPut" />
+						<h:graphicImage value="/resources/img/as.png" styleClass="as" />
+						<p:password id="rsenha" value="#{loginBean.usuario.repetirSenha}"
+							required="true" requiredMessage="SENHA INVÁLIDA">
+							<f:ajax event="blur" render="error_rsenha" />
+						</p:password>
+						<p:message id="error_rsenha" for="rsenha" display="icon" />
+
+					</h:panelGrid>
+					<br />
+					<br /> <br />
+					<br />
+
+				</fieldset>
+
+				<div style="background: #C4D2EB; height: 28px;" align="center">
+					<p:commandButton action="#{loginBean.trocaSenha}" value="OK"
+						ajax="false" icon="ui-icon-check" update="@form">
+						<f:ajax render="@form" />
+					</p:commandButton>
+				</div>
+				<br />
+
+				<div align="center" style="float: center; text-align: center;">
+					<h:outputLabel value="Os Campos Com " styleClass="OutPut" />
+					<h:graphicImage value="/resources/img/as.png" />
+					<h:outputLabel value="São Obrigatórios" styleClass="OutPut" />
+				</div>
+
+				<div align="left" style="width: 350px; margin-right: 500px;">
+					<p:messages autoUpdate="true" />
+				</div>
+
+			</div>
+
+			<div style="width: 95%; display: block;" align="center" />
+			<div id="rodape3"
+				style="background: #394674; width: 95%; height: 20px; line-height: 20px; text-align: center;">
+				&copy; Copyright 2013 &nbsp;&nbsp; UFRR - DTI - CSI</div>
+
+		</div>
+
+	</h:form>
+
+	<p:dialog rendered="#{loginBean.usuario.id==null}" visible="true"
+		resizable="false" closable="false" modal="true">
+		<div align="center">
+
+			<br />
+			<p:graphicImage value="/resources/img/noacsses.png" />
+			<br /> <br /> <br /> <br /> <a href="javascript:history.back(-1)">Voltar</a><br />
+
+		</div>
+	</p:dialog>
+
+</h:body>
+
+</html>
