@@ -18,3 +18,6 @@ Ejemplo de uso de la librería jaxws para montar un webservice. Necesario mínim
 
 ## editoria ##
 Proyecto en spring/hibernate/primefaces. Hecho con la base de datos mysql para lanzar los script's de creación.
+
+## tesis-playon-web ##
+Proyecto en spring/hibernate/jsf. Usado maven para gestión del proyecto y MySql como base de datos.
