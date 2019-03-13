@@ -1,6 +1,3 @@
-## barnasur ##
-Web para Rafael Lopez de construcción
-
 ## springmvc ##
 Ejemplo de uso con spring MVC y jquery. Se puede comprobar las llamadas ajax entre el front-end y backend. Desplegado en Tomcat 6.x y con gestor MAVEN 2.x
 
