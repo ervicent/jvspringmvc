@@ -1,14 +1,11 @@
 package moodledownloader;
 
-import org.jsoup.Connection.Method;
-import org.jsoup.Connection.Response;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
-
-import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -18,6 +15,20 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.jsoup.Connection;
+import org.jsoup.Connection.Method;
+import org.jsoup.Connection.Response;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 public class MoodleDownloader {
 
@@ -135,9 +146,9 @@ public class MoodleDownloader {
             Response response = Jsoup.connect(moodleURL).method(Method.GET).maxBodySize(0).timeout(0).execute();
             doc = response.parse();
             cookies = response.cookies();
-            System.out.println(doc.html()); //JVS
-            //if (doc.html().contains("loginform")) {
-            if (doc.html().contains("Nombre de usuario")) { //JVS
+            //System.out.println(doc.html()); //JVS
+            if (doc.html().contains("loginform")) {
+            //if (doc.html().contains("Nombre de usuario")) { //JVS
                 cookiesneeded = true;
                 String loginURL = doc.baseUri();
 
@@ -196,6 +207,50 @@ public class MoodleDownloader {
                 doc = response.parse();
             }
 
+            if (doc.html().contains("Inicia sessió com a visitant")) {
+            //if (doc.html().contains("guestlogin")) {
+            	 cookiesneeded = true;
+                 String loginURL = doc.baseUri();
+
+                 response = Jsoup
+                         .connect(loginURL)//"https://dit.gonzalonazareno.org/moodle/course/view.php?id=11")
+                         .method(Connection.Method.GET)
+                         .execute();
+                 doc = response.parse();
+                 cookies = response.cookies();
+
+//                 response = Jsoup.connect("https://dit.gonzalonazareno.org/moodle/login/index.php")
+//                         .data("logintoken", "nVxRsroAFIkuk2WoqHqtsVyT4seBv5jq")
+//                         .data("username", mainframe.getUsername())
+//                         .data("password", mainframe.getPassword())
+//                         .cookies(cookies)
+//                         .method(Connection.Method.POST)
+//                         .followRedirects(true)
+//                         .execute();
+//
+//                 doc = response.parse();
+//
+//                 Map<String, String> tmpcookies;
+//                 tmpcookies = response.cookies();
+//
+//                 String cookieuser = null, cookiesession = null;
+//
+//                 for (Map.Entry<String, String> entrySet : tmpcookies.entrySet()) {
+//                     String key = entrySet.getKey();
+//                     String value = entrySet.getValue();
+//                     if (key.contains("MoodleSession")) {
+//                         cookieuser = key;
+//                         cookiesession = value;
+//                     }
+//                 }
+
+                 cookies.put("MoodleSession", "kvphg0e10cd4qsviejt9lffh93");
+                 //cookies.put("MoodleSessionmoodle2postgres", "5691ijjurpeqcedsthsu89cm48");
+
+                 response = Jsoup.connect(moodleURL).method(Method.GET).cookies(cookies).maxBodySize(0).timeout(0).execute();
+                 doc = response.parse();
+            }
+            
             folder = folder_tmp.equals("") ? mainframe.getFolder() + "\\" : folder_tmp;
 
         } catch (IOException ioe) {
@@ -261,9 +316,14 @@ public class MoodleDownloader {
                 if (content.contains("text-")) type = ".txt";
                 if (content.contains("unknown-")) type = "";
                 if (content.contains("writer-")) type = ".odt";
+                if (content.contains("impress-")) type = ".odp";
+                if (content.contains("calc-")) type = ".ods";
                 if (type == null) type = ".pdf";
 
+//                if (!type.equals(".pdf")){
+                	System.out.println(name);
                 downloadResource(name, link, type);
+//                }
                 idx++;
             }
             if (content.contains("/url/")) {

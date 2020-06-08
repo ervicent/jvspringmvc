@@ -71,15 +71,13 @@ public class MainJFrame extends javax.swing.JFrame {
         outTextArea.setRows(5);
         jScrollPane1.setViewportView(outTextArea);
 
-        //userTextField.setText("guest");
-        userTextField.setText("annapuja"); //JVS
+        userTextField.setText("guest");
 
         jLabel2.setText("Usuario:");
 
         jLabel3.setText("Password:");
 
-        //passwordPwdField.setText("guest"); //JVS
-        passwordPwdField.setText("Mambon55*");
+        passwordPwdField.setText("guest"); //JVS
 
         jLabel4.setText("Carpeta de salida:");
 
