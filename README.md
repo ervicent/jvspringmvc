@@ -1,3 +1,6 @@
+## moodleDownloader ##
+Proyecto en java con jsoup. Usado maven para gestión del proyecto descarga moodles con una ventana swing. Necesita configurar  la librería wkhtmltopdf.exe
+
 ## springmvc ##
 Ejemplo de uso con spring MVC y jquery. Se puede comprobar las llamadas ajax entre el front-end y backend. Desplegado en Tomcat 6.x y con gestor MAVEN 2.x
 
